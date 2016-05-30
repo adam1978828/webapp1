@@ -1,0 +1,134 @@
+{% extends 'acc_base.html' %}
+{% load staticfiles %}
+{% load static %}
+{% load acctags %}
+{% load i18n %}
+{% block breadcrumb %}
+  <div class="left">
+    <ul class="breadcrumb">
+      <li><a href="/">{% trans "Home" %}</a></li>
+      <li><a href="{% url 'companies.views.view_list' %}">{% trans "Company" %}</a></li>
+      <li><a href="{% url 'companies.views.group_list' %}">{% trans "Permission group settings" %}</a></li>
+    </ul>
+  </div>
+{% endblock %}
+{% block scripts %}
+{% endblock %}
+{% block title %}{% trans "Permission group settings" %}{% endblock %}
+{% block acc_content %}
+  <script>
+  $('#bt_list_group').addClass('current');
+  </script>
+  <!-- Here goes the content. -->
+  <section id="content" class="container_12 clearfix" data-sort=true>
+
+    {% if 'company_edit_group_permission' in request.user.rights %}
+    <h1 class="grid_12">{% trans "Add group" %}</h1>
+    <div class="spacer"></div>
+    <div class="grid_12">
+      <div id="addTrailerBox" class="box">
+        <div class="header">
+          <h2>{% trans "Group info" %}</h2>
+        </div>
+        <form action="{% url 'companies.views.group_add' %}" method="post" class="full content validate" id="addGroup">
+          {% csrf_token %}
+          <fieldset>
+
+            {% if request.user.is_focus %}
+            <div class="row">
+                <label for="f_company_id">
+                    <strong>{% trans "Company" %}</strong>
+                </label>
+                <div>
+                    <select name="f_company_id" id="f_company_id" class="search" data-placeholder="{% trans "Choose a Company" %}">
+                        {% for company in companies %}
+                            <option value="{{company.id}}">{{company.name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            {% endif %}
+
+
+            <div class="row">
+              <label for="group_name">
+                <strong>{% trans "Name" %}</strong>
+              </label>
+              <div>
+                <input type="text" name="group_name" id="group_name">
+                <label class="error_group_name error" style="top: 50px; display: none;">{% trans "Name field is empty." %}</label>
+              </div>
+            </div>
+            <div class="add-btn-group actions">
+              <div class="right">
+                <input id="addGroupBtn" type="submit" value="{% trans "Add" %}">
+              </div>
+            </div>
+          </fieldset>
+        </form>
+      </div>
+    </div>
+    {% endif %}
+
+
+    <h1 class="grid_12">{{company.name}} groups</h1>
+    <div class="grid_12">
+      <div class="box">
+        <div class="content">
+          <table class="dynamic styled" data-show-Filter-Bar="true">
+            <colgroup>
+              <col span="1">
+              <col span="1">
+            </colgroup>
+            <thead>
+              <tr>
+                <th>Name</th>
+
+                {% if request.user.is_focus %}
+                <th>Company</th>
+                {% endif %}
+
+                {% if 'company_edit_group_permission' in request.user.rights %}
+                    <th>Actions</th>
+                {% endif %}
+
+              </tr>
+            </thead>
+            <tbody>
+              {% for group in groups %}
+                <tr>
+                  <td>
+                      {% if group.name %}
+                          {{group.name}}
+                      {% else %}
+                          No name
+                      {% endif %}
+                  </td>
+
+                {% if request.user.is_focus %}
+                <td>{{ group.company.name }}</td>
+                {% endif %}
+
+                  {% if 'company_edit_group_permission' in request.user.rights %}
+                  <td class="center">
+
+                      <a href="{% url 'companies.views.edit_group' group.id %}" class="button small grey tooltip"
+                         data-gravity=s title="Edit"><i class="icon-pencil"></i></a>
+
+                      <a data-url="{% url 'companies.views.remove_group' group.id %}"
+                        class="removeGroupBtn button small grey tooltip" title="Revoke group">
+                        <i class="icon-remove"></i></a>
+                  </td>
+                {% endif %}
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div><!-- End of .content -->
+      </div><!-- End of .box -->
+    </div><!-- End of .grid_12 -->
+  </section><!-- End of #content -->
+{% endblock %}
+{% block addons %}
+  <!-- The settings dialog -->
+{% endblock %}

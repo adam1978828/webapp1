@@ -1,0 +1,112 @@
+{% extends 'acc_base.html' %}
+{% load staticfiles %}
+{% load acctags %}
+{% load filters %}
+{% load tz %}
+{% load i18n %}
+{% block breadcrumb %}
+    <div class="left">
+        <ul class="breadcrumb">
+            <li><a href="/">{% trans "Home" %}</a></li>
+            <li><a href="{% url 'deals.views.all_deals' %}">{% trans "Transactions" %}</a></li>
+        </ul>
+    </div>
+{% endblock %}
+{% block title %}{% trans "Transactions" %}{% endblock %}
+{% block acc_content %}
+    <script>
+        $('#deals').addClass('current');
+        $('.accordion li a').removeClass('open');
+    </script>
+    <section id="content" class="container_12 clearfix ui-sortable" data-sort="true">
+        <h1 class="grid_12">{% trans "Transactions" %}</h1>
+
+        <div class="spacer"></div>
+        <div class="grid_12">
+            <div class="box">
+                <div class="content">
+                    <table id="deals-table" class="dynamic styled" data-show-Filter-Bar="true"
+                           data-max-items-per-page=25>
+                        <thead>
+                        <tr>
+                            <th>{% trans "ID" %}</th>
+                            <th>{% trans "Card" %}</th>
+                            <th>{% trans "Started on" %}</th>
+                            <th>{% trans "Title" %}</th>
+
+                            {% if request.user.is_focus %}
+                            <th>{% trans "Company" %}</th>
+                            {% endif %}
+
+                            <th>{% trans "Status" %}</th>
+                            <th>{% trans "Date start" %}</th>
+                            <th>{% trans "Date end" %}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for deal in deals %}
+                            <tr class="tooltip deal_id" data-id="{{ deal.id }}"
+                                data-url="{% url 'deals.views.show_deal' deal.id %}" title="{% trans "Click to view" %}">
+                                <td class="center">{{ forloop.counter }}</td>
+                                <td class="center">{{ deal.card.value_to_display|default:'-' }}</td>
+                                <td class="center">
+                                    {% if deal.kiosk_start.settings.alias %}
+                                        {{ deal.kiosk_start.settings.alias|default:'-' }}
+                                    {% else %}
+                                        {{ deal.kiosk_start.settings.address.to_string|default:'-' }}
+                                    {% endif %}
+                                </td>
+                                <td class="center">{{ deal.disk.upc.movie.get_name }} ({{ deal.disk.upc.format.name }})
+                                    / {{ deal.disk.upc.movie.release_year }}</td>
+
+                                {% if request.user.is_focus %}
+                                <td class="center">{{ deal.company.name }}</td>
+                                {% endif %}
+
+                                <td data-field="status" class="center">{{ deal.deal_status.alias|default:'-' }}</td>
+{#                                <td class="center">{{ deal.dt_start|localize:deal.kiosk_start.settings.timezone.name|date:'d.m.y H:i:s'|default:'-' }}</td>#}
+                                <td class="center">{{ deal.dt_start|timezone:deal.kiosk_start.settings.timezone.name|date:'d.m.y H:i:s'|default:'-' }}</td>
+                                <td class="center">
+                                    {% if deal.kiosk_end %}
+                                        {{ deal.dt_end|timezone:deal.kiosk_end.settings.timezone.name|date:'d.m.y H:i:s'|default:'-' }}
+                                    {% else %}
+                                        {{ deal.dt_end|timezone:deal.kiosk_start.settings.timezone.name|date:'d.m.y H:i:s'|default:'-' }}
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- End of .content -->
+    </section>
+    <div id="finishDealModal" title="{% trans "Manual Disk Return" %}" style="display:none;">
+        <form action="{% url 'deals.views.finish_deal' '0' %}" class="full no-box" id="finishTransaction">
+            <fieldset>
+                <input id='type' name='type' type="hidden">
+
+                <div class="row">
+                    <label for="dtEnd">
+                        <strong>{% trans "Finish date" %}</strong>
+                    </label>
+
+                    <div>
+                        <input type="text" name="dtEnd" id="dtEnd"/>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+        <div class="actions">
+            <div class="left">
+                <button class="grey cancel">{% trans "Cancel" %}</button>
+            </div>
+            <div class="right">
+                <button id="replayDeal" class="submit2">{% trans "Finish" %}</button>
+            </div>
+        </div>
+    </div>
+
+<script language="javascript" type="text/javascript">window.onload = function(){$(".deal_id").click();}</script>
+{% endblock %}

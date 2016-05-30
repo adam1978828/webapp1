@@ -1,0 +1,77 @@
+{% extends 'auth_base.html' %}
+{% load staticfiles %}
+{% load i18n %}
+
+{% block title %}
+    {% trans "Restore password" context "page title" %}
+{% endblock %}
+
+{% block breadcrumb %}
+{% endblock %}
+
+
+{% block form %}
+    <!-- The container of the sidebar and content box -->
+	<section id="login" class="container_12 clearfix">
+
+		<form method="post" class="box" id="restore_password_form" name="restore_password_form">
+            {% csrf_token %}
+
+			<div class="header">
+				<h2>
+                    <span class="icon icon-lock"></span>
+                    {% trans "Restore" %}
+                </h2>
+			</div>
+
+			<div class="content">
+
+				<!-- Login messages -->
+				<div class="restore-messages">
+					<div class="message welcome">
+                        {% trans "Please, enter your e-mail" %}
+                    </div>
+					<div class="message failure">
+                        {% trans "Invalid e-mail." %}
+                    </div>
+				</div>
+
+                {% if error %}
+                <script type="text/javascript">
+				$login = $('#login');
+			    $msg = $login.find('.restore-messages');
+			    $msg.find('.welcome').fadeOut();
+				$msg.find('.failure').fadeIn();
+                </script>
+                <span>{{ error }}</span>
+
+                {% endif %}
+
+				<!-- The form -->
+				<div class="form-box">
+
+					<div class="row">
+						<label for="email">
+							<strong>
+                                {% trans "E-mail" %}
+                            </strong>
+						</label>
+                        <div>
+                            <input class="required" tabindex=1 email="true" check_email="true" type="text" name=email id=email />
+                        </div>
+					</div>
+
+				</div><!-- End of .form-box -->
+
+			</div><!-- End of .content -->
+
+			<div class="actions">
+				<div class="right">
+					<input tabindex=2 type="submit" value="{% trans 'Restore' context 'button label'%}" name="login_btn" />
+				</div>
+			</div><!-- End of .actions -->
+
+		</form><!-- End of form -->
+
+	</section>
+{% endblock %}

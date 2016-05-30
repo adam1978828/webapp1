@@ -1,0 +1,83 @@
+{% extends 'acc_base.html' %}
+{% load staticfiles %}
+{% load acctags %}
+{% load i18n %}
+{% block breadcrumb %}
+    <div class="left">
+        <ul class="breadcrumb">
+            <li><a>{% trans "Staff" %}</a></li>
+            <li><a>{{operation|capfirst}}</a></li>
+        </ul>
+    </div>
+{% endblock %}
+{% block scripts %}
+    <!--<script src="{% static 'js/script_company.js' %}"></script>-->
+{% endblock %}
+{% block title %}{% trans "Permissions" %}{% endblock %}
+{% block acc_content %}
+    <script>
+    $('#bt_staff_list').addClass('current');
+    </script>
+    <!-- Here goes the content. -->
+    <section id="content" class="container_12 clearfix" data-sort=true>
+        {% if operation == "add" %}
+            <h1 class="grid_12">{% trans "Add new worker" %}</h1>
+        {% else %}
+            <h1 class="grid_12">{% trans "Edit profile:" %} {{person.email}}</h1>
+        {% endif %}
+        {% include 'shortcuts/display_errors.html' with errors=errors %}
+        <form action="" class="grid_12" method="post">
+            {% csrf_token %}
+            {% for object in sys_objects %}
+                <fieldset>
+                    <legend>{{object.name}}</legend>
+                    {% for function in object.functions %}
+                        {% if person.user_type_id == 2 and function.for_company or person.user_type_id == 3 and function.for_focus %}
+                            <div class="row">
+                                <label for="{{prefix}}{{function.id}}">
+                                    <strong>{{function.name}}</strong>
+                                </label>
+                                <div>
+                                    <div>
+                                        <input type="checkbox" name='{{prefix}}{{function.id}}' id='{{prefix}}{{function.id}}'
+                                        {% if function in person.permissions %}
+                                            checked
+                                        {% endif %}
+                                        />
+                                        {% if function.alias in person.rights %}
+                                            <span class="tooltip icon-ok" id="span_{{function.id}}">
+                                            {% for group in person.company.user_groups %}
+                                                {% if group in person.groups and function in group.permissions %}
+                                                    {{group.name}}
+                                                {% endif %}
+                                            {% endfor %}
+                                            </span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </fieldset>
+            {% endfor %}
+            <fieldset>
+                <legend>Groups</legend>
+                <div>
+                    <select multiple class="dualselects" data-size=small id=user_groups name=user_groups >
+                        {% for group in person.company.user_groups %}
+                            <option value="{{group.id}}" {% if group in person.groups %}selected{% endif %}>{{ group.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </fieldset>
+            <div class="actions">
+                <div class="right">
+                    <input type="submit" value="{% trans "Submit" %}" />
+                </div>
+            </div><!-- End of .actions -->
+        </form>
+    </section><!-- End of #content -->
+{% endblock %}
+{% block addons %}
+    <!-- The settings dialog -->
+{% endblock %}

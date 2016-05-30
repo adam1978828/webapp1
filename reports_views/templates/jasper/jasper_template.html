@@ -1,0 +1,31 @@
+{% extends 'acc_base.html' %}
+{% load staticfiles %}
+{% load acctags %}
+{% load i18n %}
+{% block breadcrumb %}
+    <div class="left">
+        <ul class="breadcrumb">
+            <li><a href="/">{% trans "Home" %}</a></li>
+            <li><a href="{% url 'reports_views.views.jasper_templates' %}">{% trans "Jasper Template" %}</a></li>
+            <li>{% trans 'Edit Jasper Template' %}</li>
+        </ul>
+    </div>
+{% endblock %}
+{% block title %}{% trans "Edit Jasper Template" %}{% endblock %}
+
+
+{% block acc_content %}
+    <script>
+        $('#bt_jasper_templates').addClass('current');
+        $('.accordion li a').removeClass('open');
+        $('#bt_jasper_templates').parent().prev().addClass('open');
+    </script>
+    <section id="content" class="container_12 clearfix ui-sortable" data-sort="true">
+        <h1 class="grid_12">{% trans "Edit Jasper Template" %}</h1>
+        <div class="spacer"></div>
+
+        {% with mode='edit' %}
+            {% include 'jasper/jasper_template_form.html' %}
+        {% endwith %}
+    </section>
+{% endblock %}

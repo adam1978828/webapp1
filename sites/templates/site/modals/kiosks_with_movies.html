@@ -1,0 +1,14 @@
+{% load i18n %}
+<div id="selectKiosk">
+    <p class="login__title">{% trans "Reservation" %}<br><span class="login-edition">{% trans "movie" %}</span></p>
+    <div class="field-wrap select">
+        <div class="choosekiosk">{% trans "Choose kiosk:" %}</div>
+        <select id="kiosks" class="select__sort" tabindex="0" name="kioskId">
+            {% for kiosk in kiosks_with_movie %}
+                <option value="{{kiosk.id}}">{{kiosk.settings.alias}}</option>
+            {% endfor %}
+        </select>
+        <input id="movieId" type="hidden" value="" name="movieId">
+        <input id="formatId" type="hidden" value="" name="formatId">
+    </div>
+</div>

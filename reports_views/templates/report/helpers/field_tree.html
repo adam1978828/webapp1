@@ -1,0 +1,17 @@
+<tr>
+    <td><i class="icon icon-sort"></i></td>
+    <td>
+        {% autoescape off %}{{ field_info }}{% endautoescape %}
+        <div class="sub-sorted">
+        {% for sub_field_info in sub_fields %}
+            <div class="sub-fields grid_12">
+                <table class="styled3 col-md-offset-1 col-xs-11 col-xs-offset-1">
+                    <tbody class="rep-sortable">
+                    {% autoescape off %}{{ sub_field_info }}{% endautoescape %}
+                    </tbody>
+                </table>
+            </div>
+        {% endfor %}
+        </div>
+    </td>
+</tr>

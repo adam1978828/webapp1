@@ -1,0 +1,172 @@
+{% extends 'acc_base.html' %}
+{% load staticfiles %}
+{% load static %}
+{% load acctags %}
+{% load i18n %}
+{% block breadcrumb %}
+        <div class="left">
+            <ul class="breadcrumb">
+                <li><a href="/">{% trans "Home" %}</a></li>
+                <li><a href="{% url 'companies.views.view_list' %}">{% trans "Company" %}</a></li>
+                <li><a href="{% url 'companies.views.view' %}">{% trans "View" %}</a></li>
+            </ul>
+        </div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/script_company.js' %}"></script>
+{% endblock %}
+
+{% block title %}{% trans "Company" %}{% endblock %}
+
+
+{% block acc_content %}
+    <script>
+        $('#bt_company_view').addClass('current');
+    </script>
+
+    <!-- Here goes the content. -->
+    <section id="content" class="container_12 clearfix" data-sort=true>
+        <div class="grid_12 profile">
+
+            <div class="header">
+
+                <div class="title">
+                    <h2>{{ company.name }}</h2>
+                </div>
+                <div class="avatar">
+                    <img src="{% get_media_prefix %}{{ company.logo_path|default:'company_logo/logo.png' }}" id="img_logo" style="width:44px; height:44px;"/>
+                    <a id="btn_upload_logo">{% trans "Change" %}</a>
+                    <div style="display: none">
+                        <form id="upload_logo_form" action="/acc/company/ajax_change_logo/" method="post">
+                            <input type="file" name="upload_logo" id="upload_logo" accept='image/*'>
+                            <input type="hidden" name="company_id" id="company_id" value="{{company.id}}">
+                        </form>
+                    </div>
+                </div>
+
+                <ul class="info">
+
+                    <li>
+                        <a href="javascript:void(0);">
+                            <strong>{{ company.kiosks|length }}</strong>
+                            <small>{% trans "Kiosks" %}</small>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="javascript:void(0);">
+                            <strong>{{ company.users|length }}</strong>
+                            <small>{% trans "Co-workers" %}</small>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="javascript:void(0);">
+                            <strong>106</strong>
+                            <small>{% trans "Some other interesting staticsic" %}</small>
+                        </a>
+                    </li>
+
+                </ul><!-- End of ul.info -->
+            </div><!-- End of .header -->
+
+            <div class="details grid_12">
+                <h2>{% trans "Personal Details" %}</h2>
+                <a href="{% url 'companies.views.edit' %}"><span class="icon icon-pencil"></span>{% trans "Update Details" %}</a>
+                <section>
+                    <table>
+                        <tr>
+                            <th>{% trans "Company:" %}</th><td>{{ company.name }}</td>
+                        </tr>
+                        {% if company.phone %}
+                        <tr>
+                            <th>{% trans "Phone:" %}</th><td>{{ company.phone|phonenumber }}</td>
+                        </tr>
+                        {% endif %}
+                        {% if company.alt_phone %}
+                        <tr>
+                            <th>{% trans "Alternative phone:" %}</th><td>{{ company.alt_phone|phonenumber }}</td>
+                        </tr>
+                        {% endif %}
+                        {% if company.email %}
+                        <tr>
+                            <th>{% trans "Email:" %}</th><td>{{ company.email }}</td>
+                        </tr>
+                        {% endif %}
+                        {% if company.web_site %}
+                        <tr>
+                            <th>{% trans "Web site:" %}</th><td><a href="{{ company.web_site }}">{{ company.web_site }}</a></td>
+                        </tr>
+                        {% endif %}
+                        {% if company.address.to_string %}
+                        <tr>
+                            <th>{% trans "Address:" %}</th><td>{{ company.address.to_string }}</td>
+                        </tr>
+                        {% endif %}
+                    </table>
+                </section>
+            </div><!-- End of .details -->
+
+            <div class="details grid_6">
+                <h2>{% trans "Discount" %}</h2>
+                <a class="open-profile-dialog" href="javascript:void(0);"><span class="icon icon-plus"></span>{% trans "Add Coupon" %}</a>
+                <a class ="open-profile-dialog" href="javascript:void(0);"><span class="icon icon-remove"></span>{% trans "Remove Coupon" %}</a>
+                <section>
+                    <table>
+                        {% for person in company.staff %}
+                        <tr>
+                            <th>{{person.name}}</th><td></td>
+                        </tr>
+                        {% endfor %}
+                        <!--<tr>-->
+                            <!--<th>Coupon #4:</th><td><i>Already used!</i></td>-->
+                        <!--</tr>-->
+                    </table>
+                </section>
+            </div><!-- End of .details -->
+
+            <div class="details grid_6">
+                <h2>{% trans "Subscription" %}</h2>
+                <a class="open-profile-dialog" href="javascript:void(0);"><span class="icon icon-plus"></span>{% trans "Add Subscription" %}</a>
+                <section class="center-elements">
+                    <p><i>{% trans "No active subscription" %}</i></p>
+                </section>
+            </div><!-- End of .details -->
+
+            <div class="details grid_12">
+                <h2>{% trans "Logs" %}</h2>
+                <a href="javascript:void(0);">{% trans "More" %}<span class="icon icon-hand-right right"></span></a>
+                <section>
+                    <ul class="logs">
+                        <li class="error">
+                            <a href="javascript:void(0);">
+                                <strong>{% trans "Failed Login" %}</strong>
+                                <small>2012/01/15 11:36:03</small>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0);">
+                                <strong>{% trans "Created Category “Overdue Tickets”" %}</strong>
+                                <small>2012/01/15 08:57:17</small>
+                            </a>
+                        </li>
+                    </ul>
+                </section>
+            </div><!-- End of .details -->
+
+            <div class="clearfix"></div>
+            <div class="divider"></div>
+
+            <div class="grid_12">
+                <a href="javascript:void(0);" class="button red right">{% trans "Delete Account" %}</a>
+            </div>
+        </div>
+    </section>
+
+
+{% endblock %}
+
+{% block addons %}
+
+{% endblock %}

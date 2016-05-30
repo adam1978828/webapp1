@@ -1,0 +1,305 @@
+{% extends 'acc_base.html' %}
+{% load staticfiles %}
+{% load static %}
+{% load i18n %}
+
+{% block breadcrumb %}
+        <div class="left">
+            <ul class="breadcrumb">
+
+            {% if operation == "add" %}
+                 <li><a href="/">{% trans "Home" %}</a></li>
+                    <li><a href="{% url 'companies.views.view_list' %}">{% trans "Company" %}</a></li>
+                    <li><a href="{% url 'profiles.views.add_staff' %}">{% trans "Add" %}</a></li>
+            {% elif operation == "edit" %}
+                <li><a href="/">{% trans "Home" %}</a></li>
+                    <li><a href="{% url 'companies.views.view_list' %}">{% trans "Company" %}</a></li>
+                    <li><a href="{% url 'companies.views.edit' %}">{% trans "Edit" %}</a></li>
+            {% endif %}
+
+            </ul>
+        </div>
+{% endblock %}
+
+{% block scripts %}
+    <script type="text/javascript" 
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAVZeU0hq_SAiOlFfbsO1Gz4ZQuHTLxz3Q">
+    </script>
+    <script src="{% static 'js/script_company.js' %}"></script>
+{% endblock %}
+
+{% block title %}{% trans "Company" %}{% endblock %}
+
+
+{% block acc_content %}
+    <script>
+        function initializeMap() {
+            var ff = 0;
+            var mapOptions = {
+                    center: { 
+                        lat: {{company.address.latitude|default:21}}, 
+                        lng: {{company.address.longitude|default:-153}} 
+                    },
+                    zoom: 8
+                },
+                mapCanvas = document.getElementById('mapCanvas'),
+                map = new google.maps.Map(mapCanvas, mapOptions),
+                geocoder = new google.maps.Geocoder(),
+                marker,
+                infowindow = new google.maps.InfoWindow({content:''}),
+                formLinks = function() {
+                    var wrapper = document.createElement('div'),
+                        header = document.createElement('h2'),
+                        settingsLink = document.createElement("a"),
+                        tariffLink = document.createElement("a"),
+                        permissionsLink = document.createElement("a"),
+                        slotsLink = document.createElement("a"),
+                        screensLink = document.createElement("a"),
+                        trailerLink = document.createElement("a");
+                    wrapper.setAttribute('class', 'kioskInfo')
+                    header.innerHTML = "{{company.name}}"
+                    wrapper.appendChild(header);
+                    return wrapper;
+                },
+                addMarker = function(location, map) {
+                    if (marker) {
+                        marker.setPosition(location)
+                    } else {
+                        marker = new google.maps.Marker({
+                            position: location,
+                            map: map,
+                            draggable: true,
+                            animation: google.maps.Animation.DROP
+                        });
+
+                        google.maps.event.addListener(marker, 'click', function() {
+                            infowindow.content = formLinks();
+                            infowindow.open(map, marker)
+                        });
+                    }
+
+                    mapCanvas.setAttribute('data-marker', location.A + "|" + location.F);
+                    $('input#geolocation').val(location.A + "|" + location.F);
+                    geocodePosition(location, function(address) {
+                        $('[data-geolocation]').each(function(){
+                            var key = $(this).attr('data-geolocation');
+                            if (address.hasOwnProperty(key) && ff>0){
+                                $(this).val(address[key]);}
+                        })
+                        ff++;
+
+                    });
+
+
+                },
+                geocodePosition = function(position, callback) {
+                    geocoder.geocode({'latLng': position}, function(results, status) {
+                        var data = {};
+                        if (status == google.maps.GeocoderStatus.OK) {
+                            for (i in results) {
+                                var address = results[i].address_components;
+                                for (j in address) {
+                                    if (!data.hasOwnProperty(address[j].types[0]))
+                                        data[address[j].types[0]] = address[j].long_name
+                                }
+                            }
+                            data['formatted_address'] = results[0].formatted_address;
+                            callback(data);
+                        }
+                    })
+                };
+                {% if company and company.has_geolocation %}
+                    var location = new google.maps.LatLng(
+                        {{company.address.latitude}}, 
+                        {{company.address.longitude}}
+                    )
+                    addMarker(location, map)
+                {% endif %}
+
+            $('.find').on('click', function(e) {
+                e.preventDefault();
+                    geocoder.geocode({'address': $(this).prev().val()}, function(results, status) {
+                        if (status == google.maps.GeocoderStatus.OK) {
+                            map.setCenter(results[0].geometry.location);
+                            addMarker(results[0].geometry.location, map);
+                            $('input#geolocation').val(results[0].geometry.location.A + "|" + results[0].geometry.location.F);
+                        }
+                    })
+            })
+            google.maps.event.addListener(map, 'mouseup', function(e) { addMarker(e.latLng, map); });
+        }
+        google.maps.event.addDomListener(window, 'load', initializeMap);
+    </script>
+   {% if operation == "add" %}
+            <script>
+                $('#bt_add_company').addClass('current');
+            </script>
+        {% elif operation == "edit" %}
+            <script>
+                $('#bt_edit_company').addClass('current');
+            </script>
+        {% endif %}
+
+    <!-- Here goes the content. -->
+    <section id="content" class="container_12 clearfix" data-sort=true>
+        <h1 class="grid_12">
+        {% if operation == "add" %}
+            {% trans "Add new Company" %}
+        {% elif operation == "edit" %}
+            {% trans "Edit company details" %}
+        {% endif %}
+        </h1>
+
+        <!-- {% include 'shortcuts/display_errors.html' with errors=errors %} -->
+
+        <form action="" method="post" class="grid_12 validate" id="f_create_company" name="f_create_company" enctype="multipart/form-data">
+            {% csrf_token %}
+            <fieldset>
+                {% if operation == "add" %}
+                    <legend>{% trans "Owner Info" %}</legend>
+                    <div class="row">
+                        <label for="f_admin_email">
+                            <strong>{% trans "Email of company owner" %}</strong>
+                        </label>
+                        <div>
+                            <input type="text" name="f_admin_email" id="f_admin_email" class="required" email="true"/>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <label for="f_admin_pass">
+                            <strong>{% trans "Password" %}</strong>
+                        </label>
+                        <div>
+                            <input type="text" name="f_admin_pass" id="f_admin_pass" class="required"/>
+                            <a class="button" id="bt_generate_pass">{% trans "Generate" %}</a>
+                        </div>
+                    </div>
+                {% elif operation == "edit" %}
+                    <input type="hidden" name="f_company_id" id="f_company_id" value="{{company.id}}"/>
+                {% endif %}
+                <input type="hidden" name="f_operation" id="f_operation" value="{{operation}}"/>
+            </fieldset>
+
+            <fieldset>
+                <legend>{% trans "Company info" %}</legend>
+                <div class="row">
+                    <label for="f_company_name">
+                        <strong>{% trans "Company name" %}</strong>
+                    </label>
+                    <div>
+                        <input type="text" name="f_company_name" id="f_company_name" value="{{ company.name|default_if_none:'' }}"/>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <label for="f_company_logo">
+                        <strong>{% trans "Company logo" %}</strong>
+                    </label>
+                    <div>
+                        <img src="{% get_media_prefix %}{{ company.logo_path|default:'company_logo/logo.png' }}" id="f_img_logo" style="width:100px; height:100px;"/>
+                        <input type="file" name="f_company_logo" id="f_company_logo" accept='image/gif, image/jpeg, image/png'/>
+                    </div>
+                </div>
+            </fieldset>
+            
+            <div class="map box">
+                <div id="mapCanvas" class="map canvas"></div>
+            </div>
+            <input type="hidden" name="geolocation" id="geolocation" value="{{company.address.latitude|default_if_none:'21'}}|{{company.address.longitude|default_if_none:'-153'}}"/>
+            <input type="hidden" name="latitude" id="latitude" value="{{company.address.latitude|default_if_none:'21'}}"/>
+            <input type="hidden" name="longitude" id="longitude" value="{{company.address.longitude|default_if_none:'-153'}}"/>
+            {% include 'forms/address.html' with addr=company.address%}
+
+            <fieldset>
+                <legend>{% trans "Contact information" %}</legend>
+                <div class="row">
+                    <label for="f_c_phone">
+                        <strong>{% trans "Phone" %}</strong>
+                    </label>
+                    <div>
+                        <input class="maskIntPhone" type="text" name="f_c_phone" id="phone" value="{{ company.phone|default_if_none:'' }}" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <label for="f_c_alt_phone">
+                        <strong>{% trans "Alternate phone" %}</strong>
+                    </label>
+                    <div>
+                        <input class="maskIntPhone" type="text" name="f_c_alt_phone" id="altPhone" value="{{ company.alt_phone|default_if_none:'' }}" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <label for="f_c_email">
+                        <strong>{% trans "Company Email" %}</strong>
+                    </label>
+                    <div>
+                        <input type="text" name="f_c_email" id="email" value="{{ company.email|default_if_none:'' }}" email="true"/>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <label for="f_c_web">
+                        <strong>{% trans "Company web-site" %}</strong>
+                    </label>
+                    <div>
+                        <input type="text" name="f_c_web" id="webSite" value="{{ company.web_site|default_if_none:'' }}" />
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend>{% trans "Payment information" %}</legend>
+
+                <div class="row">
+                    <label for="f_c_card">
+                        <strong>{% trans "Card number" %}</strong>
+                    </label>
+                    <div>
+                        <input class="maskCustom" data-mask="9999 9999 9999 9999" type="text" name="f_c_card" id="card" value="{{ company.card|default_if_none:'' }}" />
+                    </div>
+                </div>
+                <div class="row">
+                    <label for="f_c_card">
+                        <strong>{% trans "Card Exp.Date" %}</strong>
+                    </label>
+                    <div>
+                        <input class="maskCustom" data-mask="99/99" type="text" name="ccExpiry" id="ccExpiry" value="{{ company.cc_expiry|default_if_none:'' }}" />
+                    </div>
+                </div>
+
+            </fieldset>
+
+            <div class="actions">
+                <div class="right">
+                    <input type="submit" value="{% trans "Submit" %}" />
+                </div>
+            </div><!-- End of .actions -->
+        </form>
+        <!-- Your Boxes Here! -->
+        <div class="box">
+            <div class="content" style="display: none" id="msg_ok">
+                <div class="alert success sticky no-margin" >
+                    <span class="icon"></span>
+                    <strong>{% trans "Success!" %}</strong> {% trans "You successfully added a company" %}
+                </div>
+
+            </div>
+        </div>
+        <div class="center-elements" id="btn_add_more" style="display: none;">
+            <div class="right">
+                <a href="{% url 'companies.views.add' %}" class="button block">
+                    <span class="icon icn-plus"></span>
+                    {% trans "Add_more" %}
+                </a>
+            </div>
+        </div>
+
+    </section><!-- End of #content -->
+
+{% endblock %}
+
+{% block addons %}
+    <!-- The settings dialog -->
+{% endblock %}

@@ -1,0 +1,7 @@
+{% load i18n %}
+<select class="form-control input-sm fields-set">
+    <option value="">{% trans "Empty Field (Custom Heading)" %}</option>
+    {% for field in report.fields %}
+        <option value="{{ field.model_field_name }}">{{ field.readable_name }}</option>
+    {% endfor %}
+</select>

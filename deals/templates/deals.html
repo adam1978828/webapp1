@@ -1,0 +1,80 @@
+{% extends 'acc_base.html' %}
+{% load staticfiles %}
+{% load acctags %}
+{% load filters %}
+{% load tz %}
+{% load i18n %}
+{% block breadcrumb %}
+    <div class="left">
+        <ul class="breadcrumb">
+            <li><a href="/">{% trans "Home" %}</a></li>
+            <li><a href="{% url 'deals.views.all_deals' %}">{% trans "Transactions" %}</a></li>
+        </ul>
+    </div>
+{% endblock %}
+{% block title %}{% trans "Transactions" %}{% endblock %}
+{% block acc_content %}
+    <script>
+        $('#deals').addClass('current');
+        $('.accordion li a').removeClass('open');
+    </script>
+    <section id="content" class="container_12 clearfix ui-sortable" data-sort="true">
+        <h1 class="grid_12">{% trans "Transactions" %}</h1>
+
+        <div class="spacer"></div>
+        <div class="grid_12">
+            <div class="box">
+                <div class="content"><!-- dynamic -->
+                    <input id="data-url" type="text" class="hidden" value="{% url 'deals.views.show_deal' 'replace' %}">
+                    <table id="deals-table" class="dynamic styled all-deals"
+                           data-show-Filter-Bar="true" data-max-items-per-page=25
+                           data-data-table='{"aaSorting":[[4, "desc" ]], "bServerSide":true, "bProcessing":true, "sAjaxSource":"{% url 'deals.views.json_deals' %}" }'>
+                        <thead>
+                            <tr>
+                                <!--<th>{% trans "ID" %}</th>-->
+                                <th>{% trans "ID" %}</th>
+                                <th>{% trans "Card" %}</th>
+                                <th>{% trans "Title" %}</th>
+                                <th>{% trans "Status" %}</th>
+                                <th>{% trans "Date Start" %}</th>
+                                <th>{% trans "Date End" %}</th>
+                                <th>{% trans "Start Kiosk" %}</th>
+                                <th>{% trans "End Kiosk" %}</th>
+                                {% if request.user.is_focus %}
+                                    <th>{% trans "Company" %}</th>
+                                {% endif %}
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- End of .content -->
+    </section>
+    <div id="finishDealModal" title="{% trans "Manual Disk Return" %}" style="display:none;">
+        <form action="{% url 'deals.views.finish_deal' '0' %}" class="full no-box" id="finishTransaction">
+            <fieldset>
+                <input id='type' name='type' type="hidden">
+
+                <div class="row">
+                    <label for="dtEnd">
+                        <strong>{% trans "Finish date" %}</strong>
+                    </label>
+
+                    <div>
+                        <input type="text" name="dtEnd" id="dtEnd"/>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+        <div class="actions">
+            <div class="left">
+                <button class="grey cancel">{% trans "Cancel" %}</button>
+            </div>
+            <div class="right">
+                <button id="replayDeal" class="submit2">{% trans "Finish" %}</button>
+            </div>
+        </div>
+    </div>
+{% endblock %}

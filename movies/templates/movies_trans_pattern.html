@@ -1,0 +1,20 @@
+{% load i18n %}
+<div {% if need_id %}id="transPattern"{% endif %} class="pricing grid_6" name="{{ trans.language.name|default_if_none:'' }}">
+    <div class="title"><span class="lang-name">{{ trans.language.name|default_if_none:'' }}</span><span class="discard-translation">x</span></div>
+    <form class="validate full content trans-form" novalidate="novalidate">
+        <fieldset>
+            <input type="hidden" name="id" value="{{ trans.language_id|default_if_none:'' }}">
+
+            <div class="row">
+                <label for="title"><strong> {% trans 'Title' %}</strong></label>
+
+                <div><input name="title" type="text" class="required" data-id="title" value="{{ trans.name|default_if_none:'' }}"></div>
+            </div>
+            <div class="row">
+                <label for="description"><strong> {% trans 'Description' %} </strong></label>
+
+                <div><textarea name="description" data-id="description">{{ trans.description|default_if_none:'' }}</textarea></div>
+            </div>
+        </fieldset>
+    </form>
+</div>

@@ -1,0 +1,33 @@
+{% load i18n %}
+<div class="overlay kioskchoose overlay-hugeinc">
+  <section class="container">
+    <div class="col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 col-lg-4 col-lg-offset-4">
+      <button type="button" class="overlay-close">{% trans "Close" %}</button>
+      <form id="choose-kiosk-form" class="login" action="{% url 'sites.views.preferred_kiosk' %}" method='post' novalidate=''>
+        {% csrf_token %}
+        <p class="login__title">
+          <span class="login-edition">{% trans "Chose kiosk" %}</span>
+        </p>
+
+        <div id="normal-kioskchoose" style="height: 300px; overflow-y: scroll;">
+          {% for kiosk in request.company.active_kiosks %}
+            <div class="login__control">
+              <div class="namekiosk">
+                <a data-href="{% url 'sites.views.company_kiosks' %}{{ kiosk.id }}" data-id="{{ kiosk.id }}" href="{% url 'sites.views.company_kiosks' %}{{ kiosk.id }}">{{ kiosk.settings.alias }}</a>
+              </div>
+              <div class="address {% if forloop.last %}addresslast{% endif %}">
+                <span class="pull-left">{{ kiosk.address.to_string }}</span>
+                <button data-href="{% url 'sites.views.company_kiosks' %}{{ kiosk.id }}" data-id="{{ kiosk.id }}"
+                        type='submit'
+                        class="btn pull-right btn-sm btn-choose {% if request.preferred_kiosk.id == kiosk.id %}btn--danger{% else %}btn--info{% endif %}">
+                  {% if request.preferred_kiosk.id == kiosk.id %}{% trans "Active" %}{% else %}{% trans "Select" %}{% endif %}
+                </button>
+                <div class="clear"></div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </form>
+    </div>
+  </section>
+</div>

@@ -1,0 +1,62 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>{% trans "Test" %}</title>
+    <script language="javascript" type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script language="javascript" type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.10.0/jquery.validate.min.js"></script>
+</head>
+<body>
+<script>
+    $.validator.addMethod("check_email",
+        function(value, element) {
+	        var form = $('#form');
+            var res = false;
+            $.ajax({
+                type: 'GET',
+                url:  '/auth/ajax_check_email/',
+                data: {'email': value},
+                async: false,
+                dataType: "json",
+                success:
+                    function(response){
+                        res = !response.error
+                    }
+            });
+            return res
+        },
+        "No such email"
+    );
+    $.validator.addMethod("email_new",
+        function(value, element) {
+            var res = /^[A-Za-z0-9\.\+_-]+@[A-Za-z0-9\._-]+\.[a-zA-Z]+$/.test(value);
+            return res
+        },
+        "Not an email"
+    );
+    $(document).ready(function(){
+        $("#form").validate({
+            debug: true,
+            onfocusout: false,
+            onkeyup: false,
+            onclick: false,
+            rules: {
+                field: {
+                    email_new: true,
+                    email_ok: true
+                }
+            },
+            messages: {
+                comments: "No URL's"
+            }
+        });
+
+    });
+</script>
+    <form id="form" method="GET" action="">
+        <input type="text" id="field" name="field">
+        <input type="submit" id="ok" name="ok">
+    </form>
+</body>
+</html>

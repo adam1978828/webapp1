@@ -1,0 +1,115 @@
+{% extends 'acc_base.html' %}
+{% load staticfiles %}
+{% load acctags %}
+{% load tz %}
+{% load filters %}
+{% load i18n %}
+{% block breadcrumb %}
+    <div class="left">
+        <ul class="breadcrumb">
+            <li><a href="/">{% trans "Home" %}</a></li>
+            <li><a href="{% url 'kiosks.views.global_review_inventory' %}">{% trans "Global Review Inventory" %}</a></li>
+        </ul>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}
+
+{% block title %}{% trans "Global Review Inventory" %}{% endblock %}
+
+
+{% block acc_content %}
+    <script>
+        $('#bt_kiosks_global_review').addClass('current');
+        $('.accordion li a').removeClass('open');
+        $('#bt_kiosks_global_review').parent().prev().addClass('open');
+    </script>
+
+
+<section id="content" class="container_12 clearfix ui-sortable" data-sort="true">
+    <h1 class="grid_12">{% trans "Global Review" %}</h1>
+
+    <div class="spacer"></div>
+    <form action="{% url 'kiosks.views.global_review_inventory' %}" method="post" class="grid_12 validate"
+          id="kioskReview" name="kioskReview">
+    <fieldset>
+    <legend>{% trans "Start Review" %}</legend>
+
+    <div class="row">
+      <label for="kiosks">
+        <strong>{% trans "Kiosks" %}</strong>
+      </label>
+
+      <div>
+        <select multiple class="dualselects" data-size="medium" id="kiosks"
+                name="kiosks">
+          {% for kiosk in data.kiosks_without_review %}
+            <option value="{{ kiosk.id }}" name="{{ kiosk.id }}">
+              {{ kiosk.id }} / {{ kiosk.settings.alias }} / {{ kiosk.address.line_1|default:'-' }}
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+
+    <div class="actions">
+        <div class="left">
+            <input type="checkbox"/> Load local Kiosk DB
+        </div>
+        <div class="right">
+            <input id="start" type="submit" value="{% trans "Start" %}"/>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <label for="kiosksStop">
+            <strong>{% trans "Stop Inventory" %}</strong>
+        </label>
+
+        <div>
+            <select multiple class="dualselects" data-size="medium" id="kiosksStop"
+                name="kiosksStop">
+          {% for kiosk in data.kiosks_with_review %}
+            <option value="{{ kiosk.id }}" name="{{ kiosk.id }}">
+              {{ kiosk.id }} / {{ kiosk.settings.alias }} / {{ kiosk.address.line_1|default:'-' }}
+            </option>
+          {% endfor %}
+        </select>
+        </div>
+    </div>
+
+
+    <div class="actions">
+        <div class="right">
+            <input id="stop" name="stop" type="submit" value="{% trans "Stop" %}"/>
+        </div>
+    </div>
+{#    </fieldset>#}
+    {% if data.kiosks_with_review_canceled %}
+{#    <fieldset>#}
+        <div class="row">
+        <label for="canceledReview">
+            <strong>{% trans "Review Canceled" %}</strong>
+        </label>
+
+
+        <select multiple="" data-size="medium" class="ignore" id="canceledReview">
+                {% for kiosk in data.kiosks_with_review_canceled %}
+                <option value="{{ kiosk.id }}" name="{{ kiosk.id }}">
+                  {{ kiosk.id }} / {{ kiosk.settings.alias }} / {{ kiosk.address.line_1|default:'-' }}
+                </option>
+                {% endfor %}
+            </select>
+          </div>
+        </fieldset>
+        {% endif %}
+    </form>
+    </section>
+
+
+{% endblock %}
+
+{% block addons %}
+{% endblock %}

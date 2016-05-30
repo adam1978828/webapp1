@@ -1,0 +1,37 @@
+{% extends 'site/base.html' %}
+{% load staticfiles %}
+{% load i18n %}
+{% block title %}{% trans "Forgot pass" %} - {{request.company.name}}{% endblock %}
+{% block content %}
+{% include 'site/search_panel.html' %}
+    <!-- Main content -->
+        <section class="container">
+            <div class="col-sm-12">
+                <h2 class="page-heading">{% trans "Forgot pass" %}</h2>
+                <section class="container">
+                <div class="col-sm-6 col-sm-offset-3">
+                    <form id="forgot-code-form" class="login" action="{% url 'sites.views.password_restore_confirm' 0 %}" method='post' novalidate=''>
+                        {% csrf_token %}
+                        <div class="field-wrap">
+                            <input type='text' placeholder='{% trans "Code" %}' name='code' class="login__input">
+                            <input type='password' placeholder='{% trans "New password" %}' name='new_password' class="login__input">
+                            <input type='password' placeholder='{% trans "Password" %}' name='repeat_new_password' class="login__input">
+                        </div>
+                        <div class="login__control">
+                            <button type='submit' class="btn btn-md btn--warning btn--wider code">{% trans "Submite" %}</button>
+                        </div>
+                        <div class="clear"></div>
+                    </form>
+                </div>
+            </section>
+            </div>
+        </section>
+    <div class="clearfix"></div>
+{%endblock%}
+{% block script %}
+ <script type="text/javascript">
+              $(document).ready(function() {
+                  init_MovieList();
+              });
+		  </script>
+ {% endblock %}

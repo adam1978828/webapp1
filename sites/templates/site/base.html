@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+{% load i18n %}
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>{% block title %}{% endblock %}</title>
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <meta name="author" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta content="telephone=no" name="format-detection">
+  {% include 'site/load_styles_head.html' %}
+  {% include 'site/load_scripts_head.html' %}
+  <script src="{% static 'site/js/app.js' %}"></script>
+</head>
+<body>
+<div class="alert-in-corner">Something goes wrong</div>
+<div class="wrapper">
+  <div id="fixfooter">
+    <header class="header-wrapper">
+      <div class="container">
+        <a href='/' class="logo">
+          {% if request.company.site.logo_path %}
+            <img alt='logo' src="/media/company/{{ request.company.id }}/sites/logos/{{ request.company.site.logo_path }}">
+          {% else %}
+            <img alt='logo' src="{% static 'site/images/logo.png' %}">
+          {% endif %}
+        </a>
+        <a class="choose" href="{% url 'sites.views.preferred_kiosk' %}">
+          {% if request.preferred_kiosk.settings.alias %}
+            {{ request.preferred_kiosk.settings.alias }}
+          {% else %}
+            {% trans "Preferred kiosk" %}
+          {% endif %}
+        </a>
+        <nav id="navigation-box">
+          <a href="#" id="navigation-toggle">
+            <span class="menu-icon">
+              <span class="icon-toggle" role="button" aria-label="{% trans "Toggle Navigation" %}">
+                <span class="lines"></span>
+              </span>
+            </span>
+          </a>
+          <ul id="navigation">
+            <li><a href="{% url 'sites.views.movies_search' %}">{% trans "Movies" %}</a></li>
+            <li><a href="{% url 'sites.views.company_kiosks' %}">{% trans "Our Kiosks" %}</a></li>
+            <li><a href="{% url 'sites.views.contacts' %}">{% trans "Contact Us" %}</a></li>
+          </ul>
+        </nav>
+        <div class="control-panel cart-top">
+          {% if request.user.is_authenticated %}
+            <div class="auth auth--home">
+              <div class="auth__show">
+                <span class="auth__image">
+                  <img alt="" src="">
+                </span>
+              </div>
+              <a href="#" class="btn btn--sign btn--singin">{% trans "me" %}</a>
+              <ul class="auth__function">
+                <li>
+                  <a href="{% url 'sites.views.user_reservations' %}" class="auth__function-item">{% trans "My reservations" %}</a>
+                </li>
+                <li>
+                  <a href="{% url 'sites.views.personal_data' %}" class="auth__function-item">{% trans "Personal data" %}</a>
+                </li>
+                <li>
+                  <a href="{% url 'sites.views.change_password' %}" class="auth__function-item">{% trans "Change password" %}</a>
+                </li>
+                <li>
+                  <a href="{% url 'sites.views.credit_cards' %}" class="auth__function-item">{% trans "Credit cards" %}</a>
+                </li>
+              </ul>
+            </div>
+            <a class="btn btn--sign log-out" href="{% url 'sites.views.logout' %}">{% trans "Log out" %}</a>
+            {% csrf_token %}
+          {% else %}
+             <a class="btn btn--sign register-window" href="{% url 'sites.views.signup' %}">{% trans "Sign up" %}</a>
+            <a class="btn btn--sign login-window" href="#">{% trans "Sign in" %}</a>
+          {% endif %}
+          <a href="{% url 'sites.views.cart' %}"
+             class="fa fa-shopping-cart {% if not request.preferred_kiosk %}no-kiosk{% endif %}">
+            <span class="col-cart">{{ request.items|length }}</span>
+          </a>
+        </div>
+      </div>
+    </header>
+    {% block content %}{% endblock %}
+  </div>
+  <footer class="footer-wrapper">
+    <section class="container">
+      <div class="col-xs-12 col-md-12">
+        <div class="footer-info">
+          <p class="heading-special--small">{{ request.company.name }}<br>
+            {% if request.company.social_communities %}
+              <span class="title-edition">{% trans "in social media" %}</span></p>
+              <div class="social">
+                {% for social in request.company.social_communities %}
+                  <a target="_blank" href='{{ social.url }}' class="social__variant fa fa-{{ social.brand.brand }}"></a>
+                {% endfor %}
+              </div>
+            {% endif %}
+          <div class="clearfix"></div>
+        </div>
+      </div>
+    </section>
+  </footer>
+</div>
+{% include 'site/modals/alert.html' %}
+{% include 'site/modals/add_coupon.html' %}
+<div class="overlay signo overlay-hugeinc">
+  <section class="container">
+    <div class="col-sm-4 col-sm-offset-4">
+      <button type="button" class="overlay-close">{% trans "Close" %}</button>
+      <form id="login-form" action="{% url 'sites.views.login' %}" class="login" method='post' novalidate=''>
+        {% csrf_token %}
+        <p class="login__title">{% trans "sign in" %} <br><span class="login-edition">{% trans "welcome to" %} {{ request.company.name }}</span></p>
+
+        <div class="field-wrap purchasel" style="display:none;">
+          <div class="alert alert-warning" style="margin-bottom: 15px;">
+            <span class="icon-bell"></span>
+
+            <div class="wtext"></div>
+          </div>
+        </div>
+        <div class="field-wrap">
+          <input type='email' placeholder='{% trans "Email" %}' name='email' class="login__input">
+          <input type='password' placeholder='{% trans "Password" %}' name='password' class="login__input">
+        </div>
+        <div class="login__control">
+          <button type='submit' class="btn btn-md btn--warning btn--wider">{% trans "sign in" %}</button>
+        </div>
+        <div class="login__control">
+          <a href="#" class="login__tracker form__tracker forgot">{% trans "Forgot password?" %}</a>
+        </div>
+        <div class="clear"></div>
+      </form>
+    </div>
+  </section>
+</div>
+
+
+<div class="overlay signupo overlay-hugeinc close">
+  <section class="container">
+    <div class="col-sm-4 col-sm-offset-4">
+      <button type="button" class="overlay-close">{% trans "Close" %}</button>
+      <form id="signupo-form" action="{% url 'sites.views.ajax_signup_confirm' %}" class="login" method='post' novalidate=''>
+        {% csrf_token %}
+        <p class="login__title">{% trans "Signup confirm" %}<br><span class="login-edition">{% trans "welcome to" %} {{ request.company.name }}</span></p>
+
+        <div class="field-wrap purchasel" style="display:none;">
+          <div class="alert alert-warning" style="margin-bottom: 15px;">
+            <span class="icon-bell"></span>
+
+            <div class="wtext"></div>
+          </div>
+        </div>
+        <div class="login__control">
+          <p id="signupo-messege" class="login__tracker form__tracker">{% trans "You didn't confirm your email yet. Please, follow the link in your email." %}</p>
+        </div>
+        <div class="field-wrap">
+          <input id="emailSignupo" type='hidden' placeholder='{% trans "Email" %}' name='email' class="login__input">
+        </div>
+        <div class="login__control">
+          <button id="signupo-submit" type='submit' class="btn btn-md btn--warning btn--wider">{% trans "Send email again" %}</button>
+        </div>
+
+        <div class="clear"></div>
+      </form>
+    </div>
+  </section>
+</div>
+
+
+<div class="overlay checko overlay-hugeinc">
+  <section class="container">
+    <div class="col-sm-4 col-sm-offset-4">
+      <button type="button" class="overlay-close">{% trans "Close" %}</button>
+      <form id="register-form" action="{% url 'sites.views.register_user' %}" class="login" method='post' novalidate=''>
+        {% csrf_token %}
+        <div id="normal-reg">
+          <p class="login__title">{% trans "Sign up" %} <br><span class="login-edition">{% trans "welcome to" %} {{ request.company.name }}</span>
+          </p>
+
+          <div class="field-wrap">
+            <input type='email' placeholder='{% trans "Email" %}' name='email' class="login__input">
+            <input type='password' placeholder='{% trans "Password" %}' name='password' class="login__input">
+          </div>
+          <div class="login__control">
+            <button type='submit' class="btn btn-md btn--warning btn--wider">{% trans "Sign up" %}</button>
+          </div>
+          <div class="login__control">
+            <a href="#" class="login__tracker form__tracker forgot">{% trans "Forgot password?" %}</a>
+            <a href="#" class="login__tracker form__tracker sign">{% trans "Sign in" %}</a>
+          </div>
+          <div class="clear"></div>
+        </div>
+        <div id="success-reg" style="display:none;">
+          <p class="login__title">{% trans "Sign up" %}<br></p>
+
+          <p class="success">{% trans "You have successfully" %}<br> {% trans "signed up!" %}</p>
+        </div>
+      </form>
+    </div>
+  </section>
+</div>
+<div class="overlay forgoto overlay-hugeinc">
+  <section class="container">
+    <div class="col-sm-4 col-sm-offset-4">
+      <button type="button" class="overlay-close">{% trans "Close" %}</button>
+      <form id="forgot-form" class="login" action="{% url 'sites.views.password_restore' %}" method='post'
+            novalidate=''>
+        {% csrf_token %}
+        <div id="normal-forgot">
+          <p class="login__title">{% trans "Forgot password" %} <br><span
+              class="login-edition">{% trans "welcome to" %} {{ request.company.name }}</span></p>
+
+          <div class="field-wrap">
+            <input type='email' placeholder='{% trans "Email" %}' name='email' class="login__input">
+          </div>
+          <div class="login__control">
+            <button type='submit' class="btn btn-md btn--warning btn--wider">{% trans "Restore access" %}</button>
+          </div>
+          <div class="login__control">
+            <a href="#" class="text-center login__tracker form__tracker sign">{% trans "Sign in" %}</a>
+          </div>
+          <div class="clear"></div>
+        </div>
+        <div id="success-forgot" style="display:none;">
+          <p class="login__title">{% trans "Forgot password" %}<br></p>
+
+          <p class="success">{% trans "The link to password reset was successfully sent to you." %}<br>{% trans "Check your email, please" %}</p>
+        </div>
+      </form>
+    </div>
+  </section>
+</div>
+<div class="overlay kioskselect overlay-hugeinc">
+  <section class="container">
+    <div class="col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 col-lg-4 col-lg-offset-4">
+      <button type="button" class="overlay-close">{% trans "Close" %}</button>
+      <form id="add-cart-form" class="login" action="{% url 'sites.views.add_to_cart' %}" method='post' novalidate=''>
+        {% csrf_token %}
+        <div id="normal-kioskselect">
+          <div class="login__control">
+            <button type='submit' class="btn btn-md btn--warning btn--wider">{% trans "Add to cart" %}</button>
+          </div>
+        </div>
+        <div id="success-kioskselect" style="display:none;">
+          <p class="login__title">{% trans "Add cart" %}</p>
+
+          <p class="success">{% trans "Added to cart successfully" %}</p>
+
+          <div class="login__control clearfix">
+            <a href="" class="close btn btn-md btn--warning btn--wider pull-left">{% trans "Continue" %}</a>
+            <a href="{% url 'sites.views.cart' %}" class="btn btn-md btn--warning btn--wider pull-right">{% trans "Check out" %}</a>
+
+            <div class="clear"></div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </section>
+</div>
+
+<div class="overlay kioskselectcart overlay-hugeinc">
+  <section class="container">
+    <div class="col-sm-4 col-sm-offset-4">
+      <button type="button" class="overlay-close">{% trans "Close" %}</button>
+      <form class="login">
+        <div id="success-kioskselect-cart">
+          <p class="login__title">{% trans "Kiosk" %}<br></p>
+
+          <p class="success">{% trans "is not chosen!" %}</p>
+        </div>
+        <div id="normal-kioskselect-cart">
+          <div class="login__control">
+            <button type='button' class="btn btn-md btn--warning close-select btn--wider">{% trans "Ok" %}</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </section>
+</div>
+<div id="reservationSuccessOverlay" class="overlay overlay-hugeinc">
+  <section class="container">
+    <div class="col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 col-lg-4 col-lg-offset-4">
+      <button type="button" class="overlay-close">{% trans "Close" %}</button>
+      <div id="reservationSuccess" class='login' style="display:none;">
+        <p class="login__title">{% trans "Thanks for reservation!" %}</p>
+
+        <p class="success">{% trans "Your secret code is:" %} <span id='secretResCode'></span></p>
+
+        <div class="login__control clearfix">
+          <a href="{% url 'sites.views.user_reservations' %}" class="btn btn-md btn--warning btn--wider">{% trans "Show my reservations" %}</a>
+
+          <div class="clear"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+{% include 'site/modals/choosekiosk.html' %}
+{% include 'site/load_scripts_body.html' %}
+{% block script %}
+{% endblock %}
+</body>
+</html>

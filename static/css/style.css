@@ -1,0 +1,1070 @@
+/* * HTML5 ? Boilerplate
+*
+* What follows is the result of much research on cross-browser styling.
+* Credit left inline and big thanks to Nicolas Gallagher, Jonathan Neal, * Kroc Camen, and the H5BP dev community and team.
+*
+* Detailed information about this CSS:h5bp.com/css
+*
+* ==|== normalize ========================================================== */
+
+
+/* =============================================================================
+HTML5 display definitions
+========================================================================== */
+
+article, aside, details, figcaption, figure, footer, header, hgroup, nav, section {
+  display: block;
+}
+audio, canvas, video {
+  display: inline-block;
+  *display: inline;
+  *zoom: 1;
+}
+audio:not([controls]) {
+  display: none;
+}
+[hidden] {
+  display: none;
+}
+
+/* =============================================================================
+Base
+========================================================================== */
+/* * 1. Correct text resizing oddly in IE6/7 when body font-size is set using em units
+* 2. Force vertical scrollbar in non-IE
+* 3. Prevent iOS text size adjust on device orientation change, without disabling user zoom:h5bp.com/g */
+
+html {
+  font-size: 100%;
+  overflow-y: scroll;
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+}
+body {
+  margin: 0;
+  font-size: 1em;
+  line-height: 1.4;
+}
+body, button, input, select, textarea {
+  font-family: sans-serif;
+  color: #222;
+}
+
+/* * Remove text-shadow in selection highlight:h5bp.com/i
+* These selection declarations have to be separate
+* Also:hot blue! (or customize the background color to match your design) */
+::-moz-selection {
+  background: #264061;
+  color: #fff;
+  text-shadow: none;
+}
+::selection {
+  background: #264061;
+  color: #fff;
+  text-shadow: none;
+}
+
+/* =============================================================================
+Links
+========================================================================== */
+a {
+  color: #00e;
+}
+a:visited {
+  color: #551a8b;
+}
+a:hover {
+  color: #06e;
+}
+a:focus {
+  outline: none;
+}
+
+/* Improve readability when focused and hovered in all browsers:h5bp.com/h */
+a:hover, a:active {
+  outline: 0;
+}
+
+/* =============================================================================
+Typography
+========================================================================== */
+abbr[title] {
+  border-bottom: 1px dotted;
+}
+b, strong {
+  font-weight: bold;
+}
+blockquote {
+  margin: 1em 40px;
+}
+dfn {
+  font-style: italic;
+}
+hr {
+  display: block;
+  height: 1px;
+  border: 0;
+  border-top: 1px solid #ccc;
+  margin: 1em 0;
+  padding: 0;
+}
+ins {
+  background: #ff9;
+  color: #000;
+  text-decoration: none;
+}
+mark {
+  background: #ff0;
+  color: #000;
+  font-style: italic;
+  font-weight: bold;
+}
+
+/* Redeclare monospace font family:h5bp.com/j */
+pre, code, kbd, samp {
+  font-family: monospace, serif;
+  _font-family: 'courier new', monospace;
+  font-size: 1em;
+}
+
+/* Improve readability of pre-formatted text in all browsers */
+pre {
+  white-space: pre;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+q {
+  quotes: none;
+}
+q:before, q:after {
+  content: "";
+  content: none;
+}
+small {
+  font-size: 85%;
+}
+
+/* Position subscript and superscript content without affecting line-height:h5bp.com/k */
+sub, sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+sup {
+  top: -0.5em;
+}
+sub {
+  bottom: -0.25em;
+}
+
+/* =============================================================================
+Lists
+========================================================================== */
+ul, ol {
+  margin: 1em 0;
+  padding: 0 0 0 40px;
+}
+dd {
+  margin: 0 0 0 40px;
+}
+nav ul, nav ol {
+  list-style: none;
+  list-style-image: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* =============================================================================
+Embedded content
+========================================================================== */
+/* * 1. Improve image quality when scaled in IE7:h5bp.com/d
+* 2. Remove the gap between images and borders on image containers:h5bp.com/e */
+
+img {
+  border: 0;
+  -ms-interpolation-mode: bicubic;
+  vertical-align: middle;
+}
+
+/* * Correct overflow not hidden in IE9 */
+svg:not(:root) {
+  overflow: hidden;
+}
+
+/* =============================================================================
+Figures
+========================================================================== */
+figure {
+  margin: 0;
+}
+
+/* =============================================================================
+Forms
+========================================================================== */
+form {
+  margin: 0;
+}
+fieldset {
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+
+/* Indicate that 'label' will shift focus to the associated form element */
+label {
+  cursor: pointer;
+}
+
+/* * 1. Correct color not inheriting in IE6/7/8/9
+* 2. Correct alignment displayed oddly in IE6/7 */
+legend {
+  border: 0;
+  *margin-left: -7px;
+  padding: 0;
+}
+
+/* * 1. Correct font-size not inheriting in all browsers
+* 2. Remove margins in FF3/4 S5 Chrome
+* 3. Define consistent vertical alignment display in all browsers */
+button, input, select, textarea {
+  font-size: 100%;
+  margin: 0;
+  vertical-align: baseline;
+  *vertical-align: middle;
+}
+
+/* * 1. Define line-height as normal to match FF3/4 (set using !important in the UA stylesheet) */
+button, input {
+  line-height: normal;
+}
+
+/* * 1. Display hand cursor for clickable form elements
+* 2. Allow styling of clickable form elements in iOS
+* 3. Correct inner spacing displayed oddly in IE7 (doesn't effect IE6) */
+button, input[type="button"], input[type="reset"], input[type="submit"] {
+  cursor: pointer;
+  -webkit-appearance: button;
+  *overflow: visible;
+}
+
+/* * Consistent box sizing and appearance */
+input[type="checkbox"], input[type="radio"] {
+  box-sizing: border-box;
+  padding: 0;
+}
+input[type="search"] {
+  -webkit-appearance: textfield;
+  -moz-box-sizing: content-box;
+  -webkit-box-sizing: content-box;
+  box-sizing: content-box;
+}
+input[type="search"]::-webkit-search-decoration {
+  -webkit-appearance: none;
+}
+
+/* * Remove inner padding and border in FF3/4:h5bp.com/l */
+button::-moz-focus-inner, input::-moz-focus-inner {
+  border: 0;
+  padding: 0;
+}
+
+/* * 1. Remove default vertical scrollbar in IE6/7/8/9
+* 2. Allow only vertical resizing */
+textarea {
+  overflow: auto;
+  vertical-align: top;
+  resize: vertical;
+}
+
+/* Colors for form validity
+input:valid, textarea:valid {
+}
+input:invalid, textarea:invalid {
+  background-color: #f0dddd;
+}
+*/
+/* =============================================================================
+Tables
+========================================================================== */
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+td {
+  vertical-align: middle;
+}
+
+/* ==|== primary styles =====================================================
+Author:========================================================================== */
+/* ==|== media queries ======================================================
+PLACEHOLDER Media Queries for Responsive Design.
+These override the primary ('mobile first') styles
+Modify as content requires.
+========================================================================== */
+
+@media only screen and (min-width:480px) {
+  /* Style adjustments for viewports 480px and over go here */
+}
+@media only screen and (min-width:768px) {
+  /* Style adjustments for viewports 768px and over go here */
+}
+
+/* ==|== non-semantic helper classes ========================================
+Please define your styles before this section.
+========================================================================== */
+/* For image replacement */
+.ir {
+  display: block;
+  border: 0;
+  text-indent: -999em;
+  overflow: hidden;
+  background-color: transparent;
+  background-repeat: no-repeat;
+  text-align: left;
+  direction: ltr;
+  *line-height: 0;
+}
+.ir br {
+  display: none;
+}
+
+/* Hide from both screenreaders and browsers:h5bp.com/u */
+.hidden {
+  display: none !important;
+  visibility: hidden;
+}
+
+/* Hide only visually, but have it available for screenreaders:h5bp.com/v */
+.visuallyhidden {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+
+/* Extends the .visuallyhidden class to allow the element to be focusable when navigated to via the keyboard:h5bp.com/p */
+.visuallyhidden.focusable:active, .visuallyhidden.focusable:focus {
+  clip: auto;
+  height: auto;
+  margin: 0;
+  overflow: visible;
+  position: static;
+  width: auto;
+}
+
+/* Hide visually and from screenreaders, but maintain layout */
+.invisible {
+  visibility: hidden;
+}
+
+/* Contain floats:h5bp.com/q */
+.clearfix:before, .clearfix:after {
+  content: "";
+  display: table;
+}
+.clearfix:after {
+  clear: both;
+}
+.clearfix {
+  *zoom: 1;
+}
+
+/* ==|== print styles =======================================================
+Print styles.
+Inlined to avoid required HTTP connection:h5bp.com/r
+========================================================================== */
+@media print {
+  *{background: transparent !important;
+    color: black !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+    filter: none !important;
+    -ms-filter: none !important;
+  }
+  
+  /* Black prints faster:h5bp.com/s */
+  a, a:visited {
+    text-decoration: underline;
+  }
+  a[href]:after {
+    content: " (" attr(href) ")";
+  }
+  abbr[title]:after {
+    content: " (" attr(title) ")";
+  }
+  .ir a:after, a[href^="javascript:"]:after, a[href^="#"]:after {
+    content: "";
+  }
+  
+  /* Don't show links for images, or javascript/internal links */
+  pre, blockquote {
+    border: 1px solid #999;
+    page-break-inside: avoid;
+  }
+  thead {
+    display: table-header-group;
+  }
+  
+  /* h5bp.com/t */
+  tr, img {
+    page-break-inside: avoid;
+  }
+  img {
+    max-width: 100% !important;
+  }
+  @page {
+    margin: 0.5cm;
+  }
+  p, h2, h3 {
+    orphans: 3;
+    widows: 3;
+  }
+  h2, h3 {
+    page-break-after: avoid;
+  }
+}
+.text-overflow {
+  white-space: nowrap; /* Перво-наперво, запретим перенос строк */
+  overflow: hidden; /* Скрываем текст, который не помещается в блок */
+  text-overflow: ellipsis; /* Уводим текст в многоточие */
+  display: block; /* Элемент обязательно должен быть блочным */
+}
+.center {
+  text-align: center;
+}
+#firstdatasubmit {
+  width: auto;
+}
+.actions:before, .ui-dialog .actions:after {
+  content: "";
+  display: table;
+}
+.actions:after {
+  clear: both;
+}
+.actions .left {
+  float: left;
+}
+.actions .right {
+  float: right;
+}
+#companySettings .checkbox, #kioskSettings .checkbox {
+  display: block;
+}
+.onoffswitch .checkbox {
+  display: none !important;
+}
+.onoffswitch {
+  position: relative;
+  width: 90px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+.onoffswitch-checkbox {
+  display: none;
+}
+.onoffswitch-label {
+  display: block;
+  overflow: hidden;
+  cursor: pointer;
+  border: 2px solid #999999;
+  border-radius: 20px;
+  width: 90px;
+}
+.onoffswitch-inner {
+  display: block;
+  width: 200%;
+  margin-left: -100%;
+  -moz-transition: margin 0.3s ease-in 0s;
+  -webkit-transition: margin 0.3s ease-in 0s;
+  -o-transition: margin 0.3s ease-in 0s;
+  transition: margin 0.3s ease-in 0s;
+}
+.onoffswitch-inner:before, .onoffswitch-inner:after {
+  display: block;
+  float: left;
+  width: 50%;
+  height: 30px;
+  padding: 0;
+  line-height: 30px;
+  font-size: 14px;
+  color: white;
+  font-family: Trebuchet, Arial, sans-serif;
+  font-weight: bold;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+.onoffswitch-inner:before {
+  content: "days";
+  padding-left: 10px;
+  background-color: #34A7C1;
+  color: #FFFFFF;
+}
+.onoffswitch-inner:after {
+  content: "dollars";
+  padding-right: 10px;
+  background-color: #EEEEEE;
+  color: #999999;
+  text-align: right;
+}
+.onoffswitch-switch {
+  display: block;
+  width: 18px;
+  margin: 6px;
+  background: #FFFFFF;
+  border: 2px solid #999999;
+  border-radius: 20px;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 56px;
+  -moz-transition: all 0.3s ease-in 0s;
+  -webkit-transition: all 0.3s ease-in 0s;
+  -o-transition: all 0.3s ease-in 0s;
+  transition: all 0.3s ease-in 0s;
+}
+.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {
+  margin-left: 0;
+}
+.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
+  right: 0px;
+}
+
+/* .selectPeriod .yes {
+  display: inline-block !important;
+}
+*/
+.skipDaysWeek .leftMonth {
+  display: inline-block;
+  width: auto;
+}
+.selectPeriod .chosen-container {
+  /* for day, month and year selectors in skip days  */
+  display: inline-block;
+  margin: 0 1% 0 0;
+  width: 15% !important;
+}
+.disk-cover {
+  float: left;
+  margin: 16px 10px 0 16px;
+}
+.topmargin {
+  box-sizing: border-box;
+  padding: 20px 0 0 15px !important;
+  height: auto !important;
+}
+.info_row {
+  padding: 15px 0 0 0 !important;
+  cursor: default;
+}
+#deals-table tbody tr {
+  cursor: pointer;
+}
+#deals-table tbody tr tr {
+  cursor: default;
+}
+form.no-box .row.grid_6 {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+.row.grid_6 {
+  width: 50% !important;
+}
+.topmargin2 {
+  border-right: 1px solid #d2d2d2;
+  box-sizing: border-box;
+  padding: 20px 0 0 15px !important;
+  height: auto !important;
+}
+.row.grid_6 label {
+  padding: 20px 10px !important;
+  border-left: 1px solid #d2d2d2 !important;
+}
+.row.grid_6:last-child {
+  border-bottom: 1px solid #d2d2d2 !important;
+}
+.info_row form.no-box {
+  margin-bottom: 15px !important;
+}
+.deal-transaction {
+  border-right: 1px solid #d2d2d2;
+  border-bottom: 1px solid #d2d2d2;
+  border-left: 1px solid #d2d2d2;
+}
+.deals label {
+  cursor: default;
+}
+tr.strong > td {
+  font-weight: bold;
+}
+.dataTable tr td {
+  text-align: center;
+}
+.newtable tr td {
+  text-align: left;
+  vertical-align: top;
+}
+.marginedtop {
+  margin-top: 15px;
+}
+.tabletools .right a {
+  cursor: pointer;
+}
+.hidden {
+  display: none;
+}
+.visible {
+  display: block;
+}
+.autoscroll {
+  max-height: 175px;
+  overflow: auto;
+}
+.upc-cards {
+  display: table;
+  width: 100%;
+}
+.pricing .price {
+  text-align: center !important;
+}
+.pricing {
+  display: table-cell;
+  vertical-align: middle;
+}
+span.upc-transfer {
+  font-size: 32px !important;
+  float: left;
+  padding: 0 10px;
+  vertical-align: middle;
+}
+.upc-details {
+  margin-bottom: 10px !important;
+}
+.upc-details section {
+  padding-bottom: 90px;
+}
+.discard-translation {
+  position: absolute;
+  right: 10px;
+  top: 3px;
+}
+.discard-translation:hover {
+  cursor: pointer;
+}
+.create-upc-notify {
+  max-height: 200px;
+}
+.strike-out {
+  text-decoration: line-through;
+}
+.dataTables_length .text {
+  top: 0 !important;
+}
+.server-log {
+  max-height: 400px;
+  overflow: auto;
+}
+.update-center .full-stats {
+  display: block !important;
+  float: none !important;
+  margin: 0 auto;
+}
+.stat.hlist .warm-yellow .value {
+  color: #FF8C00;
+}
+
+.date-changed {
+  display: block !important;
+  font-family: Verdana;
+  font-weight: bold;
+  margin: 10px auto;
+  text-align: center;
+}
+
+.transaction-detail .field-actions {
+  display: none;
+  left: 70%;
+  margin: 0 !important;
+  padding: 0 !important;
+  position: absolute;
+  top: 37.5%;
+}
+
+.transaction-detail:hover .field-actions {
+  display: table-cell;
+  cursor: pointer;
+}
+
+.transaction-detail .field-actions .icon-ok {
+  color: green;
+}
+
+.transaction-detail .field-actions .icon-remove {
+  color: red;
+}
+
+input.inline-edit, input.inline-edit[disabled]{
+  background-color: #FFF;
+  box-shadow: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+
+  font: inherit;
+  color: inherit;
+  line-height: inherit;
+  font-size: inherit;
+  text-align: inherit;
+
+  vertical-align: top;
+}
+
+input.inline-edit[disabled] {
+  background-color: #FFF !important;
+  border: none !important;
+  cursor: default !important;
+}
+
+input.inline-edit:hover,
+input.inline-edit:focus{
+  background-color: #FFD;
+  -webkit-transition: background-color 0.5s;
+     -moz-transition: background-color 0.5s;
+      -ie-transition: background-color 0.5s;
+          transition: background-color 0.5s;
+}
+
+.inline-select {
+  font-family: "PT Sans",sans-serif;
+  margin: 0 !important;
+  padding: 0 !important;
+  text-align: center;
+  width: auto;
+}
+
+div.inline-select .chosen-container {
+  display: block;
+  position: absolute;
+  left: 40%;
+  top: 28%;
+}
+
+div.inline-select .chosen-container-single .chosen-single {
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  color: #5e6267;
+}
+
+div.inline-select .chosen-container-single .chosen-single div {
+  background: none !important;
+  border: none !important;
+  top: -1.5px !important;
+  right: 10px !important;
+}
+
+div.inline-select .chosen-container-single.chosen-disabled {
+  opacity: 1 !important;
+}
+
+div.inline-select .chosen-container-single.chosen-disabled .chosen-single div {
+  display: none;
+  cursor: default !important;
+}
+
+.pointing:hover {
+  cursor: pointer;
+}
+
+.covers {
+  text-align: center;
+}
+
+.covers img {
+  margin: 0 20px 20px 20px;
+  text-align: center;
+}
+
+.screens {
+  text-align: center;
+}
+
+#screenGallery{overflow: auto;max-height: 400px;}
+
+.screens .gallery,
+.latest-screen .gallery {
+  display: inline-block;
+  margin: 0 auto;
+}
+
+.screens .gallery .top.image,
+.latest-screen .gallery .top.image {
+  width: 68%;margin-left: 0.5%;
+}
+
+.screens .gallery .bottom.image,
+.latest-screen .gallery .bottom.image {
+  width: 31%;
+}
+
+.screens .gallery .image img,
+.latest-screen .gallery .image img {
+  width: 100%;
+}
+
+.latest-screen, .empty {
+  text-align: center;
+}
+
+.latest-screen .block {
+  margin-bottom: 10px;
+}
+
+.latest-screen .content, .screens .content {
+  height: 100%;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.latest-screen .grid_12 {
+  min-height: 200px;
+  width:100% !important;
+}
+
+.latest-screen #loading-overlay,
+.latest-screen #loading {
+  position: absolute !important;
+}
+.otstup{margin:10px 5px;}
+@media (max-width: 1366px) {
+    #screenGallery{max-height: 350px;}
+}
+@media (min-width: 1367px) {
+    #screenGallery{max-height:530px;}
+}
+
+.pricing .info li span{
+  padding: 10px 10px 10px 50px;
+}
+
+#shortMovieInfo .pricing {
+  width: 98% !important;
+}
+
+#shortMovieInfo .pricing .badge.block {
+  position: absolute;
+  right: 10px;
+}
+
+/* ********************************************* */
+/* Scheduler */
+
+.scheduler {
+  position: relative;
+}
+
+.scheduler:before, .scheduler:after {
+  display: table;
+  content: '';
+}
+
+.scheduler:after {
+  clear: both;
+}
+
+.scheduler .left, .scheduler .right {
+  width: 50%;
+
+  float: left;
+
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.scheduler .left {
+  padding-right: 25px;
+}
+
+
+.scheduler .right {
+  padding-left: 25px;
+}
+
+.scheduler input, .scheduler select {
+  width: 100%;
+
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.scheduler input, .scheduler input.valid {
+  margin-bottom: -1px;
+  border-radius: 3px 3px 0 0;
+}
+
+.scheduler select {
+  padding: 5px;
+  padding-top: 0;
+
+  border: 1px solid #a0a0a0;
+  border-top: none;
+  border-radius: 0 0 3px 3px;
+}
+
+.scheduler.small select {
+  height: 100px;
+}
+
+.scheduler.medium select {
+  height: 150px;
+}
+
+.scheduler.large select {
+  height: 500px;
+}
+
+.scheduler input:focus + select {
+  border: 1px solid #5695db;
+  border-top: none;
+}
+
+.scheduler .buttons {
+  position: absolute;
+
+  left: 50%;
+  margin-left: -25px;
+  width: 50px;
+}
+
+.scheduler .buttons a {
+  width: 80%;
+  margin: 0 10%;
+
+  border-bottom-width: 0px;
+  border-radius: 0;
+
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  box-sizing: border-box;
+
+  text-align: center;
+}
+
+.scheduler .buttons a:first-child {
+  border-radius: 3px 3px 0 0;
+}
+
+.scheduler .buttons a:last-child {
+  border-radius: 0 0 3px 3px;
+  border-bottom-width: 1px;
+}
+
+/* Google Maps mango styling */
+.map.box {
+  border: none;
+  height: 400px;
+  margin: 0;
+  padding: 0;
+}
+
+.map.box .map.canvas {
+  height: 100%;
+}
+
+.kioskInfo {
+  min-width: 100px;
+}
+
+.kioskInfo a {
+  display: block;
+}
+
+.kioskInfo h2 {
+  padding-top: 5px;
+  padding-bottom: 0.75em;
+}
+
+#patternExplanation {
+  font-size: 1.1em;
+}
+
+.tabled {
+  display: table;
+}
+
+input[type='radio'].cell {
+  margin-right: 5px;
+}
+
+.tabled .cell {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+#popUpResults {
+  height: 75px;
+  overflow: auto;
+  min-width: 350px;
+}
+
+.top-right.icon {
+  position: absolute;
+  top: 8px;
+  right: 12px;
+}
+
+.top-right.icon:hover {
+  cursor: pointer;
+}
+
+.medium-width {
+  width: 60%;
+}
+
+.offkiosk td{background-color: #264061 !important;color:white !important;}
+.un-visible{display:none;}
+.addreport{margin:20px 0; padding: 4px 8px !important;}
+.rep-sortable td:first-child {padding-top: 6px !important;text-align: center;vertical-align: top;width: 5px;}
+.rep-order-by, .field-wrapper{}
+.add-field, .remove-field{padding: 4px 8px !important;}
+.styled2, .styled2 input{width:100%}
+.styled3, .styled3 input{width: 91.6667%;}
+.icon-sort{cursor:pointer;}
+#filters, #fields, #aggregations, #order_by_fields, #group_by_fields {}
+#filters .chosen-container, #fields .chosen-container, #aggregations .chosen-container, #order_by_fields .chosen-container, #group_by_fields .chosen-container{width:100% !important;}
+.remove-group, .remove-field{margin-left:1%;}
+.overflow-y {overflow-y: scroll;}
+#ds-fields{margin-bottom:0px;}
+.ds_settings .chosen-container-multi .chosen-choices li.search-choice .search-choice-close{right: 5px;top: 3px;width: 16px;}
+.ds_settings{margin:0 !important;width: 100% !important;}
+
+.circul-red {
+  display: block;
+  position: relative;
+  width: 14px;
+  height: 14px;
+  top: -14px;
+  background: url('../img/layout/content/toolbar/user/counter.png');
+  line-height: 12px;
+  user-select: none;
+  -moz-user-select: none;
+  cursor: default;
+  font-family: Arial;
+  text-align: center;
+  color: #fff;
+}
+.circul-red:hover {
+    color: #fff;
+}

@@ -1,0 +1,101 @@
+{% extends 'acc_base.html' %}
+{% load staticfiles %}
+{% load acctags %}
+{% load filters %}
+{% load i18n %}
+{% block breadcrumb %}
+    <div class="left">
+        <ul class="breadcrumb">
+            <li><a href="/">{% trans "Home" %}</a></li>
+            <li><a href="{% url 'movies.views.all' %}">{% trans "Movies" %}</a></li>
+            <li><a href="{% url 'movies.views.featured' %}">{% trans "Featured" %}</a></li>
+        </ul>
+    </div>
+{% endblock %}
+{% block title %}{% trans "Featured Movies" %}{% endblock %}
+
+{% block acc_content %}
+    <script>
+        $('#bt_movies_featured').addClass('current');
+        $('.accordion li a').removeClass('open');
+        $('#bt_movies_featured').parent().prev().addClass('open');
+    </script>
+    <section id="content" class="container_12 clearfix ui-sortable" data-sort="true">
+
+        {% if 'movies_edit_featured' in request.user.rights %}
+            <div class="grid_12">
+                <div class="box">
+                    <div class="header">
+                        <h2>{% trans "Feature the movie" %}</h2>
+                    </div>
+                    <form id="featuredMovies" action="" method="post" class="full content validate">
+                        {% csrf_token %}
+                        <fieldset>
+                            <div class="row">
+                                <label for="movieId">
+                                    <strong>{% trans "Movie" %}</strong>
+                                </label>
+
+                                <div>
+                                    <!-- dropdown here -->
+                                    <select data-short-info-url="{% url 'movies.views.short_info' 000 %}" data-search-url="{% url 'movies.views.search' %}"
+                                            name="movieId" id="movieId" class="search" data-placeholder="{% trans "Search the movie" %}">
+                                        <option value=""></option>
+                                        {% for movie in movies %}
+                                            <option value="{{ movie.id }}">{{ movie.get_name }}</option>
+                                        {% endfor %}
+                                    </select>
+
+                                    <div id='shortMovieInfo'></div>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+                    <div class="actions">
+                        <div class="right">
+                            <input id='makeFeatured' type="submit" value="{% trans "Add to Featured" %}">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+        <section class="grid_12 box">
+            <table id='featuredMoviesTable' class="dynamic styled" data-show-Filter-Bar="true" data-max-items-per-page="50"
+                   data-unfeature-url="{% url 'movies.views.unfeature' 0 %}">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>{% trans 'Name' %}</th>
+                    <th>{% trans 'Length' %}</th>
+                    <th>{% trans 'Release' %}</th>
+                    <th>{% trans 'DVD Release' %}</th>
+
+                    {% if 'movies_edit_featured' in request.user.rights %}
+                        <th>Actions</th>
+                    {% endif %}
+
+                </tr>
+                </thead>
+                <tbody>
+                {% for movie in featured %}
+                    <tr>
+                        <td class="center">{{ forloop.counter }}</td>
+                        <td class="center">{{ movie.get_name }}</td>
+                        <td class="center">{{ movie.length }}</td>
+                        <td class="center">{{ movie.dt_release|date:'m/d/y' }}</td>
+                        <td class="center">{{ movie.dt_dvd_release|date:'m/d/y' }}</td>
+
+                        {% if 'movies_edit_featured' in request.user.rights %}
+                            <td class="center">
+                                <a class="button small grey" href="{% url 'movies.views.unfeature' movie.id %}"><i class="icon-remove"></i></a>
+                            </td>
+                        {% endif %}
+
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </section>
+    </section>
+{% endblock %}

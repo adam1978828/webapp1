@@ -1,0 +1,57 @@
+{% load i18n %}
+<form class="grid_12 no-box" name="" method="post" action="" novalidate="novalidate" id="repAggregations">
+    <fieldset>
+        <legend>{% trans "Aggregations" %}</legend>
+        <div class="row">
+            <label> <strong>{% trans "Add" %}</strong></label>
+            <div class="grid_6">
+                <select class="form-control input-sm" id="aggregations-set">
+                    {% for val in report.aggregations %}
+                        <option value="{{ val.model_field_name }}">
+                            {{ val.readable_name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <a class="button medium addreport pull-left" id="addAggregation"><i class="icon-plus"></i></a>
+            <div class="clear"></div>
+        </div>
+    </fieldset>
+    <fieldset>
+        <legend>{% trans "Selected Aggregations" %}</legend>
+        <table class="styled2 row" id="aggregations">
+            {% for agg in pattern.aggregations %}
+                {% for val in report.aggregations %}
+                    {% if agg.alias == val.model_field_name %}
+                        <tr>
+                            <td><i class="icon icon-sort"></i></td>
+                            <td>
+                                <div class="rep-aggregation agg-by-{{ val.model_field_name }}">
+                                    <div class="grid_3">
+                                        <input type="text" name="alias" value="{{ val.model_field_name }}" hidden style="display:none;">
+                                        <input type="text" readonly class="form-control input-sm"
+                                               value="{{ val.readable_name }}">
+                                    </div>
+                                    <div class="grid_3">
+                                        <input type="text" name="header" class="form-control input-sm" value="{{ agg.header }}">
+                                    </div>
+                                    <div class="grid_5">
+                                            <select class="form-control input-sm" name="agg_alias">
+                                                {% for agg_func in val.aggregations %}
+                                                    <option value="{{ agg_func.alias }}" {% if agg_func.alias == agg.agg_alias %}selected{% endif %}>{{ agg_func.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                    </div>
+                                        {% if 'pattern' in mode %}
+                                            <a class="button medium remove-agg pull-left"><i class="icon-minus"></i></a>
+                                        {% endif %}
+                                </div>
+                            </td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}
+        </table>
+    </fieldset>
+    {% include 'report/config/aggregations.html' %}
+</form>

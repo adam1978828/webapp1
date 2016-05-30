@@ -1,0 +1,52 @@
+{% extends 'acc_base.html' %}
+{% load staticfiles %}
+{% load acctags %}
+{% load i18n %}
+{% block breadcrumb %}
+        <div class="left">
+            <ul class="breadcrumb">
+                {% if mode == "add" %}
+                     <li><a href="/">{% trans "Home" %}</a></li>
+                     <li><a href="{% url 'price_plans.views.all_price_plans' %}">{% trans "Price plans" %}</a></li>
+                     <li><a href="{% url 'price_plans.views.add_price_plan' %}">{% trans "Add" %}</a></li>
+                {% elif mode == "edit" %}
+                     <li><a href="/">{% trans "Home" %}</a></li>
+                     <li><a href="{% url 'price_plans.views.all_price_plans' %}">{% trans "Price plans" %}</a></li>
+                     <li><a href="">{% trans "Edit" %}</a></li>
+                {% elif mode == "show" %}
+                     <li><a href="/">{% trans "Home" %}</a></li>
+                     <li><a href="{% url 'price_plans.views.all_price_plans' %}">{% trans "Price plans" %}</a></li>
+                     <li><a href="">{% trans "Show" %}</a></li>
+                {% endif %}
+            </ul>
+        </div>
+{% endblock %}
+{% block title %}
+{% if mode == "add" %}
+        {% trans "Add price plan" %}
+{% elif mode == "edit" %}
+        {% trans "Edit price plan" %}
+{% elif mode == "show" %}
+        {% trans "Show price plan" %}
+{% endif %}
+{% endblock %}
+{% block acc_content %}
+<script>
+    $('#priceplans').addClass('current');
+$('.accordion li a').removeClass('open');
+</script>
+<section id="content" class="container_12 clearfix ui-sortable" data-sort="true">
+        <h1 class="grid_12">
+        {% if mode == "add" %}
+            {% trans "Add price plan" %}
+        {% elif mode == "edit" %}
+            {% trans "Edit price plan" %}
+        {% elif mode == "show" %}
+            {% trans "Show price plan" %}
+        {% endif %}
+        </h1>
+        <div class="grid_12">
+            {% include 'priceplans/add.html' %}
+        </div>
+</section>
+{% endblock %}

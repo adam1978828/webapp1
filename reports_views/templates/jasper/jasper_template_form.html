@@ -1,0 +1,62 @@
+{% load i18n %}
+
+<form id="jasperTemplateForm" class="grid_12 no-box" name="" method="post" action="" novalidate="novalidate">
+    <fieldset>
+        <legend>{% if mode == 'edit' %}{% trans "Edit Jasper Template" %}{% else %}{% trans 'Add New Jasper Template' %}{% endif %}</legend>
+
+        {% if mode == 'edit' %}
+            <input class="hidden" type="text" name="id" id="id" value="{{ j_temp.id|default_if_none:'' }}">
+        {% endif %}
+        <div class="row">
+            <label for="name">
+                <strong>{% trans "Name" %}</strong>
+            </label>
+
+            <div>
+                <input type="text" name="name" id="name" value="{{ j_temp.name|default_if_none:'' }}">
+            </div>
+        </div>
+
+        <div class="row">
+            <label for="alias">
+                <strong>{% trans "Alias" %}</strong>
+            </label>
+
+            <div>
+                <input type="text" name="alias" id="alias" value="{{ j_temp.alias|default_if_none:'' }}">
+            </div>
+        </div>
+
+        <div class="row">
+            <label for="path">
+                <strong>{% trans "Jasper Server Path" %}</strong>
+            </label>
+
+            <div>
+                <input type="text" name="path" id="path" value="{{ j_temp.path|default_if_none:'' }}">
+            </div>
+        </div>
+
+        <div class="row">
+            <label for="is_for">
+                <strong>{% trans "Is Available For" %}</strong>
+            </label>
+            <div>
+                <select class="form-control input-sm" name="is_for" id="is_for">
+                    <option value="-1" {% if is_for == -1 %}selected="selected"{% endif %}>{% trans "Focus Only" %}</option>
+                    <option value="-2" {% if is_for == -2 %}selected="selected"{% endif %}>{% trans "All Companies" %}</option>
+                    {% for val in companies %}
+                        <option value="{{ val.id }}" {% if is_for == val.id %}selected="selected"{% endif %}>{{ val.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+    </fieldset>
+    <div class="actions">
+        <div class="right">
+            <button class="" id="saveJasperTemplate" data-url="{% url 'reports_views.views.save_jasper_template' %}">
+                <span class="icon icon-save"></span> {% trans "Save" %}
+            </button>
+        </div>
+    </div>
+</form>

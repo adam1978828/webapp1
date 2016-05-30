@@ -1,0 +1,303 @@
+{% extends 'acc_base.html' %}
+{% load staticfiles %}
+{% load acctags %}
+{% load tz %}
+{% load i18n %}
+{% block breadcrumb %}
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/script_profile.js' %}"></script>
+{% endblock %}
+
+{% block title %}{% trans "Profile" %}{% endblock %}
+
+
+{% block acc_content %}
+<script>
+$('#bt_list_user_management').addClass('current');
+</script>
+
+
+		<!-- Here goes the content. -->
+		<section id="content" class="container_12 clearfix" data-sort=true>
+
+			<!-- Your Boxes Here! -->
+
+            <div class="grid_12 profile">
+
+				<div class="header">
+
+					<div class="title">
+						<h2>{{person.name}}</h2>
+						<h3>{{person.user_type.name|capfirst}}</h3>
+					</div>
+					<div class="avatar">
+						<img src="{% static 'img/elements/profile/avatar.png' %}" />
+					</div>
+
+
+
+
+                </div><!-- End of .header -->
+
+                <div class="clearfix"></div>
+                <div class="divider"></div>
+
+                <div class="details grid_12">
+					<h2>{% trans "Personal Details" %}</h2>
+                    <section>
+						<table>
+							<tr>
+								<th>{% trans "Name:" %}</th><td>{{ person.full_name }}</td>
+							</tr>
+							<tr>
+								<th>{% trans "Email:" %}</th><td>{{ person.email }}</td>
+							</tr>
+                            {% if person.email2 %}
+							<tr>
+								<th>{% trans "Alternative email:" %}</th><td>{{ person.email2 }}</td>
+							</tr>
+                            {% endif %}
+                            {% if request.user.is_focus %}
+							<tr>
+								<th>{% trans "Company:" %}</th><td>{{ person.company.name }}</td>
+							</tr>
+                            {% endif %}
+                            {% if person.address.to_string %}
+							<tr>
+								<th>{% trans "Address:" %}</th><td>{{ person.address.to_string }}</td>
+							</tr>
+                            {% endif %}
+                            {% if person.address.line_2 %}
+							<tr>
+								<th>{% trans "Address 2:" %}</th><td>{{ person.address.line_2 }}</td>
+							</tr>
+                            {% endif %}
+                            {% if person.address.city %}
+							<tr>
+								<th>{% trans "City:" %}</th><td>{{ person.address.city }}</td>
+							</tr>
+                            {% endif %}
+                            {% if person.address.state %}
+							<tr>
+								<th>{% trans "State:" %}</th><td>{{ person.address.state }}</td>
+							</tr>
+                            {% endif %}
+                            {% if person.address.postalcode %}
+							<tr>
+								<th>{% trans "Postal code:" %}</th><td>{{ person.address.postalcode }}</td>
+							</tr>
+                            {% endif %}
+                            {% if person.address.country %}
+							<tr>
+								<th>{% trans "Country:" %}</th><td>{{ person.address.country }}</td>
+							</tr>
+                            {% endif %}
+                            {% if person.phone %}
+							<tr>
+								<th>{% trans "Phone:" %}</th><td>{{ person.phone|phonenumber }}</td>
+							</tr>
+                            {% endif %}
+                            {% if person.m_phone %}
+							<tr>
+								<th>{% trans "Mobile phone:" %}</th><td>{{ person.m_phone|phonenumber }}</td>
+							</tr>
+                            {% endif %}
+						</table>
+					</section>
+				</div><!-- End of .details -->
+
+				<div class="clearfix"></div>
+				<div class="divider"></div>
+
+
+                <div class="details grid_12">
+					<h2>{% trans "Actions" %}</h2>
+                    <section>
+                      <form id="formSendEmailForRestorePassword" class="form-send-res-pass" action="{% url 'companies.views.send_mail_for_password_restore' %}" method='post' novalidate=''>
+                        {% csrf_token %}
+                        <input type="hidden" name="user_id" class="login__input" value="{{ person.id }}">
+                        <button id="sendEmailForRestorePassword" type='submit' class="btn btn-md btn--warning btn--wider">{% trans "Send email for restore password" %}</button>
+                      </form>
+                    </section>
+                </div>
+
+                <div class="clearfix"></div>
+				<div class="divider"></div>
+
+                <div class="spacer"></div>
+                <div class="grid_12">
+                    <h2>{% trans "User Deals" %}</h2>
+                    <div class="box">
+                        <div class="content">
+                            <table id="deals-table" class="deals-person dynamic styled" data-show-Filter-Bar="true"
+                                   data-max-items-per-page=25>
+                                <thead>
+                                <tr>
+                                    <th>{% trans "ID" %}</th>
+                                    <th>{% trans "Card" %}</th>
+                                    <th>{% trans "Started on" %}</th>
+                                    <th>{% trans "Title" %}</th>
+                                    <th>{% trans "Status" %}</th>
+                                    <th>{% trans "Date start" %}</th>
+                                    <th>{% trans "Date end" %}</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for deal in deals %}
+                                    <tr class="tooltip" data-id="{{ deal.id }}"
+                                        data-url="{% url 'deals.views.show_deal' deal.id %}" title="{% trans "Click to view" %}">
+                                        <td class="center">{{ forloop.counter }}</td>
+                                        <td class="center">{{ deal.card.value_to_display|default:'-' }}</td>
+                                        <td class="center">
+                                            {% if deal.kiosk_start.settings.alias %}
+                                                {{ deal.kiosk_start.settings.alias|default:'-' }}
+                                            {% else %}
+                                                {{ deal.kiosk_start.settings.address.to_string|default:'-' }}
+                                            {% endif %}
+                                        </td>
+                                        <td class="center">{{ deal.disk.upc.movie.get_name }} ({{ deal.disk.upc.format.name }})
+                                            / {{ deal.disk.upc.movie.release_year }}</td>
+                                        <td data-field="status" class="center">{{ deal.deal_status.alias|default:'-' }}</td>
+        {#                                <td class="center">{{ deal.dt_start|localize:deal.kiosk_start.settings.timezone.name|date:'d.m.y H:i:s'|default:'-' }}</td>#}
+                                        <td class="center">{{ deal.dt_start|timezone:deal.kiosk_start.settings.timezone.name|date:'d.m.y H:i:s'|default:'-' }}</td>
+                                        <td class="center">
+                                            {% if deal.kiosk_end %}
+                                                {{ deal.dt_end|timezone:deal.kiosk_end.settings.timezone.name|date:'d.m.y H:i:s'|default:'-' }}
+                                            {% else %}
+                                                {{ deal.dt_end|timezone:deal.kiosk_start.settings.timezone.name|date:'d.m.y H:i:s'|default:'-' }}
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+
+			</div>
+
+		</section><!-- End of #content -->
+
+{% endblock %}
+
+{% block addons %}
+    <!--<!-- The settings dialog -->-->
+    <!--<div id="settings" class="settings-content" data-width=450>-->
+
+        <!--<ul class="tabs center-elements">-->
+            <!--<li><a href="#settings-1"><img src="{% static 'img/icons/packs/fugue/24x24/user-business.png' %}" alt="" /><span>Basic Info</span></a></li>-->
+            <!--<li><a href="#settings-2"><img src="{% static 'img/icons/packs/fugue/24x24/map.png' %}" alt="" /><span>Address</span></a></li>-->
+            <!--<li><a href="#settings-3"><img src="{% static 'img/icons/packs/fugue/24x24/mobile-phone.png' %}" alt="" /><span>Contact info</span></a></li>-->
+        <!--</ul>-->
+
+        <!--<div class="change_password">-->
+            <!--<form action="/auth/ajax_change_password" method="POST" class="validate" id="settings_password">-->
+                <!--<div class="pass-messages">-->
+					<!--<div class="message failure"></div>-->
+				<!--</div>-->
+                <!--<p>-->
+                    <!--<label for="settings-old-password">Old Password:</label>-->
+                    <!--<input type="password" id="settings-old-password" class="required password" />-->
+                <!--</p>-->
+                    <!--<div class="spacer"></div>-->
+                <!--<p>-->
+                    <!--<label for="settings-new-password">New Password:</label>-->
+                    <!--<input type="password" id="settings-new-password" class="required password" />-->
+                <!--</p>-->
+                    <!--<div class="spacer"></div>-->
+                <!--<p>-->
+                    <!--<label for="settings-rep-password">Repeat Password:</label>-->
+                    <!--<input type="password" id="settings-rep-password" class="required password" equalTo="#settings-new-password" />-->
+                <!--</p>-->
+            <!--</form>-->
+            <!--<div class="actions">-->
+                <!--<div class="right">-->
+                    <!--<input form="settings_password" type="reset" value="Cancel" class="grey" />-->
+                    <!--<input form="settings_password" type="submit" value="OK" id="btn-change-password"/>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div><!-- End of .change_password -->-->
+
+        <!--<div class="content" id="personal_data">-->
+
+            <!--<div id="settings-1">-->
+                <!--<form action="/acc/profile/ajax_save_profile/" method="POST" name="basic_info" id="basic_info">-->
+                    <!--<p>-->
+                        <!--<label for="s-f-name">First name:</label>-->
+                        <!--<input type="text" id="s-f-name" class="medium" value="{{ person.first_name|default_if_none:'' }}"/>-->
+                    <!--</p>-->
+                    <!--<p>-->
+                        <!--<label for="s-l-name">Last name:</label>-->
+                        <!--<input type="text" id="s-l-name" class="medium" value="{{ person.last_name|default_if_none:'' }}"/>-->
+                    <!--</p>-->
+                    <!--<p class="divider"></p>-->
+                    <!--<p>-->
+                        <!--<label for="settings-pw">Password: </label> <input class="grey change_password_button" type="button" id="settings-pw" value="Change Password..." data-lang-changed="Password changed" />-->
+                    <!--</p>-->
+                <!--</form>-->
+            <!--</div><!-- End of #settings-1 -->-->
+
+            <!--<div id="settings-2">-->
+                <!--<form action="/acc/profile/ajax_save_profile/" method="POST" name="address">-->
+                    <!--<p>-->
+                        <!--<label for="s-a-address1">Address 1:</label>-->
+                        <!--<input type="text" id="s-a-address1" class="medium" value="{{ person.address.line_1|default_if_none:''}}"/>-->
+                    <!--</p>-->
+                    <!--<p>-->
+                        <!--<label for="s-a-address2">Address 2:</label>-->
+                        <!--<input type="text" id="s-a-address2" class="medium" value="{{ person.address.line_2|default_if_none:''}}"/>-->
+                    <!--</p>-->
+                    <!--<p>-->
+                        <!--<label for="s-a-city">City:</label>-->
+                        <!--<input type="text" id="s-a-city" class="medium" value="{{ person.address.city|default_if_none:''}}" />-->
+                    <!--</p>-->
+                    <!--<p>-->
+                        <!--<label for="s-a-code">Postal code:</label>-->
+                        <!--<input type="text" id="s-a-code" class="medium" value="{{ person.address.postalcode|default_if_none:''}}" />-->
+                    <!--</p>-->
+                    <!--<p>-->
+                        <!--<label for="s-a-state">State:</label>-->
+                        <!--<input type="text" id="s-a-state" class="medium" value="{{ person.address.state|default_if_none:''}}" />-->
+                    <!--</p>-->
+                    <!--<p>-->
+                        <!--<label for="s-a-country">Country:</label>-->
+                        <!--<input type="text" id="s-a-country" class="medium" value="{{ person.address.country|default_if_none:''}}" />-->
+                    <!--</p>-->
+                <!--</form>-->
+            <!--</div><!-- End of #settings-2 -->-->
+
+            <!--<div id="settings-3">-->
+                <!--<form action="/acc/profile/ajax_save_profile/" method="POST" name="contact_info">-->
+                    <!--<p>-->
+                        <!--<label for="s-c-phone">Phone:</label>-->
+                        <!--<input type="text" id="s-c-phone" class="medium maskIntPhone" value="{{ person.phone|default_if_none:'' }}"/>-->
+                    <!--</p>-->
+                    <!--<p>-->
+                        <!--<label for="s-c-mobile">Mobile phone:</label>-->
+                        <!--<input type="text" id="s-c-mobile" class="medium maskIntPhone" value="{{ person.m_phone|default_if_none:'' }}"/>-->
+                    <!--</p>-->
+                    <!--<p>-->
+                        <!--<label for="s-c-email">Alternative e-mail:</label>-->
+                        <!--<input type="text" id="s-c-email" class="medium" value="{{ user.email2|default_if_none:'' }}"/>-->
+                    <!--</p>-->
+                <!--</form>-->
+            <!--</div><!-- End of #settings-3 -->-->
+
+        <!--</div><!-- End of .content -->-->
+
+        <!--<div class="actions">-->
+            <!--<div class="left">-->
+                <!--<button class="grey cancel">Cancel</button>-->
+            <!--</div>-->
+            <!--<div class="right">-->
+                <!--<button id="btn-save" class="save">Save</button>-->
+                <!--<button class="hide saving" disabled >Saving...</button>-->
+            <!--</div>-->
+        <!--</div><!-- End of .actions -->-->
+
+    <!--</div><!-- End of settings dialog -->-->
+{% endblock %}

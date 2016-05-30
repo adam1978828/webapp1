@@ -1,0 +1,52 @@
+{% extends 'acc_base.html' %}
+{% load staticfiles %}
+{% load acctags %}
+{% load i18n %}
+{% block breadcrumb %}
+    <div class="left">
+        <ul class="breadcrumb">
+            <li><a href="/">{% trans "Home" %}</a></li>
+            <li><a href="{% url 'reports_views.views.reports' %}">{% trans "Reports" %}</a></li>
+            <li><a href="{% url 'reports_views.views.data_sources' %}">{% trans "Sources" %}</a></li>
+        </ul>
+    </div>
+{% endblock %}
+{% block title %}
+    {% trans "Data sources" %}
+{% endblock %}
+{% block acc_content %}
+     <script>
+        $('#bt_sources').addClass('current');
+        $('.accordion li a').removeClass('open');
+        $('#bt_sources').parent().prev().addClass('open');
+    </script>
+    <section id="content" class="container_12 clearfix ui-sortable" data-sort="true">
+        <h1 class="grid_12"><span>{% trans "Data sources" %}</span></h1>
+        <div class="grid_12">
+            <div class="box with-table">
+                <table class="styled">
+                    <thead>
+                        <tr>
+                            <th>{% trans "ID" %}</th>
+                            <th>{% trans "Name" %}</th>
+                            <th>{% trans "Псевдоним" %}</th>
+                            <th>{% trans "Type" %}</th>
+                            <th>{% trans "Actions" %}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for val in data_sources %}
+                            <tr>
+                                <td>{{ val.id }}</td>
+                                <td>{{ val.name }}</td>
+                                <td>{{ val.alias }}</td>
+                                <td>{{ val.source_type }}</td>
+                                <td><a class="button" href="{% url 'reports_views.views.data_source_edit' val.alias %}" target="_blank"><i class="icon icon-pencil"></i> {% trans "Edit" %}</a></td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+{% endblock %}

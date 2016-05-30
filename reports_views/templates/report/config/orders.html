@@ -1,0 +1,21 @@
+<div class="orders-set" hidden style="display:none;">
+    {% for val in report.orders %}
+        {{ val.readable_name }}
+        <div class="rep-order-by order-by-{{ val.model_field_name }}">
+            <div class="grid_6">
+                <input type="text" name="alias" value="{{ val.model_field_name }}" hidden style="display:none;">
+                <input type="text" readonly class="form-control input-sm" value="{{ val.readable_name }}">
+            </div>
+            <div class="grid_5 col-xs-10">
+                <select class="form-control input-sm" name="order">
+                    {% for ord_op in val.orders %}
+                        <option value="{{ ord_op.alias }}">{{ ord_op.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            {% if 'pattern' in mode %}
+                <a class="button medium remove-order"><i class="icon-minus"></i></a>
+            {% endif %}
+        </div>
+    {% endfor %}
+</div>

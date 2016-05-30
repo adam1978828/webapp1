@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Wiki Kiosk</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="css/style.css" rel="stylesheet">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">Wiki Kiosk</a>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <a data-toggle="collapse" href="#permissions" aria-expanded="false" aria-controls="permissions">Permissions</a>
+                    </li>
+                    <!--<li>
+                        <a data-toggle="collapse" href="#permissions2" aria-expanded="false" aria-controls="permissions2">Services</a>
+                    </li>
+                    <li>
+                        <a href="#">Contact</a>
+                    </li>-->
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+
+    <!-- Page Content -->
+    <div class="container">
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="collapse" id="permissions">
+                  <div>
+                    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                      <h4 class="perm-category">Profile</h4>
+
+                      <div class="panel panel-default">
+                        <div class="panel-heading perm-heading" role="tab" id="user_edit_own_profile_aria">
+                          <h4 class="panel-title perm-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#user_edit_own_profile" aria-expanded="true" aria-controls="user_edit_own_profile">
+                              Can edit own profile
+                            </a>
+                          </h4>
+                        </div>
+                        <div id="user_edit_own_profile" class="panel-collapse collapse" role="tabpanel" aria-labelledby="user_edit_own_profile_aria">
+                          <div class="panel-body">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                    <img src="img/permissions/profile/user_edit_own_profile/user_edit_own_profile_ps.png" class="img-thumbnail">
+                                </div>
+                                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                    <img src="img/permissions/profile/user_edit_own_profile/user_edit_own_profile2_ps.png" class="img-thumbnail">
+                                </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+              
+                      <h4  class="perm-category">Company</h4>
+
+                      <h6 class="perm-meta-category">Add worker</h6>
+
+                      <div class="panel panel-default">
+                        <div class="panel-heading perm-heading" role="tab" id="user_add_aria">
+                          <h4 class="panel-title perm-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#user_add" aria-expanded="true" aria-controls="user_add">
+                              Can add new workers
+                            </a>
+                          </h4>
+                        </div>
+                        <div id="user_add" class="panel-collapse collapse" role="tabpanel" aria-labelledby="user_add_aria">
+                          <div class="panel-body">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <img src="img/permissions/company/user_add/user_add_ps.png" class="img-thumbnail">
+                                </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <h6 class="perm-meta-category">Add new company</h6>
+                    
+                      <div class="panel panel-default">
+                        <div class="panel-heading perm-heading" role="tab" id="company_add_aria">
+                          <h4 class="panel-title perm-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#company_add" aria-expanded="true" aria-controls="company_add">
+                              Add company (only for_focus)
+                            </a>
+                          </h4>
+                        </div>
+                        <div id="company_add" class="panel-collapse collapse" role="tabpanel" aria-labelledby="company_add_aria">
+                          <div class="panel-body">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                    <img src="img/permissions/company/company_add/company_add_ps.png" class="img-thumbnail">
+                                </div>
+                                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                    <img src="img/permissions/company/company_add/company_add2_ps.png" class="img-thumbnail">
+                                </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <h6 class="perm-meta-category">Edit company</h6>
+
+                      <div class="panel panel-default">
+                        <div class="panel-heading perm-heading" role="tab" id="company_edit_own_aria">
+                          <h4 class="panel-title perm-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#company_edit_own" aria-expanded="true" aria-controls="company_edit_own">
+                              Edit own company (only for_company)
+                            </a>
+                          </h4>
+                        </div>
+                        <div id="company_edit_own" class="panel-collapse collapse" role="tabpanel" aria-labelledby="company_edit_own_aria">
+                          <div class="panel-body">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <img src="img/permissions/company/company_edit_own/company_edit_own_ps.png" class="img-thumbnail">
+                                </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <h6 class="perm-meta-category">All companies</h6>
+
+                      <div class="panel panel-default">
+                        <div class="panel-heading perm-heading" role="tab" id="company_view_any_aria">
+                          <h4 class="panel-title perm-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#company_view_any" aria-expanded="true" aria-controls="company_view_any">
+                              View any company (only for_focus)
+                            </a>
+                          </h4>
+                        </div>
+                        <div id="company_view_any" class="panel-collapse collapse" role="tabpanel" aria-labelledby="company_view_any_aria">
+                          <div class="panel-body">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <img src="img/permissions/company/company_view_any/company_view_any_ps.png" class="img-thumbnail">
+                                </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <h6 class="perm-meta-category">View</h6>
+
+                      <div class="panel panel-default">
+                        <div class="panel-heading perm-heading" role="tab" id="company_view_own_aria">
+                          <h4 class="panel-title perm-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#company_view_own" aria-expanded="true" aria-controls="company_view_own">
+                              View own company (only for_company)
+                            </a>
+                          </h4>
+                        </div>
+                        <div id="company_view_own" class="panel-collapse collapse" role="tabpanel" aria-labelledby="company_view_own_aria">
+                          <div class="panel-body">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <img src="img/permissions/company/company_view_own/company_view_own_ps.png" class="img-thumbnail">
+                                </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <h6 class="perm-meta-category">View staff</h6>
+
+                      <div class="panel panel-default">
+                        <div class="panel-heading perm-heading" role="tab" id="user_view_aria">
+                          <h4 class="panel-title perm-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#user_view" aria-expanded="true" aria-controls="user_view">
+                              Can view profile of any coworker
+                            </a>
+                          </h4>
+                        </div>
+                        <div id="user_view" class="panel-collapse collapse" role="tabpanel" aria-labelledby="user_view_aria">
+                          <div class="panel-body">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <img src="img/permissions/company/user_view/user_view_ps.png" class="img-thumbnail">
+                                </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="panel panel-default">
+                        <div class="panel-heading perm-heading" role="tab" id="user_edit_aria">
+                          <h4 class="panel-title perm-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#user_edit" aria-expanded="true" aria-controls="user_edit">
+                              Can edit profile of any coworker
+                            </a>
+                          </h4>
+                        </div>
+                        <div id="user_edit" class="panel-collapse collapse" role="tabpanel" aria-labelledby="user_edit_aria">
+                          <div class="panel-body">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <img src="img/permissions/company/user_edit/user_edit_ps.png" class="img-thumbnail">
+                                </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="panel panel-default">
+                        <div class="panel-heading perm-heading" role="tab" id="user_set_perms_aria">
+                          <h4 class="panel-title perm-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#user_set_perms" aria-expanded="true" aria-controls="user_set_perms">
+                              Can set rights to any coworker
+                            </a>
+                          </h4>
+                        </div>
+                        <div id="user_set_perms" class="panel-collapse collapse" role="tabpanel" aria-labelledby="user_set_perms_aria">
+                          <div class="panel-body">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <img src="img/permissions/company/user_set_perms/user_set_perms_ps.png" class="img-thumbnail">
+                                </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                    <h6 class="perm-meta-category">Client sites management</h6>
+
+                      <div class="panel panel-default">
+                        <div class="panel-heading perm-heading" role="tab" id="company_view_sites_aria">
+                          <h4 class="panel-title perm-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#company_view_sites" aria-expanded="true" aria-controls="company_view_sites">
+                              Can view sites
+                            </a>
+                          </h4>
+                        </div>
+                        <div id="company_view_sites" class="panel-collapse collapse" role="tabpanel" aria-labelledby="company_view_sites_aria">
+                          <div class="panel-body">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                    <img src="img/permissions/company/company_view_sites/company_view_sites_ps.png" class="img-thumbnail">
+                                </div>
+                                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                    <img src="img/permissions/company/company_view_sites/company_view_sites2_ps.png" class="img-thumbnail">
+                                </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="panel panel-default">
+                        <div class="panel-heading perm-heading" role="tab" id="company_edit_sites_aria">
+                          <h4 class="panel-title perm-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#company_edit_sites" aria-expanded="true" aria-controls="company_edit_sites">
+                              Can edit sites
+                            </a>
+                          </h4>
+                        </div>
+                        <div id="company_edit_sites" class="panel-collapse collapse" role="tabpanel" aria-labelledby="company_edit_sites_aria">
+                          <div class="panel-body">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <img src="img/permissions/company/company_edit_sites/company_edit_sites_ps.png" class="img-thumbnail">
+                                </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <h6 class="perm-meta-category">Merchant Accounts</h6>
+                      
+                      <div class="panel panel-default">
+                        <div class="panel-heading perm-heading" role="tab" id="company_view_payments_aria">
+                          <h4 class="panel-title perm-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#company_view_payments" aria-expanded="true" aria-controls="company_view_payments">
+                              Can view payments
+                            </a>
+                          </h4>
+                        </div>
+                        <div id="company_view_payments" class="panel-collapse collapse" role="tabpanel" aria-labelledby="company_view_payments_aria">
+                          <div class="panel-body">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <img src="img/permissions/company/company_view_payments/company_view_payments_ps.png" class="img-thumbnail">
+                                </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div class="panel panel-default">
+                        <div class="panel-heading perm-heading" role="tab" id="company_add_payment_aria">
+                          <h4 class="panel-title perm-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#company_add_payment" aria-expanded="true" aria-controls="company_add_payment">
+                              Can add payment
+                            </a>
+                          </h4>
+                        </div>
+                        <div id="company_add_payment" class="panel-collapse collapse" role="tabpanel" aria-labelledby="company_add_payment_aria">
+                          <div class="panel-body">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <img src="img/permissions/company/company_add_payment/company_add_payment_ps.png" class="img-thumbnail">
+                                </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <h6 class="perm-meta-category">Permissions</h6>
+
+                      <div class="panel panel-default">
+                        <div class="panel-heading perm-heading" role="tab" id="company_view_permissions_aria">
+                          <h4 class="panel-title perm-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#company_view_permissions" aria-expanded="true" aria-controls="company_view_permissions">
+                              Can view permissions
+                            </a>
+                          </h4>
+                        </div>
+                        <div id="company_view_permissions" class="panel-collapse collapse" role="tabpanel" aria-labelledby="company_view_permissions_aria">
+                          <div class="panel-body">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                    <img src="img/permissions/company/company_view_permissions/company_view_permissions_ps.png" class="img-thumbnail">
+                                </div>
+                                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                    <img src="img/permissions/company/company_view_permissions/company_view_permissions2_ps.png" class="img-thumbnail">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                    <img src="img/permissions/company/company_view_permissions/company_view_permissions3_ps.png" class="img-thumbnail">
+                                </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <h6 class="perm-meta-category">Permission group settings</h6>
+                  
+                      <div class="panel panel-default">
+                        <div class="panel-heading perm-heading" role="tab" id="perms_moderate_groups_aria">
+                          <h4 class="panel-title perm-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#perms_moderate_groups" aria-expanded="true" aria-controls="perms_moderate_groups">
+                              Can create or edit groups
+                            </a>
+                          </h4>
+                        </div>
+                        <div id="perms_moderate_groups" class="panel-collapse collapse" role="tabpanel" aria-labelledby="perms_moderate_groups_aria">
+                          <div class="panel-body">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <img src="img/permissions/company/perms_moderate_groups/perms_moderate_groups_ps.png" class="img-thumbnail">
+                                </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div class="panel panel-default">
+                        <div class="panel-heading perm-heading" role="tab" id="company_edit_group_permission_aria">
+                          <h4 class="panel-title perm-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#company_edit_group_permission" aria-expanded="true" aria-controls="company_edit_group_permission">
+                              Can edit group permission
+                            </a>
+                          </h4>
+                        </div>
+                        <div id="company_edit_group_permission" class="panel-collapse collapse" role="tabpanel" aria-labelledby="company_edit_group_permission_aria">
+                          <div class="panel-body">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <img src="img/permissions/company/company_edit_group_permission/company_edit_group_permission_ps.png" class="img-thumbnail">
+                                </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <h6 class="perm-meta-category">Settings</h6>
+                  
+                      <div class="panel panel-default">
+                        <div class="panel-heading perm-heading" role="tab" id="company_view_settings_aria">
+                          <h4 class="panel-title perm-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#company_view_settings" aria-expanded="true" aria-controls="company_view_settings">
+                              Can view settings
+                            </a>
+                          </h4>
+                        </div>
+                        <div id="company_view_settings" class="panel-collapse collapse" role="tabpanel" aria-labelledby="company_view_settings_aria">
+                          <div class="panel-body">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                    <img src="img/permissions/company/company_view_settings/company_view_settings_ps.png" class="img-thumbnail">
+                                </div>
+                                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                    <img src="img/permissions/company/company_view_settings/company_view_settings2_ps.png" class="img-thumbnail">
+                                </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div class="panel panel-default">
+                        <div class="panel-heading perm-heading" role="tab" id="company_edit_settings_aria">
+                          <h4 class="panel-title perm-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#company_edit_settings" aria-expanded="true" aria-controls="company_edit_settings">
+                              Can edit settings (only for_company)
+                            </a>
+                          </h4>
+                        </div>
+                        <div id="company_edit_settings" class="panel-collapse collapse" role="tabpanel" aria-labelledby="company_edit_settings_aria">
+                          <div class="panel-body">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <img src="img/permissions/company/company_edit_settings/company_edit_settings_ps.png" class="img-thumbnail">
+                                </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <h6 class="perm-meta-category">Trailers</h6>
+
+                      <div class="panel panel-default">
+                        <div class="panel-heading perm-heading" role="tab" id="company_view_trailers_aria">
+                          <h4 class="panel-title perm-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#company_view_trailers" aria-expanded="true" aria-controls="company_view_trailers">
+                              Can view trailers
+                            </a>
+                          </h4>
+                        </div>
+                        <div id="company_view_trailers" class="panel-collapse collapse" role="tabpanel" aria-labelledby="company_view_trailers_aria">
+                          <div class="panel-body">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                    <img src="img/permissions/company/company_view_trailers/company_view_trailers_ps.png" class="img-thumbnail">
+                                </div>
+                                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                    <img src="img/permissions/company/company_view_trailers/company_view_trailers2_ps.png" class="img-thumbnail">
+                                </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="panel panel-default">
+                        <div class="panel-heading perm-heading" role="tab" id="company_add_trailer_aria">
+                          <h4 class="panel-title perm-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#company_add_trailer" aria-expanded="true" aria-controls="company_add_trailer">
+                              Can add trailer
+                            </a>
+                          </h4>
+                        </div>
+                        <div id="company_add_trailer" class="panel-collapse collapse" role="tabpanel" aria-labelledby="company_add_trailer_aria">
+                          <div class="panel-body">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <img src="img/permissions/company/company_add_trailer/company_add_trailer_ps.png" class="img-thumbnail">
+                                </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <h6 class="perm-meta-category">Social communities</h6>
+
+                      <div class="panel panel-default">
+                        <div class="panel-heading perm-heading" role="tab" id="company_view_social_aria">
+                          <h4 class="panel-title perm-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#company_view_social" aria-expanded="true" aria-controls="company_view_social">
+                              Can view social
+                            </a>
+                          </h4>
+                        </div>
+                        <div id="company_view_social" class="panel-collapse collapse" role="tabpanel" aria-labelledby="company_view_social_aria">
+                          <div class="panel-body">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <img src="img/permissions/company/company_view_social/company_view_social_ps.png" class="img-thumbnail">
+                                </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="panel panel-default">
+                        <div class="panel-heading perm-heading" role="tab" id="company_add_social_aria">
+                          <h4 class="panel-title perm-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#company_add_social" aria-expanded="true" aria-controls="company_add_social">
+                              Can add social
+                            </a>
+                          </h4>
+                        </div>
+                        <div id="company_add_social" class="panel-collapse collapse" role="tabpanel" aria-labelledby="company_add_social_aria">
+                          <div class="panel-body">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <img src="img/permissions/company/company_add_social/company_add_social_ps.png" class="img-thumbnail">
+                                </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+
+                      <div class="panel panel-default">
+                        <div class="panel-heading perm-heading" role="tab" id="company_edit_any_aria">
+                          <h4 class="panel-title perm-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#company_edit_any" aria-expanded="true" aria-controls="company_edit_any">
+                              Edit any company (only for_focus)
+                            </a>
+                          </h4>
+                        </div>
+                        <div id="company_edit_any" class="panel-collapse collapse" role="tabpanel" aria-labelledby="company_edit_any_aria">
+                          <div class="panel-body">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <img src="img/permissions/company/company_edit_any/company_edit_any_ps.png" class="img-thumbnail">
+                                </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                                      
+
+                      <h4>Price plans</h4>
+
+                      <div class="panel panel-default">
+                        <div class="panel-heading perm-heading" role="tab" id="price_plan_view_aria">
+                          <h4 class="panel-title perm-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#price_plan_view" aria-expanded="true" aria-controls="price_plan_view">
+                              Can view price plans
+                            </a>
+                          </h4>
+                        </div>
+                        <div id="price_plan_view" class="panel-collapse collapse" role="tabpanel" aria-labelledby="price_plan_view_aria">
+                          <div class="panel-body">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                    <img src="img/permissions/price_plans/price_plan_view/price_plan_view_ps.png" class="img-thumbnail">
+                                </div>
+                                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                    <img src="img/permissions/price_plans/price_plan_view/price_plan_view2_ps.png" class="img-thumbnail">
+                                </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="panel panel-default">
+                        <div class="panel-heading perm-heading" role="tab" id="price_plan_add_aria">
+                          <h4 class="panel-title perm-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#price_plan_add" aria-expanded="true" aria-controls="price_plan_add">
+                              Can add price plan
+                            </a>
+                          </h4>
+                        </div>
+                        <div id="price_plan_add" class="panel-collapse collapse" role="tabpanel" aria-labelledby="price_plan_add_aria">
+                          <div class="panel-body">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <img src="img/permissions/price_plans/price_plan_add/price_plan_add_ps.png" class="img-thumbnail">
+                                </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div class="panel panel-default">
+                        <div class="panel-heading perm-heading" role="tab" id="price_plan_edit_aria">
+                          <h4 class="panel-title perm-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#price_plan_edit" aria-expanded="true" aria-controls="price_plan_edit">
+                              Can edit price plane
+                            </a>
+                          </h4>
+                        </div>
+                        <div id="price_plan_edit" class="panel-collapse collapse" role="tabpanel" aria-labelledby="price_plan_edit_aria">
+                          <div class="panel-body">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <img src="img/permissions/price_plans/price_plan_edit/price_plan_edit_ps.png" class="img-thumbnail">
+                                </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <h4>Kiosk</h4>
+
+                      <div class="panel panel-default">
+                        <div class="panel-heading perm-heading" role="tab" id="kiosk_view_aria">
+                          <h4 class="panel-title perm-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#kiosk_view" aria-expanded="true" aria-controls="kiosk_view">
+                              Can view kiosks
+                            </a>
+                          </h4>
+                        </div>
+                        <div id="kiosk_view" class="panel-collapse collapse" role="tabpanel" aria-labelledby="kiosk_view_aria">
+                          <div class="panel-body">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <img src="img/permissions/kiosk/kiosk_view/kiosk_view_ps.png" class="img-thumbnail">
+                                </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="panel panel-default">
+                        <div class="panel-heading perm-heading" role="tab" id="kiosk_add_aria">
+                          <h4 class="panel-title perm-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#kiosk_add" aria-expanded="true" aria-controls="kiosk_add">
+                              Can add kiosks
+                            </a>
+                          </h4>
+                        </div>
+                        <div id="kiosk_add" class="panel-collapse collapse" role="tabpanel" aria-labelledby="kiosk_add_aria">
+                          <div class="panel-body">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <img src="img/permissions/kiosk/kiosk_add/kiosk_add_ps.png" class="img-thumbnail">
+                                </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="panel panel-default">
+                        <div class="panel-heading perm-heading" role="tab" id="kiosk_edit_aria">
+                          <h4 class="panel-title perm-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#kiosk_edit" aria-expanded="true" aria-controls="kiosk_edit">
+                              Can edit kiosk
+                            </a>
+                          </h4>
+                        </div>
+                        <div id="kiosk_edit" class="panel-collapse collapse" role="tabpanel" aria-labelledby="kiosk_edit_aria">
+                          <div class="panel-body">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <img src="img/permissions/kiosk/kiosk_edit/kiosk_edit_ps.png" class="img-thumbnail">
+                                </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="panel panel-default">
+                        <div class="panel-heading perm-heading" role="tab" id="kiosk_trailers_schedule_view_aria">
+                          <h4 class="panel-title perm-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#kiosk_trailers_schedule_view" aria-expanded="true" aria-controls="kiosk_trailers_schedule_view">
+                              Can view trailers schedule
+                            </a>
+                          </h4>
+                        </div>
+                        <div id="kiosk_trailers_schedule_view" class="panel-collapse collapse" role="tabpanel" aria-labelledby="kiosk_trailers_schedule_view_aria">
+                          <div class="panel-body">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <img src="img/permissions/kiosk/kiosk_trailers_schedule_view/kiosk_trailers_schedule_view_ps.png" class="img-thumbnail">
+                                </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="panel panel-default">
+                        <div class="panel-heading perm-heading" role="tab" id="kiosk_trailers_schedule_add_aria">
+                          <h4 class="panel-title perm-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#kiosk_trailers_schedule_add" aria-expanded="true" aria-controls="kiosk_trailers_schedule_add">
+                              Can add trailers schedule
+                            </a>
+                          </h4>
+                        </div>
+                        <div id="kiosk_trailers_schedule_add" class="panel-collapse collapse" role="tabpanel" aria-labelledby="kiosk_trailers_schedule_add_aria">
+                          <div class="panel-body">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <img src="img/permissions/kiosk/kiosk_trailers_schedule_add/kiosk_trailers_schedule_add_ps.png" class="img-thumbnail">
+                                </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="panel panel-default">
+                        <div class="panel-heading perm-heading" role="tab" id="kiosk_more_aria">
+                          <h4 class="panel-title perm-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#kiosk_more" aria-expanded="true" aria-controls="kiosk_more">
+                              Can more...
+                            </a>
+                          </h4>
+                        </div>
+                        <div id="kiosk_more" class="panel-collapse collapse" role="tabpanel" aria-labelledby="kiosk_more_aria">
+                          <div class="panel-body">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <p>Tariff plans <span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span> Price plans / Can view price plans</p>
+                                    <p>Specific permissions <span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span> Company / Can view permissions </p>
+                                    <p>Slots, Screens <span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span> Kiosk / Can view kiosks</p>
+                                    <p>Trailers schedule <span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span> Company / Can view trailers schedule</p>
+                                </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      
+                      <h4  class="perm-category">Rental Fleet</h4>
+
+                      <h6 class="perm-meta-category">Price Plan Assignments</h6>
+                      <div class="panel panel-default">
+                        <div class="panel-heading perm-heading" role="tab" id="price_plans_view_assignment_aria">
+                          <h4 class="panel-title perm-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#price_plans_view_assignment" aria-expanded="true" aria-controls="price_plans_view_assignment">
+                              Can view price plans assignment
+                            </a>
+                          </h4>
+                        </div>
+                        <div id="price_plans_view_assignment" class="panel-collapse collapse" role="tabpanel" aria-labelledby="price_plans_view_assignment_aria">
+                          <div class="panel-body">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                    <img src="img/permissions/rental_fleets/price_plans_view_assignment/price_plans_view_assignment_ps.png" class="img-thumbnail">
+                                </div>
+                                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                    <img src="img/permissions/rental_fleets/price_plans_view_assignment/price_plans_view_assignment2_ps.png" class="img-thumbnail">
+                                </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="panel panel-default">
+                        <div class="panel-heading perm-heading" role="tab" id="price_plans_add_assignment_aria">
+                          <h4 class="panel-title perm-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#price_plans_add_assignment" aria-expanded="true" aria-controls="price_plans_add_assignment">
+                              Can add price plans assignment
+                            </a>
+                          </h4>
+                        </div>
+                        <div id="price_plans_add_assignment" class="panel-collapse collapse" role="tabpanel" aria-labelledby="price_plans_add_assignment_aria">
+                          <div class="panel-body">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <img src="img/permissions/rental_fleets/price_plans_add_assignment/price_plans_add_assignment_ps.png" class="img-thumbnail">
+                                </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <h6 class="perm-meta-category">Disks, Disks out</h6>
+                      <div class="panel panel-default">
+                        <div class="panel-heading perm-heading" role="tab" id="rental_view_disk_aria">
+                          <h4 class="panel-title perm-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#rental_view_disk" aria-expanded="true" aria-controls="rental_view_disk">
+                              Can view rental disk
+                            </a>
+                          </h4>
+                        </div>
+                        <div id="rental_view_disk" class="panel-collapse collapse" role="tabpanel" aria-labelledby="rental_view_disk_aria">
+                          <div class="panel-body">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                    <img src="img/permissions/rental_fleets/rental_view_disk/rental_view_disk_ps.png" class="img-thumbnail">
+                                </div>
+                                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                    <img src="img/permissions/rental_fleets/rental_view_disk/rental_view_disk2_ps.png" class="img-thumbnail">
+                                </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <h6 class="perm-meta-category">Add disks</h6>
+                      <div class="panel panel-default">
+                        <div class="panel-heading perm-heading" role="tab" id="rental_add_disk_aria">
+                          <h4 class="panel-title perm-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#rental_add_disk" aria-expanded="true" aria-controls="rental_add_disk">
+                              Can add rental disk
+                            </a>
+                          </h4>
+                        </div>
+                        <div id="rental_add_disk" class="panel-collapse collapse" role="tabpanel" aria-labelledby="rental_add_disk_aria">
+                          <div class="panel-body">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <img src="img/permissions/rental_fleets/rental_add_disk/rental_add_disk_ps.png" class="img-thumbnail">
+                                </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <h4  class="perm-category">Movies</h4>
+
+                      <h6 class="perm-meta-category">Add movie</h6>
+                      <div class="panel panel-default">
+                        <div class="panel-heading perm-heading" role="tab" id="movies_add_aria">
+                          <h4 class="panel-title perm-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#movies_add" aria-expanded="true" aria-controls="movies_add">
+                              Can add movies (only for_focus)
+                            </a>
+                          </h4>
+                        </div>
+                        <div id="movies_add" class="panel-collapse collapse" role="tabpanel" aria-labelledby="movies_add_aria">
+                          <div class="panel-body">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <img src="img/permissions/movies/movies_add/movies_add_ps.png" class="img-thumbnail">
+                                </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    
+                      <h6 class="perm-meta-category">Add Additional UPC Code</h6>
+                      <div class="panel panel-default">
+                        <div class="panel-heading perm-heading" role="tab" id="movie_add_upc_aria">
+                          <h4 class="panel-title perm-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#movie_add_upc" aria-expanded="true" aria-controls="movie_add_upc">
+                              Can add upc movie (only for_focus)
+                            </a>
+                          </h4>
+                        </div>
+                        <div id="movie_add_upc" class="panel-collapse collapse" role="tabpanel" aria-labelledby="movie_add_upc_aria">
+                          <div class="panel-body">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <img src="img/permissions/movies/movie_add_upc/movie_add_upc_ps.png" class="img-thumbnail">
+                                </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <h6 class="perm-meta-category">All movies</h6>
+
+                      <h6 class="perm-meta-category">Update center</h6>
+                      <div class="panel panel-default">
+                        <div class="panel-heading perm-heading" role="tab" id="movies_update_aria">
+                          <h4 class="panel-title perm-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#movies_update" aria-expanded="true" aria-controls="movies_update">
+                              Can update movies (only for_focus)
+                            </a>
+                          </h4>
+                        </div>
+                        <div id="movies_update" class="panel-collapse collapse" role="tabpanel" aria-labelledby="movies_update_aria">
+                          <div class="panel-body">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <img src="img/permissions/movies/movies_update/movies_update_ps.png" class="img-thumbnail">
+                                </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <h6 class="perm-meta-category">Featured</h6>
+                      <div class="panel panel-default">
+                        <div class="panel-heading perm-heading" role="tab" id="movies_view_featured_aria">
+                          <h4 class="panel-title perm-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#movies_view_featured" aria-expanded="true" aria-controls="movies_view_featured">
+                              Can view featured
+                            </a>
+                          </h4>
+                        </div>
+                        <div id="movies_view_featured" class="panel-collapse collapse" role="tabpanel" aria-labelledby="movies_view_featured_aria">
+                          <div class="panel-body">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <img src="img/permissions/movies/movies_view_featured/movies_view_featured_ps.png" class="img-thumbnail">
+                                </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="panel panel-default">
+                        <div class="panel-heading perm-heading" role="tab" id="movies_edit_featured_aria">
+                          <h4 class="panel-title perm-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#movies_edit_featured" aria-expanded="true" aria-controls="movies_edit_featured">
+                              Can edit featured
+                            </a>
+                          </h4>
+                        </div>
+                        <div id="movies_edit_featured" class="panel-collapse collapse" role="tabpanel" aria-labelledby="movies_edit_featured_aria">
+                          <div class="panel-body">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <img src="img/permissions/movies/movies_edit_featured/movies_edit_featured_ps.png" class="img-thumbnail">
+                                </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <h4  class="perm-category">Transactions</h4>
+
+                      <div class="panel panel-default">
+                        <div class="panel-heading perm-heading" role="tab" id="transactions_view_aria">
+                          <h4 class="panel-title perm-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#transactions_view" aria-expanded="true" aria-controls="transactions_view">
+                              Can view transactions
+                            </a>
+                          </h4>
+                        </div>
+                        <div id="transactions_view" class="panel-collapse collapse" role="tabpanel" aria-labelledby="transactions_view_aria">
+                          <div class="panel-body">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <img src="img/permissions/transactions/transactions_view/transactions_view_ps.png" class="img-thumbnail">
+                                </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="panel panel-default">
+                        <div class="panel-heading perm-heading" role="tab" id="transactions_edit_aria">
+                          <h4 class="panel-title perm-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#transactions_edit" aria-expanded="true" aria-controls="transactions_edit">
+                              Can edit transactions
+                            </a>
+                          </h4>
+                        </div>
+                        <div id="transactions_edit" class="panel-collapse collapse" role="tabpanel" aria-labelledby="transactions_edit_aria">
+                          <div class="panel-body">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <img src="img/permissions/transactions/transactions_edit/transactions_edit_ps.png" class="img-thumbnail">
+                                </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <h4  class="perm-category">Coupons</h4>
+                      <h6 class="perm-meta-category">All coupons</h6>
+                      <div class="panel panel-default">
+                        <div class="panel-heading perm-heading" role="tab" id="coupons_view_aria">
+                          <h4 class="panel-title perm-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#coupons_view" aria-expanded="true" aria-controls="coupons_view">
+                              Can view coupons
+                            </a>
+                          </h4>
+                        </div>
+                        <div id="coupons_view" class="panel-collapse collapse" role="tabpanel" aria-labelledby="coupons_view_aria">
+                          <div class="panel-body">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <img src="img/permissions/coupons/coupons_view/coupons_view_ps.png" class="img-thumbnail">
+                                </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="panel panel-default">
+                        <div class="panel-heading perm-heading" role="tab" id="coupons_edit_aria">
+                          <h4 class="panel-title perm-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#coupons_edit" aria-expanded="true" aria-controls="coupons_edit">
+                              Can edit coupons
+                            </a>
+                          </h4>
+                        </div>
+                        <div id="coupons_edit" class="panel-collapse collapse" role="tabpanel" aria-labelledby="coupons_edit_aria">
+                          <div class="panel-body">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <img src="img/permissions/coupons/coupons_edit/coupons_edit_ps.png" class="img-thumbnail">
+                                </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                  
+              
+
+
+
+                    </div>
+                  </div>
+                </div>
+                <!--<div class="collapse" id="permissions2">
+                  <div class="well">
+                    Second Well
+                  </div>
+                </div>-->
+            </div>
+        </div>
+        <!-- /.row -->
+
+    </div>
+    <!-- /.container -->
+
+    <!-- jQuery Version 1.11.1 -->
+    <script src="js/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="js/bootstrap.min.js"></script>
+
+</body>
+
+</html>

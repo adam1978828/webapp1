@@ -1,0 +1,474 @@
+{% load filters %}
+{% load tz %}
+{% load i18n %}
+{#<!--<span>{{ deal.total_preauth }}</span>#}
+{#<span>{{ deal.total_charged }}</span>-->#}
+{% if deal.deal_type.name == "Rent" %}
+    <form class="grid_12 no-box" data-tax="{{deal.kiosk_start.settings.rent_tax_rate}}" data-url="{% url 'deals.views.manual_change' deal.id %}">
+        {% if "EJECTED RENT" in deal.deal_status.alias %}
+            <div class="tabletools">
+                <div class="right">
+                    <a data-url="{% url 'deals.views.finish_deal_void' deal.id %}" data-id="finishDealVoidBtn" data-title="{% trans "Close Rental - Zero Amount" %}">
+                        <i class="icon-undo"></i>{% trans "Close Rental - Zero Amount" %}
+                    </a>
+                    <a data-type='1' data-date="{{ deal.dt_start|to_milliseconds }}" data-deal-id="{{ deal.id }}" data-timezone="{{ deal.kiosk_start.settings.timezone.name|timezone_to_offset }}" data-id="finishDealBtn" data-title="{% trans "Manual disk return" %}">
+                        <i class="icon-undo"></i>{% trans "Manual Disk Return" %}
+                    </a>
+                </div>
+            </div>
+        {% endif %}
+        <fieldset data-id='transactionDetails'>
+            <legend>{% trans "Detail deal" %} {% if deal.deal_status_id == 231 or deal.deal_status_id == 241 %}({% trans "Reservation code:" %} {{deal.secret_code}}){% endif %}</legend>
+            <div class="row grid_6">
+                <label>
+                    <strong>{% trans "Title" %}</strong>
+                </label>
+
+                <div class="topmargin transaction-detail">
+                    {{ deal.disk.upc.movie.get_name }}
+                </div>
+            </div>
+            <div class="row grid_6">
+                <label>
+                    <strong>{% trans "Format" %}</strong>
+                </label>
+
+                <div class="topmargin transaction-detail">
+                    {{ deal.disk.upc.format.name }}
+                </div>
+            </div>
+            <div class="row grid_6">
+                <label>
+                    <strong>{% trans "Release" %}</strong>
+                </label>
+
+                <div class="topmargin transaction-detail">
+                    {{ deal.disk.upc.movie.dt_release }}
+                </div>
+            </div>
+            <div class="row grid_6">
+                <label>
+                    <strong>{% trans "Deal ID" %}</strong>
+                </label>
+
+                <div class="topmargin transaction-detail">
+                    {{ deal.id }}
+                </div>
+            </div>
+            <div class="row grid_6">
+                <label>
+                    <strong>{% trans "RFID" %}</strong>
+                </label>
+
+                <div class="topmargin2 transaction-detail">
+                    <a href="{% url 'rental_fleets.views.show_disk' deal.rf_id %}">{{ deal.rf_id }}</a>
+                </div>
+            </div>
+            <div class="row grid_6">
+                <label>
+                    <strong>{% trans "Tariff name" %}</strong>
+                </label>
+
+                <div class="topmargin2 transaction-detail">
+                    {{ deal.tariff_value.tariff_plan.name }}
+                </div>
+            </div>
+            <div class="row grid_6">
+                <label>
+                    <strong>{% trans "Deal type" %}</strong>
+                </label>
+
+                <div class="topmargin transaction-detail">
+                    <div class="inline-select">
+                        <select data-original-value="1" name='dealTypeId' data-operate="inline" disabled>
+                            {% for type in deal_types %}
+                                <option value="{{type.id}}" {% if type.id == 1 %}selected{% endif %}>{{type.name}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    {% if 'transactions_edit' in request.user.rights %}
+                    <span data-field='dealTypeId' class="icon field-actions">
+                        <div class="icon icon-pencil"></div>
+                        <div class="hidden icon icon-ok"></div>
+                        <div class="hidden icon icon-remove"></div>
+                    </span>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="row grid_6">
+                <label>
+                    <strong>{% trans "Tariff value first night" %}</strong>
+                </label>
+
+                <div class="topmargin2 transaction-detail">
+                    {{ deal.kiosk_start.settings.currency.symbol }}<input name='firstNight' data-operate="inline" class='inline-edit' type='text' data-original-value='{{ deal.tariff_value.first_night|stringformat:"0.2f" }}' value='{{ deal.tariff_value.first_night|stringformat:"0.2f" }}' disabled>
+
+                    {% if 'transactions_edit' in request.user.rights %}
+                    <span data-field='firstNight' class="icon field-actions">
+                        <div class="icon icon-pencil"></div>
+                        <div class="hidden icon icon-ok"></div>
+                        <div class="hidden icon icon-remove"></div>
+                    </span>
+                    {% endif %}
+
+                </div>
+            </div>
+            <div class="row grid_6">
+                <label>
+                    <strong>{% trans "Kiosk start" %}</strong>
+                </label>
+
+                <div class="topmargin transaction-detail">
+                    <a href="">{{ deal.kiosk_start.settings.alias }}</a>
+                </div>
+            </div>
+            <div class="row grid_6">
+                <label>
+                    <strong>{% trans "Tariff value next night" %}</strong>
+                </label>
+
+                <div class="topmargin2 transaction-detail">
+                    {{ deal.kiosk_start.settings.currency.symbol }}<input name='nextNight' data-operate="inline" class='inline-edit' type='text' data-original-value='{{ deal.tariff_value.next_night|stringformat:"0.2f" }}' value='{{ deal.tariff_value.next_night|stringformat:"0.2f" }}' disabled>
+
+                    {% if 'transactions_edit' in request.user.rights %}
+                    <span data-field='nextNight' class="icon field-actions">
+                        <div class="icon icon-pencil"></div>
+                        <div class="hidden icon icon-ok"></div>
+                        <div class="hidden icon icon-remove"></div>
+                    </span>
+                    {% endif %}
+
+                </div>
+            </div>
+            <div class="row grid_6">
+                <label>
+                    <strong>{% trans "Kiosk end" %}</strong>
+                </label>
+
+                <div class="topmargin transaction-detail">
+                    <a href="">{{ deal.kiosk_end.settings.alias|default:'-' }}</a>
+                </div>
+            </div>
+            <div class="row grid_6">
+                <label>
+                    <strong>{% trans "Preauth amount" %}</strong>
+                </label>
+
+                <div class="topmargin2 transaction-detail">
+                    {{ deal.kiosk_start.settings.currency.symbol }}{{ deal.preauth_amount|stringformat:"0.2f" }}
+                </div>
+            </div>
+            <div class="row grid_6">
+                <label>
+                    <strong>{% trans "Total days" %}</strong>
+                </label>
+
+                <div class="topmargin transaction-detail">
+                    <input name='totalDays' data-operate="inline" class='inline-edit' type='text' data-original-value='{{ deal.total_days }}' value='{{ deal.total_days }}' disabled>
+
+                    {% if 'transactions_edit' in request.user.rights %}
+                    <span data-field='totalDays' class="icon field-actions">
+                        <div class="icon icon-pencil"></div>
+                        <div class="hidden icon icon-ok"></div>
+                        <div class="hidden icon icon-remove"></div>
+                    </span>
+                    {% endif %}
+
+                </div>
+            </div>
+            <div class="row grid_6">
+                <label>
+                    <strong>{% trans "Total amount" %}</strong>
+                </label>
+
+                <div class="topmargin2 transaction-detail">
+                    {{ deal.kiosk_start.settings.currency.symbol }}<input name='totalAmount' data-operate="inline" class='inline-edit' type='text' data-original-value='{{ deal.total_amount|stringformat:"0.2f" }}' value='{{ deal.total_amount|stringformat:"0.2f" }}' disabled>
+
+                    {% if 'transactions_edit' in request.user.rights %}
+                    <span data-field='totalAmount' class="icon field-actions">
+                        <div class="icon icon-pencil"></div>
+                        <div class="hidden icon icon-ok"></div>
+                        <div class="hidden icon icon-remove"></div>
+                    </span>
+                    {% endif %}
+
+                </div>
+            </div>
+            <div class="row grid_6">
+                <label>
+                    <strong>{% trans "Tariff charge" %}</strong>
+                </label>
+
+                <div class="topmargin transaction-detail">
+                    {{ deal.kiosk_start.settings.currency.symbol }}{{ deal.tariff_charge|default:0|floatformat:2 }}
+                </div>
+            </div>
+            <div class="row grid_6">
+                <label>
+                    <strong>{% trans "Taxes info" %}</strong>
+                </label>
+
+                <div class="topmargin2 transaction-detail">
+                    {{ deal.kiosk_start.settings.currency.symbol }}{{ deal.taxes|default:0|floatformat:2 }} ({{ deal.kiosk_start.settings.tax_jurisdiction }}; {{ deal.kiosk_start.settings.rent_tax_rate|floatformat:2 }}%)
+                </div>
+            </div>
+            <div class="row grid_6">
+                <label>
+                    <strong>{% trans "Coupon" %}</strong>
+                </label>
+
+                <div class="topmargin transaction-detail">
+                    {{ deal.coupon.type.alias|default:'-' }}
+                </div>
+            </div>
+            <div class="row grid_6">
+                <label>
+                    <strong>{% trans "Discount" %}</strong>
+                </label>
+
+                <div class="topmargin2 transaction-detail">
+                    {{ deal.kiosk_start.settings.currency.symbol }}{{ deal.discount|floatformat:2 }}
+                </div>
+            </div>
+        </fieldset>
+
+        {% if 'transactions_edit' in request.user.rights %}
+        <div data-id="actions" class="actions hidden">
+            <div class="right">
+                <button data-id='manualChangeCancel' class="grey">{% trans "Cancel" %}</button>
+                <button data-id='manualChange' class="submit">{% trans "Submit" %}</button>
+            </div>
+        </div>
+        {% endif %}
+
+
+    </form>
+{% endif %}
+{% if deal.deal_type.name == "Purchase" %}
+    <form class="grid_12 no-box" data-tax="{{deal.kiosk_start.settings.sale_tax_rate}}" data-url="{% url 'deals.views.manual_change' deal.id %}">
+        {% if "CLOSED SALE" == deal.deal_status.alias %}
+            <div class="tabletools">
+                <div class="right">
+                    <a data-type='2' data-date="{{ deal.dt_start|to_milliseconds }}" data-deal-id="{{ deal.id }}"
+                       data-timezone="{{ deal.kiosk_start.settings.timezone.name|timezone_to_offset }}"
+                       data-id="finishDealBtn" data-title="{% trans "Revert deal" %}">
+                        <i class="icon-undo"></i>{% trans "Revert deal" %}</a>
+                </div>
+            </div>
+        {% endif %}
+        <fieldset>
+            <legend>{% trans "Detail deal" %}</legend>
+            <div class="row grid_6">
+                <label>
+                    <strong>{% trans "Deal ID" %}</strong>
+                </label>
+
+                <div class="topmargin">
+                    {{ deal.id }}
+                </div>
+            </div>
+            <div class="row grid_6">
+                <label>
+                    <strong>{% trans "RFID" %}</strong>
+                </label>
+
+                <div class="topmargin2">
+                    {{ deal.rf_id }}
+                </div>
+            </div>
+            <div class="row grid_6">
+                <label>
+                    <strong>{% trans "Deal type" %}</strong>
+                </label>
+
+                <div class="topmargin transaction-detail">
+                    <div class="inline-select">
+                        <select data-original-value="2" name='dealTypeId' data-operate="inline" disabled>
+                            {% for type in deal_types %}
+                                <option value="{{type.id}}" {% if type.id == 2 %}selected{% endif %}>{{type.name}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    {% if 'transactions_edit' in request.user.rights %}
+                    <span data-field='dealTypeId' class="icon field-actions">
+                        <div class="icon icon-pencil"></div>
+                        <div class="hidden icon icon-ok"></div>
+                        <div class="hidden icon icon-remove"></div>
+                    </span>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="row grid_6">
+                <label>
+                    <strong>{% trans "Tarif value sale" %}</strong>
+                </label>
+
+                <div class="topmargin2 transaction-detail">
+                    {{ deal.kiosk_start.settings.currency.symbol }}<input name='sale' data-operate="inline" class='inline-edit' type='text' data-original-value='{{ deal.tariff_value.sale|stringformat:"0.2f" }}' value='{{ deal.tariff_value.sale|stringformat:"0.2f" }}' disabled>
+
+                    {% if 'transactions_edit' in request.user.rights %}
+                    <span data-field='sale' class="icon field-actions">
+                        <div class="icon icon-pencil"></div>
+                        <div class="hidden icon icon-ok"></div>
+                        <div class="hidden icon icon-remove"></div>
+                    </span>
+                    {% endif %}
+
+                </div>
+            </div>
+            <div class="row grid_6">
+                <label>
+                    <strong>{% trans "Kiosk start" %}</strong>
+                </label>
+
+                <div class="topmargin">
+                    <a href="">{{ deal.kiosk_start.settings.alias }}</a>
+                </div>
+            </div>
+            <div class="row grid_6">
+                <label>
+                    <strong>{% trans "Total amount" %}</strong>
+                </label>
+
+                <div class="topmargin2 transaction-detail">
+                    {{ deal.kiosk_start.settings.currency.symbol }}<input name='totalAmount' data-operate="inline" class='inline-edit' type='text' data-original-value='{{ deal.total_amount|stringformat:"0.2f" }}' value='{{ deal.total_amount|stringformat:"0.2f" }}' disabled>
+
+                    {% if 'transactions_edit' in request.user.rights %}
+                    <span data-field='totalAmount' class="icon field-actions">
+                        <div class="icon icon-pencil"></div>
+                        <div class="hidden icon icon-ok"></div>
+                        <div class="hidden icon icon-remove"></div>
+                    </span>
+                    {% endif %}
+
+                </div>
+            </div>
+            <div class="row grid_6">
+                <label>
+                    <strong>{% trans "Tax jurisdiction" %}</strong>
+                </label>
+
+                <div class="topmargin transaction-detail">
+                    {{ deal.kiosk_start.settings.tax_jurisdiction }}
+                </div>
+            </div>
+            <div class="row grid_6">
+                <label>
+                    <strong>{% trans "Tax rate" %}</strong>
+                </label>
+
+                <div class="topmargin2 transaction-detail">
+                    {{ deal.kiosk_start.settings.sale_tax_rate }}%
+                </div>
+            </div>
+        </fieldset>
+
+        {% if 'transactions_edit' in request.user.rights %}
+        <div data-id="actions" class="actions hidden">
+            <div class="right">
+                <button data-id='manualChangeCancel' class="grey">{% trans "Cancel" %}</button>
+                <button data-id='manualChange' class="submit">{% trans "Submit" %}</button>
+            </div>
+        </div>
+        {% endif %}
+
+
+    </form>
+{% endif %}
+<form class="grid_12 no-box">
+  <fieldset>
+    <legend>{% trans "Detail transactions" %}</legend>
+    {% if deal.payment_account.payment_system.alias == 'linkpoint' %}
+      <table class="deal-transaction styled border">
+        <thead>
+          <tr>
+{#            <th>Transaction id</th>#}
+            <th>{% trans "Transaction date" %}</th>
+            <th>{% trans "Transaction type" %}</th>
+            <th>{% trans "Transaction amount" %}</th>
+            <th>{% trans "Transaction result" %}</th>
+            <th>{% trans "Fraud action" %}</th>
+            <th>{% trans "Error message" %}</th>
+{#            <th>Order id</th>#}
+{#            <th>Action</th>#}
+          </tr>
+        </thead>
+        <tbody>
+          {% for linkpoint in deal.linkpoint_transaction %}
+            <tr>
+{#              <td>{{ linkpoint.TransactionID | default:'-' }}</td>#}
+              <td>{{ linkpoint.TransactionTime | default:'-' }}</td>
+              {% if linkpoint.Type == 'sale' %}
+                <td>{% trans "Add'l Capture" %}</td>
+              {% elif linkpoint.Type != 'postAuth' %}
+                <td>{{ linkpoint.Type | default:'-' }}</td>
+              {% else %}
+                <td>{% trans "Capture" %}</td>
+              {% endif %}
+              <td>{{ deal.kiosk_start.settings.currency.symbol }}{{ linkpoint.pretty_charge_total |stringformat:"0.2f" | default:'-' }}</td>
+              <td>{{ linkpoint.TransactionResult | default:'-' }}</td>
+{#              <td>{{ linkpoint.TDate | default:'-' }}</td>#}
+              <td>{{ linkpoint.FraudAction | default:'-' }}</td>
+              <td>{{ linkpoint.ErrorMessage | default:'-' }}</td>
+{#              <td>{{ linkpoint.OrderId | default:'' }}</td>#}
+{#              <td>{{ linkpoint.is_can_be_postauthorized }}</td>#}
+              </tr>
+          {% endfor %}
+          {% if not deal.linkpoint_transaction %}
+            <tr>
+              <td colspan="6">{% trans "No transactions" %}</td>
+            </tr>
+          {% endif %}
+        </tbody>
+        <tfoot>
+          <tr>
+            <th>{% trans "Authorized Amount:" %}</th>
+            <th colspan="2">{{ deal.kiosk_start.settings.currency.symbol }}{{ deal.total_preauth|floatformat:2 }}</th>
+            <th>{% trans "Charged Amount:" %}</th>
+            <th colspan="2">{{ deal.kiosk_start.settings.currency.symbol }}{{ deal.total_charged|floatformat:2 }}</th>
+          </tr>
+        </tfoot>
+      </table>
+    {% elif deal.payment_account.payment_system.alias == 'firstdata' %}
+      <table class="deal-transaction styled border">
+        <thead>
+          <tr>
+            <th>{% trans "Transaction date" %}</th>
+            <th>{% trans "Transaction type" %}</th>
+            <th>{% trans "Transaction amount" %}</th>
+            <th>{% trans "Transaction approved" %}</th>
+            <th>{% trans "Fraud action" %}</th>
+            <th>{% trans "Error message" %}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for transaction in deal.firstdata_transaction_lazy %}
+            <tr>
+              <td>{{ transaction.dt_create |timezone:deal.kiosk_start.settings.timezone.name|date:'d.m.y H:i:s'|default:'-'  }}</td>
+              <td>{{ transaction.pretty_type }}</td>
+              <td>{{ deal.kiosk_start.settings.currency.symbol }}{{ transaction.pretty_charge_total |stringformat:"0.2f" | default:'-' }}</td>
+              <td>{{ transaction.transaction_approved}}</td>
+              <td>{{ transaction.bank_message | default:'-' }}</td>
+              <td>{{ transaction.exact_message | default:'-' }}</td>
+              </tr>
+          {% empty %}
+            <tr>
+              <td colspan="6">{% trans "No transactions" %}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+        <tfoot>
+          <tr>
+            <th>{% trans "Authorized Amount:" %}</th>
+            <th colspan="2">{{ deal.kiosk_start.settings.currency.symbol }}{{ deal.total_preauth|floatformat:2 }}</th>
+            <th>{% trans "Charged Amount:" %}</th>
+            <th colspan="2">{{ deal.kiosk_start.settings.currency.symbol }}{{ deal.total_charged|floatformat:2 }}</th>
+          </tr>
+        </tfoot>
+      </table>
+
+    {% endif %}
+  </fieldset>
+</form>

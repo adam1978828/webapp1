@@ -1,0 +1,58 @@
+{% load i18n %}
+<form class="grid_12 no-box" name="" method="post" action="" novalidate="novalidate" id="repOrdering"
+      xmlns="http://www.w3.org/1999/html">
+     <fieldset>
+        <legend>{% trans "Order By" %}</legend>
+        <div class="row">
+            <label> <strong>{% trans "Add" %}</strong></label>
+            <div class="grid_6">
+                <select class="form-control input-sm" id="orders-set">
+                    {% for val in report.orders %}
+                        <option value="{{ val.model_field_name }}"
+                                {% for order in pattern.order_by_fields %}
+                                    {% if order.alias == val.model_field_name %}
+                                hidden style="display:none;"
+                                    {% endif %}
+                                {% endfor %}
+                                >
+                            {{ val.readable_name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <a class="button medium addreport pull-left" id="addOrdering"><i class="icon-plus"></i></a>
+        </div>
+    </fieldset>
+    <fieldset>
+        <legend>{% trans "Order By Fields" %}</legend>
+        <table class="styled2 row" id="order_by_fields">
+            {% for order in pattern.order_by_fields %}
+                {% for val in report.orders %}
+                    {% if order.alias == val.model_field_name %}
+                        <tr>
+                            <td><i class="icon icon-sort"></i></td>
+                            <td>
+                                <div class="rep-order-by order-by-{{ val.model_field_name }}">
+                                    <div class="grid_6">
+                                        <input type="text" name="alias" value="{{ val.model_field_name }}" hidden style="display:none;">
+                                        <input type="text" readonly class="form-control input-sm" value="{{ val.readable_name }}">
+                                    </div>
+                                    <div class="grid_5">
+                                        <select class="form-control input-sm" name="order">
+                                            {% for ord_op in val.orders %}
+                                                <option value="{{ ord_op.alias }}"
+                                                    {% if order.order == ord_op.alias %}selected{% endif %}>{{ ord_op.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <a class="button medium remove-order pull-left"><i class="icon-minus"></i></a>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}
+        </table>
+    </fieldset>
+    {% include 'report/config/orders.html' %}
+</form>

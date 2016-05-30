@@ -1,0 +1,111 @@
+{% extends 'acc_base.html' %}
+{% load staticfiles %}
+{% load acctags %}
+{% load filters %}
+{% load tz %}
+{% load i18n %}
+{% block breadcrumb %}
+    <div class="left">
+        <ul class="breadcrumb">
+            <li><a href="/">{% trans "Home" %}</a></li>
+            <li><a href="{% url 'dashboard.views.all_charts' %}">{% trans "Dashboard" %}</a></li>
+        </ul>
+    </div>
+{% endblock %}
+{% block title %}{% trans "Dashboard" %}{% endblock %}
+{% block acc_content %}
+    <script>
+        $('#dashboard').addClass('current');
+        $('.accordion li a').removeClass('open');
+    </script>
+    <section id="content" class="container_12 clearfix ui-sortable" data-sort="true">
+        <h1 class="grid_12">{% trans "Dashboard" %}</h1>
+
+        <div class="spacer"></div>
+
+        {% if request.user.is_company %}
+                <div class="grid_12">
+                    <div class="box">
+
+                        <div class="header">
+                            <h2><img class="icon" src="{% static 'img/icons/packs/fugue/16x16/chart-up-color.png' %}">Disk Out</h2>
+                        </div>
+                        {% if disks_out %}
+                            <div class="content" style="height: 250px;">
+                                <table class='chart' id="discout" >
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            {% for disk in disks_out %}
+                                                <th>{{ disk.deal_dt }}</th>
+                                            {% endfor %}
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <th>First Label</th>
+                                            {% for disk in disks_out %}
+                                                <td>{{ disk.disk_out_count}}</td>
+                                            {% endfor %}
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div><!-- End of .content -->
+                        {% else %}
+                            <div class="content dataTables_empty" style="text-align: center; padding: 10px;">No data</div>
+                        {% endif %}
+
+                    </div><!-- End of .box -->
+                </div><!-- End of .grid_12 -->
+
+                <div class="grid_12">
+                    <div class="box">
+
+                        <div class="header">
+                            <h2><img class="icon" src="{% static 'img/icons/packs/fugue/16x16/chart-up-color.png' %}">Income</h2>
+                        </div>
+                        {% if incomes %}
+                            <div class="content" style="height: 250px;">
+                                <table class='chart' id='income' >
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            {% for income in incomes %}
+                                                <th>{{ income.income_date }}</th>
+                                            {% endfor %}
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <th>Rental income</th>
+                                            {% for income in incomes %}
+                                                <td>{{ income.rental_income }}</td>
+                                            {% endfor %}
+                                        </tr>
+                                        <tr>
+                                            <th>Sale income</th>
+                                            {% for income in incomes %}
+                                                <td>{{ income.sale_income }}</td>
+                                            {% endfor %}
+                                        </tr>
+                                        <tr>
+                                            <th>Total income</th>
+                                            {% for income in incomes %}
+                                                <td>{{ income.total_income }}</td>
+                                            {% endfor %}
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div><!-- End of .content -->
+                        {% else %}
+                            <div class="content dataTables_empty" style="text-align: center; padding: 10px;">No data</div>
+                        {% endif %}
+
+                    </div><!-- End of .box -->
+                </div><!-- End of .grid_12 -->
+            {% endif %}
+
+
+    </section>
+{% endblock %}
+

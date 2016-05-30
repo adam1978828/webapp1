@@ -1,0 +1,128 @@
+{% extends 'acc_base.html' %}
+{% load staticfiles %}
+{% load static %}
+{% load acctags %}
+{% load i18n %}
+{% block breadcrumb %}
+        <div class="left">
+            <ul class="breadcrumb">
+                <li><a href="/">{% trans "Home" %}</a></li>
+                <li><a href="{% url 'companies.views.view_list' %}">{% trans "Company" %}</a></li>
+                <li><a href="{% url 'companies.views.view_list' %}">{% trans "List" %}</a></li>
+            </ul>
+        </div>
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}
+
+{% block title %}{% trans "Company" %}{% endblock %}
+
+
+{% block acc_content %}
+    <script>
+        $('#bt_list_company').addClass('current');
+    </script>
+
+
+    <!-- Here goes the content. -->
+    <section id="content" class="container_12 clearfix" data-sort=true>
+        <h1 class="grid_12">{% trans "All Companies" %}</h1>
+        <div class="grid_12">
+
+            {% if 'company_add' in request.user.rights%}
+              <a class="button" href="{% url 'companies.views.add' %}"><span class="icon icon-plus"></span>{% trans "Add new company" %}</a>
+              <div class="spacer"></div>
+            {% endif %}
+
+				<div class="box">
+
+					<!--<div class="header">-->
+						<!--<h2>Simple Static Table</h2>-->
+					<!--</div>-->
+
+					<div class="content">
+
+						<table class="dynamic styled" data-show-Filter-Bar="true">
+							<colgroup>
+							   <!--<col span="1" style="width: 55px;">-->
+							   <col span="1">
+							   <col span="1">
+							   <col span="1">
+							   <col span="1">
+							   <col span="1" style="width: 100px;">
+							</colgroup>
+
+							<thead>
+								<tr>
+									<!--<td><input type="checkbox" onchange="$(this).parents('table').find(':checkbox').attr('checked', $(this).attr('checked') || false)"></td>-->
+									<th>{% trans "Logo" %}</th>
+                                    <th>{% trans "Company" %}</th>
+									<th>{% trans "Address" %}</th>
+									<th>{% trans "Card" %}</th>
+									<th>{% trans "Actions" %}</th>
+								</tr>
+							</thead>
+							<tbody>
+                            {% for company in companies %}
+								<tr onclick="document.location = '{% url 'companies.views.view_by_id' company.id %}';">
+									<!--<td><input type="checkbox"></td>-->
+									<td><img src="{% get_media_prefix %}{{ company.logo_path|default:'company_logo/logo.png' }}" id="img_logo" style="width:25px; height:25px;"/></td>
+									<td>{{company.name}}</td>
+									<td title="{{company.address.to_string}}">{{company.address.to_string|truncatechars:50}}</td>
+									<td class="center">{{company.card|maskcardnumber}}</td>
+									<td class="center">
+                            {% if 'company_edit_any' in request.user.rights %}
+                                <a href="{% url 'companies.views.edit_by_id' company.id %}" class="button small grey tooltip" data-gravity=s title="{% trans "Edit" %}"><i class="icon-pencil"></i></a>
+
+                                {% if 'company_view_permissions' in request.user.rights %}
+                                    <a href="{% url 'companies.views.permissions' company.id %}" class="button small grey tooltip" data-gravity='s' title="{% trans "Permissions" %}"><i class="icon-legal"></i></a>
+                                {% else %}
+                                    <a class="button small grey tooltip disabled" data-gravity=s title="{% trans "Permissions" %}"><i class="icon-legal"></i></a>
+                                {% endif %}
+
+                                {% if 'company_view_sites' in request.user.rights %}
+                                    <a href="{% url 'companies.views.company_sites' company.id %}" class="button small grey tooltip" data-gravity='s' title="{% trans "Sites" %}"><i class="icon-globe"></i></a>
+                                {% else %}
+                                    <a class="button small grey tooltip disabled" data-gravity=s title="{% trans "Sites" %}"><i class="icon-globe"></i></a>
+                                {% endif %}
+
+                                {% if 'company_view_settings' in request.user.rights %}
+                                    <a href="{% url 'companies.views.company_settings' company.id %}" class="button small grey tooltip" data-gravity='s' title="{% trans "Settings" %}"><i class="icon-cogs"></i></a>
+                                {% else %}
+                                    <a class="button small grey tooltip disabled" data-gravity=s title="{% trans "Settings" %}"><i class="icon-cogs"></i></a>
+                                {% endif %}
+
+                                {% if 'price_plans_view_assignment' in request.user.rights %}
+                                    <a href="{% url 'rental_fleets.views.view_rental_fleets' company.id %}" class="button small grey tooltip" data-gravity='s' title="{% trans "Rental Fleets" %}"><i class="icon-file-text-alt"></i></a>
+                                {% else %}
+                                    <a class="button small grey tooltip disabled" data-gravity=s title="{% trans "Rental Fleets" %}"><i class="icon-file-text-alt"></i></a>
+                                {% endif %}
+
+                            {% else %}
+                                <a class="button small grey tooltip disabled" data-gravity=s title="{% trans "Edit" %}"><i class="icon-pencil"></i></a>
+                                <a class="button small grey tooltip disabled" data-gravity=s title="{% trans "Permissions" %}"><i class="icon-legal"></i></a>
+                                <a class="button small grey tooltip disabled" data-gravity=s title="{% trans "Sites" %}"><i class="icon-globe"></i></a>
+                                <a class="button small grey tooltip disabled" data-gravity=s title="{% trans "Settings" %}"><i class="icon-cogs"></i></a>
+                                <a class="button small grey tooltip disabled" data-gravity=s title="{% trans "Rental Fleets" %}"><i class="icon-file-text-alt"></i></a>
+                            {% endif %}
+                                        <!--<a href="#" class="button small grey tooltip" data-gravity=s title="Remove"><i class="icon-remove"></i></a>-->
+									</td>
+								</tr>
+                            {% endfor %}
+							</tbody>
+						</table>
+
+					</div><!-- End of .content -->
+
+				</div><!-- End of .box -->
+			</div><!-- End of .grid_12 -->
+
+    </section><!-- End of #content -->
+
+{% endblock %}
+
+{% block addons %}
+    <!-- The settings dialog -->
+
+{% endblock %}

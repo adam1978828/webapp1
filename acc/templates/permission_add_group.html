@@ -1,0 +1,88 @@
+{% extends 'acc_base.html' %}
+{% load staticfiles %}
+{% load acctags %}
+{% load i18n %}
+
+{% block breadcrumb %}
+        <div class="left">
+            <ul class="breadcrumb">
+                <li><a>{% trans "Permissions" %}</a></li>
+                <li><a>{{operation}} {% trans "group" %}</a></li>
+            </ul>
+        </div>
+{% endblock %}
+
+{% block scripts %}
+<!--<script src="{% static 'js/script_company.js' %}"></script>-->
+{% endblock %}
+
+{% block title %}{% trans "Staff" %}{% endblock %}
+
+
+{% block acc_content %}
+    <script>
+        $('#bt_staff_list').addClass('current');
+    </script>
+
+
+    <!-- Here goes the content. -->
+    <section id="content" class="container_12 clearfix" data-sort=true>
+        <h1 class="grid_12">{% trans "Add new group" %}</h1>
+
+        {% include 'shortcuts/display_errors.html' with errors=errors %}
+
+        <form action="" class="grid_12" method="post">
+            {% csrf_token %}
+            <fieldset>
+                <legend>{% trans "Lorem ipsum" %}</legend>
+                <div class="row">
+                    <label for="group_name">
+                        <strong>{% trans "Group name" %}</strong>
+                    </label>
+                    <div>
+                        <input type="text" name="group_name" id="group_name" class="required" value="{{group.name}}"/>
+                    </div>
+                </div>
+            </fieldset>
+
+            {% for object in sys_objects %}
+            <fieldset>
+                <legend>{{object.name}}</legend>
+
+                {% for function in object.functions %}
+                {% if user.user_type_id == 2 and function.for_company or user.user_type_id == 3 and function.for_focus %}
+                <div class="row">
+                    <label for="{{prefix}}{{function.id}}">
+                        <strong>{{function.name}}</strong>
+                    </label>
+                    <div>
+                        <div>
+                            <input type="checkbox" name='{{prefix}}{{function.id}}' id='{{prefix}}{{function.id}}'
+                                {% if function in group.permissions %}
+                                    checked
+                                {% endif %}
+                                />
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                {% endfor %}
+
+            </fieldset>
+            {% endfor %}
+
+            <div class="actions">
+                <div class="right">
+                    <input type="submit" value="{% trans "Submit" %}" />
+                </div>
+            </div><!-- End of .actions -->
+        </form>
+
+    </section><!-- End of #content -->
+
+{% endblock %}
+
+{% block addons %}
+    <!-- The settings dialog -->
+
+{% endblock %}

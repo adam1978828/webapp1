@@ -1,0 +1,505 @@
+{% extends 'acc_base.html' %}
+{% load staticfiles %}
+{% load acctags %}
+{% load tz %}
+{% load filters %}
+{% load i18n %}
+{% block breadcrumb %}
+    <div class="left">
+        <ul class="breadcrumb">
+            <li><a href="/">{% trans "Home" %}</a></li>
+            <li><a href="{% url 'kiosks.views.multi_settings' %}">{% trans "Multi-Kiosk Settings" %}</a></li>
+        </ul>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}
+
+{% block title %}{% trans "Multi-Kiosk Settings" %}{% endblock %}
+
+
+{% block acc_content %}
+    <script>
+        $('#bt_kiosks_settings').addClass('current');
+        $('.accordion li a').removeClass('open');
+        $('#bt_kiosks_settings').parent().prev().addClass('open');
+    </script>
+
+
+<section id="content" class="container_12 clearfix ui-sortable" data-sort="true">
+    <h1 class="grid_12">{% trans "Kiosk settings" %}</h1>
+
+    <div class="spacer"></div>
+    <form action="{% url 'kiosks.views.multi_settings' %}" method="post" class="grid_12 validate"
+          id="kioskSettings" name="kioskSettings">
+    <fieldset>
+    <legend>{% trans "Settings" %}</legend>
+
+    <div class="row">
+      <label for="kiosks">
+        <strong>{% trans "Kiosks" %}</strong>
+      </label>
+
+      <div>
+        <select multiple class="dualselects" data-size=small id="kiosks"
+                name="kiosks">
+          {% for kiosk in data.kiosks %}
+            <option value="{{ kiosk.id }}" name="trailer">
+              {{ kiosk.settings.alias }} / {{ kiosk.address.line_1|default:'-' }}
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+    <div class="row">
+        <label for="timezone">
+            <strong>{% trans "Local time zone" %}</strong>
+        </label>
+
+        <div>
+            <select name="timezone" id="timezone" class="search" data-placeholder="{% trans "Choose local time zone" %}">
+                <option value="" selected> - </option>
+                {% for local in data.timezones %}
+                    <option value="{{ local.id }}">{{ local.name|normalize_timezone }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    <div class="row">
+        <label for="tDayStart">
+            <strong>{% trans "Day start" %}</strong>
+        </label>
+
+        <div>
+            <input type="time" name="tDayStart" id="tDayStart" pattern="^[0-9]{2}:[0-9]{2}$" class="empty-timepicker"
+                   data-time="">
+        </div>
+    </div>
+    <div class="row">
+        <label for="tReturn">
+            <strong>{% trans "Day return" %}</strong>
+        </label>
+
+        <div>
+            <input type="time" name="tReturn" id="tReturn" pattern="^[0-9]{2}:[0-9]{2}$" class="empty-timepicker"
+                   data-time="">
+        </div>
+    </div>
+    <div class="row">
+        <label for="currency">
+            <strong>{% trans "Currency symbol" %}</strong>
+        </label>
+
+        <div>
+            <select name="currency" id="currency" class="search" data-placeholder="{% trans "Choose currency" %}">
+                <option value="" selected> - </option>
+                {% for cur in data.currencies %}
+                    <option value="{{ cur.id }}" {% if data.currencyId == cur.id %}selected{% endif %}>{{ cur.symbol }}
+                        / {{ cur.alias }} / {{ cur.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    <div class="row">
+        <label for="speakerVolume">
+            <strong>{% trans "The speaker volume" %}</strong>
+            <small>(0-100%)</small>
+        </label>
+
+        <div>
+            <input type="text" name="speakerVolume" id="speakerVolume" value=""/>
+        </div>
+    </div>
+
+    <div class="row">
+        <label for="rentTaxRate">
+            <strong>{% trans "The rental tax rate" %}</strong>
+            <small>(0-99.999%)</small>
+        </label>
+
+        <div>
+            <input type="text" name="rentTaxRate" id="rentTaxRate"
+                   value=""/>
+        </div>
+    </div>
+    <div class="row">
+        <label for="saleTaxRate">
+            <strong>{% trans "The sale tax rate" %}</strong>
+        </label>
+
+        <div>
+            <input type="text" name="saleTaxRate" id="saleTaxRate"
+                   value=""/>
+        </div>
+    </div>
+    <div class="row">
+        <label for="taxJurisdiction">
+            <strong>{% trans "The tax jurisdiction" %}</strong>
+        </label>
+
+        <div>
+            <input type="text" name="taxJurisdiction" id="taxJurisdiction"
+                   value=""/>
+        </div>
+    </div>
+    <div class="row">
+        <label for="dvdTariffPlan">
+            <strong>{% trans "The default DVD price plan" %}</strong>
+        </label>
+
+        <div>
+            <select name="dvdTariffPlan" id="dvdTariffPlan" class="search" data-placeholder="{% trans "Choose price plan" %}">
+                <option value="" selected> - </option>
+                {% for price in data.tariff_plans %}
+                    <option value="{{ price.id }}"
+                            {% if data.dvdTariffPlanId == price.id %}selected{% endif %}>{{ price.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    <div class="row">
+        <label for="bluRayTariffPlan">
+            <strong>{% trans "The default Blu-ray price plan" %}</strong>
+        </label>
+
+        <div>
+            <select name="bluRayTariffPlan" id="bluRayTariffPlan" class="search" data-placeholder="{% trans "Choose price plan" %}">
+                <option value="" selected> - </option>
+                {% for price in data.tariff_plans %}
+                    <option value="{{ price.id }}"
+                            {% if data.bluRayTariffPlanId == price.id %}selected{% endif %}>{{ price.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    <div class="row">
+        <label for="gameTariffPlan">
+            <strong>{% trans "The default game price plan" %}</strong>
+        </label>
+
+        <div>
+            <select name="gameTariffPlan" id="gameTariffPlan" class="search" data-placeholder="{% trans "Choose price plan" %}">
+                <option value="" selected> - </option>
+                {% for price in data.tariff_plans %}
+                    <option value="{{ price.id }}"
+                            {% if data.gameTariffPlanId == price.id %}selected{% endif %}>{{ price.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    <div class="row">
+        <label for="paymentSystem">
+            <strong>{% trans "The default payment system" %}</strong>
+        </label>
+
+        <div>
+            <select name="paymentSystem" id="paymentSystem" class="search" data-placeholder="{% trans "Choose payment system" %}">
+                <option value="" selected> - </option>
+                {% for pay in data.payment_systems %}
+                    <option value="{{ pay.id }}">{{ pay.payment_system.name }}
+                        ({{ pay.system.store_number }})
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    <div class="row">
+        <label for="reservationExpirationPeriod">
+            <strong>{% trans "The reservation expiration" %} <br> {% trans "time period" %}</strong>
+            <small>(0-9999 minutes)</small>
+        </label>
+
+        <div>
+            <input type="text" name="reservationExpirationPeriod" id="reservationExpirationPeriod"
+                   value=""/>
+        </div>
+    </div>
+    <div class="row">
+        <label for="maxDisksPerCard">
+            <strong>{% trans "The maximum number" %} <br> {% trans "of disks out per credit card" %}</strong>
+            <small>{% trans "(0-99 items)" %}</small>
+        </label>
+
+        <div>
+            <input type="text" name="maxDisksPerCard" id="maxDisksPerCard"
+                   value=""/>
+        </div>
+    </div>
+    <div class="row">
+        <label for="gracePeriod">
+            <strong>{% trans "The grace period" %}</strong>
+            <small>{% trans "(0-999 minutes)" %}</small>
+        </label>
+
+        <div>
+            <input type="text" name="gracePeriod" id="gracePeriod" value=""/>
+        </div>
+    </div>
+    <div class="row">
+        <label for="dvdPreauthMethod">
+            <strong>{% trans "Preauthorization" %} <br> {% trans "method for DVD" %}</strong>
+        </label>
+
+        <div>
+            <select name="dvdPreauthMethod" id="dvdPreauthMethod"
+                    data-placeholder="Choose preauthorization method for DVD">
+                <option value="" selected> - </option>
+                {% for predvd in data.preauth_methods %}
+                    <option value="{{ predvd.id }}">{{ predvd.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    <div class="row">
+        <label for="dvdPreauthAmount">
+            <strong>{% trans "Preauthorization" %} <br> {% trans "amount for DVD" %}</strong>
+        </label>
+
+        <div>
+            <input type="text" name="dvdPreauthAmount" id="dvdPreauthAmount"
+                   value=""/>
+        </div>
+    </div>
+    <div class="row">
+        <label for="bluRayPreauthMethod">
+            <strong>{% trans "Preauthorization" %} <br> {% trans "method for BluRay" %}</strong>
+        </label>
+
+        <div>
+            <select name="bluRayPreauthMethod" id="bluRayPreauthMethod"
+                    data-placeholder="Choose preauthorization method for BluRay">
+                <option value="" selected> - </option>
+                {% for preblueray in data.preauth_methods %}
+                    <option value="{{ preblueray.id }}">{{ preblueray.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    <div class="row">
+        <label for="bluRayPreauthAmount">
+            <strong>{% trans "Preauthorization" %} <br> {% trans "amount for BluRay" %}</strong>
+        </label>
+
+        <div>
+            <input type="text" name="bluRayPreauthAmount" id="bluRayPreauthAmount"
+                   value="{{ data.bluRayPreauthAmount|default:'' }}"/>
+        </div>
+    </div>
+    <div class="row">
+        <label for="gamePreauthMethod">
+            <strong>{% trans "Preauthorization" %} <br> {% trans "method for Game" %}</strong>
+        </label>
+
+        <div>
+            <select name="gamePreauthMethod" id="gamePreauthMethod"
+                    data-placeholder="{% trans "Choose preauthorization method for Game" %}">
+                <option value="" selected> - </option>
+                {% for pregame in data.preauth_methods %}
+                    <option value="{{ pregame.id }}">{{ pregame.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    <div class="row">
+        <label for="gamePreauthAmount">
+            <strong>{% trans "Preauthorization" %} <br> {% trans "amount for Game" %}</strong>
+        </label>
+
+        <div>
+            <input type="text" name="gamePreauthAmount" id="gamePreauthAmount"
+                   value=""/>
+        </div>
+    </div>
+    <div class="row">
+        <label for="saleNoInternetOpId">
+            <strong>{% trans "Allow known to rent" %} <br> {% trans "without authorization" %}</strong>
+        </label>
+
+        <div>
+            <select name="saleNoInternetOpId" id="saleNoInternetOpId" data-placeholder="{% trans "Choose known to rent" %}">
+                <option value="" selected> - </option>
+                {% for known in data.no_internet_operations %}
+                    <option value="{{ known.id }}">{{ known.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    <div class="row">
+        <label for="rentNoInternetOpId">
+            <strong>{% trans "Allow unknown to rent" %} <br> {% trans "without authorization" %}</strong>
+        </label>
+
+        <div>
+            <select name="rentNoInternetOpId" id="rentNoInternetOpId" data-placeholder="{% trans "Choose unknown to rent" %}">
+                <option value="" selected> - </option>
+                {% for unknown in data.no_internet_operations %}
+                    <option value="{{ unknown.id }}">{{ unknown.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    <div class="row">
+        <label for="captureRetryInterval">
+            <strong>{% trans "Capture Retry Interval" %}</strong>
+            <small>{% trans "(0-99999 minutes)" %}</small>
+        </label>
+
+        <div>
+            <input type="text" name="captureRetryInterval" id="captureRetryInterval"
+                   value=""/>
+        </div>
+    </div>
+    <div class="row">
+        <label for="captureRetryQuantity">
+            <strong>{% trans "Capture Retry Quantity" %}</strong>
+            <small>{% trans "(0-999 times)" %}</small>
+        </label>
+
+        <div>
+            <input type="text" name="captureRetryQuantity" id="captureRetryQuantity"
+                   value=""/>
+        </div>
+    </div>
+    <div class="row">
+        <label for="contactTelephoneNumber">
+            <strong>{% trans "Contact telephone number" %}</strong>
+        </label>
+
+        <div>
+            <input type="text" name="contactTelephoneNumber" id="contactTelephoneNumber"
+                   value=""/>
+        </div>
+    </div>
+    <div class="row">
+        <label for="terms">
+            <strong>{% trans "Terms and conditions" %}</strong>
+        </label>
+
+        <div>
+            <textarea name="terms" id="terms"></textarea>
+        </div>
+    </div>
+    <div class="row">
+        <label for="i_country">
+            <strong>{% trans "Skip Days" %}</strong>
+        </label>
+
+        <div>
+            <div id="skipDays" class="skipDaysWeek">
+                <div class="leftMonth">
+                    <div>{% trans "Mo" %}</div>
+                    <input type="checkbox" name="skipWeekdays" id="Mo" value="1" {% if 1 in data.skipWeekdays %}
+                           checked {% endif %}/>
+                </div>
+                <div class="leftMonth">
+                    <div>{% trans "Tu" %}</div>
+                    <input type="checkbox" name="skipWeekdays" id="Tu" value="2" {% if 2 in data.skipWeekdays %}
+                           checked {% endif %}/>
+                </div>
+                <div class="leftMonth">
+                    <div>{% trans "We" %}</div>
+                    <input type="checkbox" name="skipWeekdays" id="We" value="3" {% if 3 in data.skipWeekdays %}
+                           checked="checked" {% endif %}/>
+                </div>
+                <div class="leftMonth">
+                    <div>{% trans "Th" %}</div>
+                    <input type="checkbox" name="skipWeekdays" id="Th" value="4" {% if 4 in data.skipWeekdays %}
+                           checked="checked" {% endif %} />
+                </div>
+                <div class="leftMonth">
+                    <div>{% trans "Fr" %}</div>
+                    <input type="checkbox" name="skipWeekdays" id="Fr" value="5" {% if 5 in data.skipWeekdays %}
+                           checked="checked" {% endif %}/>
+                </div>
+                <div class="leftMonth">
+                    <div>{% trans "Sa" %}</div>
+                    <input type="checkbox" name="skipWeekdays" id="Sa" value="6" {% if 6 in data.skipWeekdays %}
+                           checked="checked" {% endif %}/>
+                </div>
+                <div class="leftMonth">
+                    <div>{% trans "Su" %}</div>
+                    <input type="checkbox" name="skipWeekdays" id="Su" value="7" {% if 7 in data.skipWeekdays %}
+                           checked="checked" {% endif %}/>
+                </div>
+            </div>
+            <div id="skipPeriods">
+                <a id="addSkipPeriod" class="button block" title="{% trans "Add" %}">
+                    <span class="icon-plus"></span>
+                    {% trans "Add Skip Date" %}
+                </a>
+            </div>
+            <!-- End of .grid_12 -->
+        </div>
+    </div>
+    <div class="row">
+        <label for="emptySlotsWarning">
+            <strong>{% trans "Empty slots alert threshold" %}</strong>
+        </label>
+
+        <div>
+            <input type="text" name="emptySlotsWarning" id="emptySlotsWarning"
+                   value=""/>
+        </div>
+    </div>
+
+    <div class="row">
+      <label for="schedule">
+        <strong>{% trans "Schedule" %}</strong>
+      </label>
+      <div>
+
+        <div class="scheduler small">
+          <div class="left">
+            <input data-id='filter' class="ignore" placeholder="{% trans "Filter entries..." %}" type="text">
+            <select multiple="" class="ignore">
+              {% for trailer in data.company_trailers %}
+                <option data-id="{{trailer.id}}" name="trailer">{{trailer.alias}}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="buttons">
+            <a data-id='add' class="button flat">&nbsp;&gt;&nbsp;</a>
+            <a data-id='del' class="button flat">&nbsp;&lt;&nbsp;</a>
+            <a data-id='up' class="button flat">&nbsp;&uarr;&nbsp;</a>
+            <a data-id='down' class="button flat">&nbsp;&darr;&nbsp;</a>
+          </div>
+          <div class="right">
+            <input data-id='filter' class="ignore" placeholder="{% trans "Filter entries..." %}" type="text">
+            <select multiple="" class="ignore">
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+        <label for="password">
+            <strong>{% trans "Password for 'root' user" %}</strong>
+        </label>
+
+        <div>
+            <input type="text" name="password" id="password"
+                   value=""/>
+        </div>
+    </div>
+    <div class="left">
+        <strong>{% trans "Password for save" %}</strong>
+        <input type="password" name="passwordUser" id="passwordUser" value=""/>
+    </div>
+
+    </fieldset>
+    <div class="actions">
+        <div class="right">
+            <input type="submit" value="{% trans "Save" %}"/>
+        </div>
+    </div>
+    </form>
+    </section>
+
+{% endblock %}
+
+{% block addons %}
+    <!-- The settings dialog -->
+
+{% endblock %}

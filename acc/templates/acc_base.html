@@ -1,0 +1,444 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load static %}
+{% load i18n %}
+
+{% block right_buttons %}
+    <div class="right">
+        <ul>
+            <li><a href="/auth/logout/"><span class="icon i14_admin-user"></span>{% trans "Logout" %}</a></li>
+            <!--<li class="red"><a href="#">Red Button</a></li>-->
+        </ul>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <!-- The header containing the logo -->
+    <header class="container_12">
+        <a href="#">
+
+                <img src="{% static 'img/focus-logo.png' %}" alt="Focus" height="60">
+
+        </a>
+        <a class="phone-title" href="#">
+
+                <img src="{% static 'img/focus-logo.png' %}" alt="Focus" width="70">
+
+        </a>
+    <!-- End of header -->
+
+{#        <form action="{% url 'set_timezone' %}" method="POST">#}
+        <form action="\" method="POST" hidden="true">
+            <label for="f_tz">
+                <strong>{% trans "Time Zone" %}</strong>
+            </label>
+            <select name="f_tz" data-placeholder="{% trans "Choose Time Zone" %}">
+{#                                <option value="0" >&lt; {% trans "Focus" %} &gt;</option>#}
+            {% for tz in timezones %}
+                <option value="{{ tz }}" >{{ tz }}</option>
+            {% endfor %}
+        </select>
+{#        <input type="submit" value="Set" />#}
+        </form>
+    </header>
+    <!-- The container of the sidebar and content box -->
+    <div role="main" id="main" class="container_12 clearfix">
+    <!-- The blue toolbar stripe -->
+    <section class="toolbar">
+        <div class="user">
+            <div class="avatar">
+                <img src="{% static 'img/layout/content/toolbar/user/avatar.png' %}">
+                <!--<span>3</span>-->
+            </div>
+            <span class="text-overflow">{{ request.user.email }}</span>
+            <ul>
+                <li><a href="{% url 'profiles.views.view' %}">{% trans "Profile" %}</a></li>
+                <li class="line"></li>
+                <li><a href="/auth/logout/">{% trans "Logout" %}</a></li>
+            </ul>
+        </div>
+    </section>
+    <!-- End of .toolbar-->
+    <!-- The sidebar -->
+    <aside>
+    <div class="top">
+    <!-- Navigation -->
+    <nav>
+    <ul class="collapsible accordion">
+    <li id="bt_profile">
+        <a href="{% url 'profiles.views.view' %}">
+            <img src="{% static 'img/icons/packs/fugue/16x16/user-business.png' %}" alt="" height=16 width=16>{% trans "Profile" %}
+        </a>
+    </li>
+    <li>
+        <a class="open" href="javascript:void(0);">
+            <img src="{% static 'img/icons/packs/fugue/16x16/bank.png' %}" alt="" height=16 width=16>{% trans "Company" %}<!--<span class="badge">4</span>-->
+        </a>
+        <ul>
+
+            {% if 'user_add' in request.user.rights %}
+                <li id="bt_add_user">
+                    <a href="{% url 'profiles.views.add_staff' %}">
+                        <span class="icon icon-plus"></span>{% trans "Add worker" %}
+                    </a>
+                </li>
+            {% endif %}
+
+            {% if 'company_add' in request.user.rights %}
+                <li id="bt_add_company">
+                    <a href="{% url 'companies.views.add' %}">
+                        <span class="icon icon-plus"></span>{% trans "Add new company" %}
+                    </a>
+                </li>
+            {% endif %}
+
+            {% if 'company_edit_own' in request.user.rights %}
+                <li id="bt_edit_company">
+                    <a href="{% url 'companies.views.edit' %}">
+                        <span class="icon icon-pencil"></span>{% trans "Edit company" %}
+                    </a>
+                </li>
+            {% endif %}
+
+            {% if 'company_view_any' in request.user.rights %}
+                <li id="bt_list_company">
+                    <a href="{% url 'companies.views.view_list' %}">
+                        <span class="icon icon-list"></span>{% trans "All companies" %}
+                    </a>
+                </li>
+            {% endif %}
+
+            {% if 'company_view_own' in request.user.rights %}
+                <li id="bt_view_company">
+                    <a href="{% url 'companies.views.view' %}">
+                        <span class="icon icon-folder-open"></span>{% trans "View" %}
+                    </a>
+                </li>
+            {% endif %}
+
+            {% if 'user_view' in request.user.rights %}
+                <li id="bt_list_staff">
+                    <a href="{% url 'companies.views.staff_list' %}">
+                        <span class="icon icon-list"></span>{% trans "View staff" %}
+                    </a>
+                </li>
+            {% endif %}
+
+            {% if 'user_view' in request.user.rights %}
+                {% if request.user.is_focus %}
+                    <li id="bt_list_staff_focuss">
+                        <a href="{% url 'companies.views.staff_list_focus' %}">
+                            <span class="icon icon-list"></span>{% trans "View list focus users" %}
+                        </a>
+                    </li>
+                {% endif %}
+            {% endif %}
+
+            {% if 'user_view' in request.user.rights %}
+                {% if request.user.is_focus %}
+                    <li id="bt_list_user_management">
+                        <a href="{% url 'companies.views.user_management' %}">
+                            <span class="icon icon-list"></span>{% trans "User management" %}
+                        </a>
+                    </li>
+                {% endif %}
+            {% endif %}
+
+            {% if 'company_view_sites' in request.user.rights %}
+                {% if not request.user.is_focus %}
+                    <li id="bt_company_client_sites">
+                        <a href="{% url 'companies.views.sites' %}">
+                            <span class="icon icon-cogs"></span>{% trans "Client sites management" %}
+                        </a>
+                    </li>
+                {% endif %}
+            {% endif %}
+
+            {% if 'company_view_payments' in request.user.rights %}
+                <li id="bt_payments">
+                    <a href="{% url 'payments.views.payments' %}">
+                        <span class="icon icon-usd"></span>{% trans "Merchant Accounts" %}
+                    </a>
+                </li>
+            {% endif %}
+
+            {% if 'company_view_permissions' in request.user.rights %}
+                {% if False %}
+                    <li id="bt_company_permissions">
+                        <a href="{% url 'companies.views.permissions' %}">
+                            <span class="icon icon-list"></span>{% trans "Permissions" %}
+                        </a>
+                    </li>
+                {% endif %}
+            {% endif %}
+
+            {% if 'perms_moderate_groups' in request.user.rights %}
+                <li id="bt_list_group">
+                    <a href="{% url 'companies.views.group_list' %}">
+                        <span class="icon icon-list"></span>{% trans "Permission group settings" %}
+                    </a>
+                </li>
+            {% endif %}
+
+            {% if 'company_view_settings' in request.user.rights %}
+                {% if request.user.is_focus %}
+                    <li id="bt_list_settings">
+                        <a href="{% url 'companies.views.settings_list' %}">
+                            <span class="icon icon-cogs"></span>{% trans "Settings" %}
+                        </a>
+                    </li>
+                {% else %}
+                    <li id="bt_list_settings">
+                        <a href="{% url 'companies.views.settings' %}">
+                            <span class="icon icon-cogs"></span>{% trans "Settings" %}
+                        </a>
+                    </li>
+                {% endif %}
+            {% endif %}
+
+            {% if 'company_view_trailers' in request.user.rights %}
+                <li id="bt_company_trailers">
+                    <a href="{% url 'companies.views.trailers' %}">
+                        <span class="icon icon-film"></span>{% trans "Trailers" %}
+                    </a>
+                </li>
+            {% endif %}
+
+            {% if 'company_view_social' in request.user.rights %}
+                <li id="bt_company_social_communities">
+                    <a href="{% url 'companies.views.social' %}">
+                        <span class="icon icon-twitter"></span>{% trans "Social communities" %}
+                    </a>
+                </li>
+            {% endif %}
+
+
+            <!--{% if user.is_focus%}-->
+                <!--<li id="bt_company_add"><a href="/acc/company/add/"><span class="icon icon-plus"></span>Add company</a></li>-->
+                <!--<li id="bt_company_list"><a href="/acc/company/list/"><span class="icon icon-list"></span>Companies</a></li>-->
+                <!--{% endif %}-->
+            <!--{% if user.is_company %}-->
+                <!--<li id="bt_company_view"><a href="/acc/company/view/"><span class="icon icon-suitcase"></span>View</a></li>-->
+                <!--{% endif %}-->
+            <!--<li id="bt_staff_list"><a href="/acc/staff/list/"><span class="icon icon-group"></span>Staff</a></li>-->
+        </ul>
+    </li>
+
+    {% if 'price_plan_view' in request.user.rights %}
+        <li id="priceplans">
+            <a href="{% url 'price_plans.views.all_price_plans' %}">
+                <img src="{% static 'img/icons/packs/fugue/16x16/price-tag--plus.png' %}" alt="" height=16 width=16>{% trans "Price plans" %}
+            </a>
+        </li>
+    {% endif %}
+
+    {% if 'kiosk_view' in request.user.rights %}
+        <li>
+            <a href="javascript:void(0);">
+                <img src="{% static 'img/icons/packs/fugue/16x16/robot.png' %}" alt="Kiosks icon" height=16 width=16>{% trans "Kiosks" %}
+            </a>
+            <ul>
+                <li id="bt_kiosks_list">
+                    <a href="{% url 'kiosks.views.view_list' %}">
+                        <span class="icon icon-list"></span>{% trans "All Kiosks" %}
+                    </a>
+                </li>
+                {% if 'kiosk_multi_settings' in request.user.rights  %}
+                <li id="bt_kiosks_settings">
+                    <a href="{% url 'kiosks.views.multi_settings' %}">
+                        <span class="icon icon-cogs"></span>{% trans "Multi-Kiosk Settings" %}
+                    </a>
+                </li>
+                <li id="bt_kiosks_global_review">
+                    <a href="{% url 'kiosks.views.global_review_inventory' %}">
+                        <span class="icon icon-list"></span>{% trans "Global Review Inventory" %}
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+
+            <!--li id="bt_kiosks_list">
+                <a href="{% url 'kiosks.views.view_list' %}">
+                    <img src="{% static 'img/icons/packs/fugue/16x16/robot.png' %}" alt="" height=16 width=16>{% trans "Kiosk" %}
+                </a>
+            </li-->
+        </li>
+    {% endif %}
+
+    <li>
+        <a href="javascript:void(0);">
+            <img src="{% static 'img/icons/packs/fugue/16x16/clipboard.png' %}" alt="Rental fleets icon" height=16 width=16>{% trans "Rental Fleet" %}
+        </a>
+        <ul>
+
+            {% if 'price_plans_view_assignment' in request.user.rights %}
+                <li id="bt_rental_fleets_view">
+                    <a href="{% url 'rental_fleets.views.index' %}">
+                        <span class="icon icon-list"></span>{% trans "Price Plan Assignments" %}
+                    </a>
+                </li>
+            {% endif %}
+
+            {% if 'rental_view_disk' in request.user.rights %}
+                <li id="bt_rental_fleets_disks">
+                    <a href="{% url 'rental_fleets.views.disks' %}">
+                        <span class="icon icon-facetime-video"></span>{% trans "Disks" %}
+                    </a>
+                </li>
+            {% endif %}
+
+            {% if 'rental_add_disk' in request.user.rights %}
+                <li id="bt_rental_fleets_add_disk">
+                    <a href="{% url 'rental_fleets.views.add_disk' %}">
+                        <span class="icon icon-plus"></span>{% trans "Add Disk" %}
+                    </a>
+                </li>
+            {% endif %}
+
+            {% if 'rental_view_disk' in request.user.rights %}
+                <li id="bt_rental_fleets_disks_out">
+                    <a href="{% url 'rental_fleets.views.disks_out' %}">
+                        <span class="icon icon-signout"></span>{% trans "Disks Out" %}
+                    </a>
+                </li>
+            {% endif %}
+
+
+        </ul>
+    </li>
+    <li id="movies">
+        <a href="javascript:void(0);">
+            <img src="{% static 'img/icons/packs/fugue/16x16/film.png' %}" alt="" height=16 width=16>{% trans "Movies" %}
+        </a>
+        <ul>
+
+            {% if 'movies_add' in request.user.rights %}
+                <li id="bt_add_movie">
+                    <!--<img src="{% static 'img/icons/packs/fugue/16x16/film--plus.png' %}" alt="" height=16 width=16>-->
+                    <a href="{% url 'movies.views.add_edit' 'add' '' %}">
+                        <span class="icon icon-plus"></span>{% trans "Add Movie" %}
+                    </a>
+                </li>
+            {% endif %}
+
+            {% if 'movie_add_upc' in request.user.rights %}
+                <li id="bt_create_upc">
+                    <!--<img src="{% static 'img/icons/packs/fugue/16x16/film--plus.png' %}" alt="" height=16 width=16>-->
+                    <a href="{% url 'movies.views.add_upc' %}">
+                        <span class="icon icon-plus"></span>{% trans "Add Additional UPC Code" %}
+                    </a>
+                </li>
+            {% endif %}
+
+            <li id="bt_movies_list_view">
+                <a href="{% url 'movies.views.all' %}">
+                    <span class="icon icon-list"></span>{% trans "All Movies" %}
+                </a>
+            </li>
+
+            {% if 'movies_update' in request.user.rights %}
+                <li id="bt_movies_update_center">
+                    <a href="{% url 'movies.views.update_center_alt' 'log' %}">
+                        <span class="icon icon-refresh"></span>{% trans "Update Center" %}
+                    </a>
+                </li>
+            {% endif %}
+
+            {% if 'movies_view_featured' in request.user.rights %}
+                <li id="bt_movies_featured">
+                    <a href="{% url 'movies.views.featured' %}">
+                        <span class="icon icon-star"></span>{% trans "Featured" %}
+                    </a>
+                </li>
+            {% endif %}
+        </ul>
+    </li>
+
+    {% if 'transactions_view' in request.user.rights %}
+        <li id="deals">
+            <a href="{% url 'deals.views.all_deals' %}">
+                <img src="{% static 'img/icons/packs/fugue/16x16/price-tag--plus.png' %}" alt="" height=16 width=16>{% trans "Transactions" %}
+            </a>
+        </li>
+    {% endif %}
+
+    {% if 'coupons_view' in request.user.rights %}
+        <li id="coupons">
+            <a href="javascript:void(0);">
+                <img src="{% static 'img/icons/packs/fugue/16x16/tags.png' %}" alt="" height=16 width=16>{% trans "Coupons" %}
+            </a>
+            <ul>
+                <li id="bt_all_coupons">
+                    <a href="{% url 'coupons.views.all_coupons' %}">
+                        <span class="icon icon-list"></span>{% trans "All coupons" %}
+                    </a>
+                </li>
+                <!--<li id="bt_all_coupon_types">
+                  <a href="{% url 'coupons.views.all_types' %}">
+                    <span class="icon icon-list"></span>All coupon types
+                  </a>
+                </li>-->
+            </ul>
+        </li>
+    {% endif %}
+
+    <li id="reports">
+        <a href="javascript:void(0);">
+            <img src="{% static 'img/icons/packs/fugue/16x16/chart.png' %}" alt="" height=16 width=16>{% trans "Reports" %}
+        </a>
+        <ul>
+            {% if request.user.is_focus %}
+                <li id="bt_patterns">
+                    <a href="{% url 'reports_views.views.patterns' %}">
+                        <span class="icon icon-sitemap"></span>{% trans "Templates" %}
+                    </a>
+                </li>
+                <li id="bt_sources">
+                    <a href="{% url 'reports_views.views.data_sources' %}">
+                        <span class="icon icon-wrench"></span>{% trans "Data sources" %}
+                    </a>
+                </li>
+            {% endif %}
+            <li id="bt_reports">
+                <a href="{% url 'reports_views.views.reports' %}">
+                    <span class="icon icon-bar-chart"></span>{% trans "Reports" %}
+                </a>
+            </li>
+
+            <li id="bt_jasper_reports">
+                <a href="{% url 'reports_views.views.jasper_reports' %}">
+                    <span class="icon icon-bar-chart"></span>{% trans "Jasper Reports" %}
+                </a>
+            </li>
+
+            {% if request.user.is_focus %}
+            <li id="bt_jasper_templates">
+                <a href="{% url 'reports_views.views.jasper_templates' %}">
+                    <span class="icon icon-sitemap"></span>{% trans "Jasper Templates" %}
+                </a>
+            </li>
+            {% endif %}
+        </ul>
+    </li>
+    {% if request.user.is_company %}
+        <li id="dashboard">
+            <a href="{% url 'dashboard.views.all_charts' %}">
+                <img src="{% static 'img/icons/packs/fugue/16x16/dashboard.png' %}" alt="" height=16 width=16>{% trans "Dashboard" %}
+            </a>
+        </li>
+    {% endif %}
+
+
+    </ul>
+    </nav>
+    <!-- End of nav -->
+    </div>
+    <!-- End of .top -->
+    </aside>
+    <!-- End of sidebar -->
+    {% block acc_content %}
+    {% endblock %}
+    {% include 'popup/alert.html' %}
+    {% include 'popup/form.html' %}
+    </div><!-- End of #main -->
+{% endblock %}

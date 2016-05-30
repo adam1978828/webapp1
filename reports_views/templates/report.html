@@ -1,0 +1,44 @@
+{% extends 'acc_base.html' %}
+{% load staticfiles %}
+{% load acctags %}
+{% load i18n %}
+{% block breadcrumb %}
+    <div class="left">
+        <ul class="breadcrumb">
+            <li><a href="/">{% trans "Home" %}</a></li>
+            <li><a href="{% url 'reports_views.views.reports' %}">{% trans "Reports" %}</a></li>
+            <li><a href="{% url 'reports_views.views.patterns' %}">{% trans "Report Templates" %}</a></li>
+        </ul>
+    </div>
+{% endblock %}
+{% block title %}
+    {% if mode == 'new_pattern' %}
+        {% trans "Add New Report Template" %}
+    {% elif mode == 'edit_pattern' %}
+        {% trans "Edit Report Template" %}
+    {% elif mode == 'new_report' %}
+        {% trans "Create New Report" %}
+    {% elif mode == 'show_report' %}
+        {% trans "Report" %}
+    {% endif %}
+{% endblock %}
+
+
+{% block acc_content %}
+    <script>
+        $('#bt_reports').addClass('current');
+        $('.accordion li a').removeClass('open');
+        $('#bt_reports').parent().prev().addClass('open');
+    </script>
+    <section id="content" class="container_12 clearfix ui-sortable" data-sort="true">
+        {% include 'report/general.html' %}
+        {% include 'report/filters.html' %}
+        <div {% if 'pattern' not in mode %}hidden style="display:none;"{% endif %}>
+            {% include 'report/fields.html' %}
+            {% include 'report/ordering.html' %}
+            {% include 'report/aggregations.html' %}
+            {% include 'report/grouping.html' %}
+        </div>
+        {% include 'report/table.html' %}
+    </section>
+{% endblock %}

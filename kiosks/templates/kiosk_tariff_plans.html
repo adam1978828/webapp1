@@ -1,0 +1,79 @@
+{% extends 'acc_base.html' %}
+{% load staticfiles %}
+{% load acctags %}
+{% load i18n %}
+{% block breadcrumb %}
+        <div class="left">
+            <ul class="breadcrumb">
+                <li><a href="/">{% trans "Home" %}</a></li>
+                <li><a href="{% url 'kiosks.views.view_list' %}">{% trans "Kiosks" %}</a></li>
+                <li><a href="{% url 'kiosks.views.kiosk_tariff_plans' kiosk.id %}">{% trans "Tariff plans" %}</a></li>
+            </ul>
+        </div>
+{% endblock %}
+{% block title %}{% trans "Kiosk price plans" %}{% endblock %}
+{% block acc_content %}
+<script>
+    $('#bt_kiosks_list').addClass('current');
+    $('.accordion li a').removeClass('open');
+</script>
+<section id="content" class="container_12 clearfix" data-sort=true>
+    <h1 class="grid_12">{% trans "Kiosk price plans" %}</h1>
+    <div class="grid_12">
+        <div class="box">
+            <div class="content">
+                <table class="dynamic styled" data-show-Filter-Bar="true" data-max-items-per-page='25'>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>{% trans "Name" %}</th>
+                            <th>{% trans "First Night" %}</th>
+                            <th>{% trans "Next Night" %}</th>
+                            <th>{% trans "Sale" %}</th>
+                            <th>{% trans "Last change by" %}</th>
+                            <th>{% trans "Last change at" %}</th>
+                            <th>{% trans "Current level of assignment" %}</th>
+                            <th>{% trans "Actions" %}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if tariff_plans|length > 0 %}
+                          {% for plan in tariff_plans %}
+                            <tr>
+                              {% with plan.last_tariff_value as ltv %}
+                                <td class="center">{{ forloop.counter }}</td>
+                                <td>{{ plan.name }}</td>
+                                <td>{{ ltv.first_night}}</td>
+                                <td>{{ ltv.next_night}}</td>
+                                <td>{{ ltv.sale}}</td>
+                                <td>{{ ltv.user.name }}</td>
+                                <td>{{ ltv.dt_start|date:'m.d.Y H:i:s' }}</td>
+                                <td>
+                                  {% if plan.value.kiosk %}
+                                    {% trans "Kiosk" %}
+                                  {% else %}
+                                    {% trans "Company" %}
+                                  {% endif %}
+                                </td>
+                                <td class="center">
+                                  <a href="{% url 'kiosks.views.tariff_values' kiosk.id plan.id %}"
+                                     class=" button small grey tooltip"
+                                     original-title="{% trans "Show tariff values" %}"
+                                     data-gravity="s" title="{% trans "Tariff values" %}">
+                                    <i class="icon-usd"></i></a>
+                                </td>
+                              {%  endwith %}
+                            </tr>
+                          {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="9">{% trans "Add first tariff plan" %}</td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

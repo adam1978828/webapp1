@@ -1,0 +1,160 @@
+{% extends 'acc_base.html' %}
+{% load staticfiles %}
+{% load acctags %}
+{% load i18n %}
+{% block breadcrumb %}
+    <div class="left">
+        <ul class="breadcrumb">
+            {% if operation == "add" %}
+                <li><a href="/">{% trans "Home" %}</a></li>
+                <li><a href="{% url 'companies.views.view_list' %}">{% trans "Company" %}</a></li>
+                <li><a href="{% url 'profiles.views.add_staff' %}">{% trans "Add" %}</a></li>
+            {% else %}
+                <li><a href="/">{% trans "Home" %}</a></li>
+                <li><a href="{% url 'profiles.views.view' %}">{% trans "Profile" %}</a></li>
+                <li><a href="{% url 'companies.views.edit' %}">{% trans "Edit" %}</a></li>
+            {%endif%}
+        </ul>
+    </div>
+{% endblock %}
+{% block scripts %}
+    <!--<script src="{% static 'js/script_company.js' %}"></script>-->
+{% endblock %}
+{% block title %}
+    {% if operation == "add" %}
+        {% trans "Add new worker" %}
+    {% else %}
+        {% trans "Edit profile" %}
+    {%endif%}
+{% endblock %}
+{% block acc_content %}
+    {% if operation == "add" %}
+        <script>
+            $('#bt_add_user').addClass('current');
+        </script>
+    {% else %}
+        <script>
+            $('#bt_profile').addClass('current');
+            $('.accordion li a').removeClass('open');
+        </script>
+    {%endif%}
+    <!-- Here goes the content. -->
+    <section id="content" class="container_12 clearfix" data-sort=true>
+        {% if operation == "add" %}
+            <h1 class="grid_12">{% trans "Add new worker" %}</h1>
+        {% else %}
+            <h1 class="grid_12">{% trans "Edit profile:" %} {{person.email}}</h1>
+        {%endif%}
+        <form action="" class="grid_12 validate" method="post">
+            {% csrf_token %}
+            {% if operation == 'add' %}
+                <fieldset>
+                    <legend>{% trans "Personal information" %}</legend>
+                    <div class="row">
+                        <label for="i_email">
+                            <strong>{% trans "Email" %}</strong>
+                        </label>
+                        <div>
+                            <input type="email" name="i_email" id="email" class="required" email="true"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label for="i_pass">
+                            <strong>{% trans "Password" %}</strong>
+                        </label>
+                        <div>
+                            <input type="text" name="i_pass" id="password" class="required"/>
+                            <a class="button" id="genProfilePassword">{% trans "Generate" %}</a>
+                        </div>
+                    </div>
+                </fieldset>
+
+                {% if request.user.is_focus %}
+                <fieldset>
+                    <legend>{% trans "Company info" %}</legend>
+                    <div class="row">
+                        <label for="f_company_name">
+                            <strong>{% trans "Company name" %}</strong>
+                        </label>
+                        <div>
+                            <select name="f_company_name" data-placeholder="{% trans "Choose Company" %}">
+                                <option value="0" >&lt; {% trans "Focus" %} &gt;</option>
+                                {% for company in company_names %}
+                                    <option value="{{ company.id }}" >{{ company.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </fieldset>
+                {% endif %}
+
+            {% endif %}
+            <fieldset>
+                <legend>{% trans "Personal information" %}</legend>
+                <div class="row">
+                    <label for="i_first_name">
+                        <strong>{% trans "First name" %}</strong>
+                    </label>
+                    <div>
+                        <input type="text" name="i_first_name" id="firstName" value="{{person.first_name}}"/>
+                    </div>
+                </div>
+                <div class="row">
+                    <label for="i_last_name">
+                        <strong>{% trans "Last name" %}</strong>
+                    </label>
+                    <div>
+                        <input type="text" name="i_last_name" id="lastName" value="{{person.last_name}}" />
+                    </div>
+                </div>
+            </fieldset>
+
+{#            {% if request.user.is_focus %}#}
+                <fieldset>
+                    <legend>{% trans "Localization info" %}</legend>
+                    <div class="row">
+                        <label for="f_tz">
+                            <strong>{% trans "Time Zone" %}</strong>
+                        </label>
+                        <div>
+                            <select name="f_tz" data-placeholder="{% trans "Choose Time Zone" %}">
+{#                                <option value="0" >&lt; {% trans "Focus" %} &gt;</option>#}
+                                {% for tz in timezones %}
+                                    <option value="{{ tz }}" >{{ tz }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </fieldset>
+{#                {% endif %}#}
+            {% include 'forms/address_profile.html' with addr=person.address%}
+            <fieldset>
+                <legend>{% trans "Contact information" %}</legend>
+                <div class="row">
+                    <label for="i_phone">
+                        <strong>{% trans "Phone" %}</strong>
+                    </label>
+                    <div>
+                        <input class="maskIntPhone" type="text" name="i_phone" id="phone" value="{{person.phone}}"/>
+                    </div>
+                </div>
+                <div class="row">
+                    <label for="i_m_phone">
+                        <strong>{% trans "Mobile phone" %}</strong>
+                    </label>
+                    <div>
+                        <input class="maskIntPhone" type="text" name="i_m_phone" id="mPhone" value="{{person.m_phone}}"/>
+                    </div>
+                </div>
+            </fieldset>
+            <div class="actions">
+                <div class="right">
+                    <input id='profileChange' type="submit" value="{% trans "Save" %}">
+                </div>
+            </div><!-- End of .actions -->
+        </form>
+    </section><!-- End of #content -->
+{% endblock %}
+{% block addons %}
+    <!-- The settings dialog -->
+{% endblock %}

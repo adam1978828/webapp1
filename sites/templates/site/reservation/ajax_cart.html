@@ -1,0 +1,112 @@
+{% load i18n %}
+<div class="movie-best2">
+    <div class="col-sm-12 change--col">
+        {% if request.already_reserved_items %}
+            <div class="alert alert-warning" style="margin-bottom: 25px;">
+                <span class="icon-warning"></span>
+                {% trans "Movies" %} {{request.already_reserved_items}} {% trans "that you reserved were rented by someone else while it was in your cart, before you checked out. We have removed it because it is no longer available in this kiosk." %}
+            </div>
+        {% else %}
+            {% if not request.items %}
+                {% if successfull_reservation %}
+                    <div class="alert alert-success" style="margin-bottom: 15px;">
+                        <span class="icon-flag"></span>
+                        {% trans "Thanks for using our system. All your movies were successfully reserved." %} <a href="{% url 'sites.views.movies_search' %}">{% trans "Search more movies!" %}</a>
+                    </div>
+                {% else %}
+                    <div class="alert alert-info" style="margin-bottom: 15px;">
+                        <span class="icon-info"></span>
+                        {% trans "No added movies." %} <a href="{% url 'sites.views.movies_search' %}">{% trans "Add your first movie!" %}</a>
+                    </div>
+                {% endif %}
+            {% endif %}
+        {% endif %}
+        {% if request.items|length > request.preferred_kiosk.settings.max_disks_per_card %}
+            <div class="alert alert-info" style="margin-bottom: 15px;">
+                <span class="icon-info"></span>
+                {% trans "Your cart can contain" %} {{ request.preferred_kiosk.settings.max_disks_per_card }} {% trans "maximum. Please remove some disks from your cart to check out." %}
+            </div>
+        {% endif %}
+        {% if not_available_items %}
+            <div class="alert alert-warning" style="margin-bottom: 25px;">
+                <span class="icon-warning"></span>
+                {% trans "Not all disks are present in this kiosk" %}
+            </div>
+        {% endif %}
+        {% if not valid_card %}
+            <div class="alert alert-danger" style="margin-bottom: 25px;">
+                <span class="icon-danger"></span>
+                {% trans "Something wrong with your card" %}
+            </div>
+        {% endif %}
+        <div class="row">
+            <div class="col-sm-8 col-md-9">
+                {% for cart in request.items %}
+                    <!-- Movie variant with time -->
+                    <div class="movie-beta__item">
+                        <a class="picitems" {% if not cart.is_available %}style="background: repeating-linear-gradient(315deg,rgba(96, 109, 188, 00) ,rgba(96, 109, 188, 00) 3px, rgba(96, 109, 188, 255) 2px,  rgba(96, 109, 188, 255) 6px); border:1px solid rgba(96, 109, 188, 255);"{% endif %} href="{% url 'sites.views.movie_details' cart.upc.movie.id %}">
+                            <div style="background-image: url({{ MEDIA_URL }}movie/poster{{ cart.upc.movie.img_path }});{% if not cart.is_available %}opacity:0.4;{% endif %}" class="imgbg">
+                                <img alt="" src="/media/movie/poster/back.png">
+                            </div>
+                        </a>
+                        <span data-href="{% url 'sites.views.remove_from_cart' %}" data-format="{{ cart.disk_format.id }}" data-kiosk="{{ cart.kiosk.id }}" data-upc="{{ cart.upc.upc }}" class="fa fa-times deletecart"></span>
+                        <div class="movie__info">
+                            <a href='{% url 'sites.views.movie_details' cart.upc.movie.id %}' class="{% if not cart.is_available %}booking-cost{% endif %} movie__title">{{cart.upc.movie.get_name}}</a>
+                            <p class="movie__option disk_format"><img src="{{ MEDIA_URL }}{{cart.disk_format.img_path}}"></p>
+                            <!-- <p class="movie__time">{{ cart.upc.movie.length }} min</p>-->
+                            <p class="movie__option">{% for genre in cart.upc.movie.movie_genre %}<a href="{% url 'sites.views.movies_search' %}?query={{ genre.get_title }}&category=genre">{{genre.get_title}}</a>{% if not forloop.last %} | {% endif %}{% endfor %}</p>
+                            <p class="movie__option">{% trans "Price:" %} <span class="book-result__count booking-cost">{{request.preferred_kiosk.settings.currency.symbol }}{{ cart.actual_tariff_value.first_night|floatformat:2 }}</span></p>
+                        </div>
+                    </div>
+                {% endfor %}
+                {% for slot in empty_slots %}
+                     <div class="movie-beta__item ">
+                        <a href="{% url 'sites.views.preferred_kiosk_movies' %}">
+                            <div style="" class="imgbg">
+                                <img alt="" src="/media/movie/plus-sign-icon.png">
+                            </div>
+                        </a>
+                        <div class="movie__info">
+                        </div>
+                     </div>
+                {% endfor %}
+                <div class="clear"></div>
+            </div>
+            <div class="col-sm-4 col-md-3">
+                <div class="first-banner--left">
+                    <h4 class="hcart">{% trans "Payment Summary" %}</h4>
+                    {% with first_item=request.items|first %}
+                        {% if first_item.coupon %}
+                            <span class='payment-line'>{{first_item.coupon.type.alias}}</span>
+                        {% endif %}
+                    {% endwith %}
+                    {% for sub, tax, discount, total in payments %}
+                        <div>
+                            <span class='payment-line'>{% trans "Sub Total:" %}</span>
+                            <span class='payment-amount'>{{request.preferred_kiosk.settings.currency.symbol }}{{ sub|floatformat:2 }}</span>
+                        </div>
+                        <div>
+                            <span class='payment-line'>{% trans "Discount:" %}</span>
+                            <span class='payment-amount'>{{request.preferred_kiosk.settings.currency.symbol }}{{ discount|floatformat:2 }}</span>
+                        </div>
+                        <div>
+                            <span class='payment-line'>{% trans "Taxes:" %}</span>
+                            <span class='payment-amount'>{{request.preferred_kiosk.settings.currency.symbol }}{{ tax|floatformat:2 }}</span>
+                        </div>
+                        <div class='payment-total'>
+                            <span class='payment-line'>{% trans "Total:" %}</span>
+                            <span class="payment-amount booking-cost">{{request.preferred_kiosk.settings.currency.symbol }}{{ total|floatformat:2 }}</span>
+                        </div>
+                    {% endfor %}
+                    <div class="order">
+                        <a id='addCoupon' class="btn btn-md btn--warning btn--wide btn-center">{% trans "add coupon" %}</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="clearfix"></div>
+<div class="order">
+    <a id='purchase' data-purchase-url="{% url 'sites.views.check_cart' %}" class="btn btn-md btn--warning btn--wide" {% if not_available_items or request.items|length > request.preferred_kiosk.settings.max_disks_per_card %}disabled{% endif %}>{% trans "check out" %}</a>
+</div>

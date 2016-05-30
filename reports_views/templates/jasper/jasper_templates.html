@@ -1,0 +1,60 @@
+{% extends 'acc_base.html' %}
+{% load staticfiles %}
+{% load acctags %}
+{% load i18n %}
+{% block breadcrumb %}
+    <div class="left">
+        <ul class="breadcrumb">
+            <li><a href="/">{% trans "Home" %}</a></li>
+            <li><a href="{% url 'reports_views.views.jasper_reports' %}">{% trans "Jasper Templates" %}</a></li>
+        </ul>
+    </div>
+{% endblock %}
+{% block title %}{% trans "Jasper Templates" %}{% endblock %}
+
+
+{% block acc_content %}
+    <script>
+        $('#bt_jasper_templates').addClass('current');
+        $('.accordion li a').removeClass('open');
+        $('#bt_jasper_templates').parent().prev().addClass('open');
+    </script>
+    <section id="content" class="container_12 clearfix ui-sortable" data-sort="true">
+        <h1 class="grid_12">{% trans "Jasper Templates" %}</h1>
+        <div class="spacer"></div>
+        {% include 'jasper/jasper_template_form.html' %}
+
+        <div class="grid_12">
+            <div class="box">
+                <div class="content">
+
+                    <table id="jasper-template-table" class="dynamic styled" data-show-Filter-Bar="true" data-max-items-per-page="25">
+                        <thead>
+                            <tr>
+                                <th>{% trans "ID" %}</th>
+                                <th>{% trans "Name" %}</th>
+                                <th>{% trans "Path" %}</th>
+                                <th>{% trans "Created At" %}</th>
+                                <th>{% trans "Actions" %}</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for row in data %}
+                                <tr data-id="{{ row.id }}">
+                                    <td>{{ row.id }}</td>
+                                    <td>{{ row.name|default_if_none:'' }}</td>
+                                    <td>{{ row.path|default_if_none:'' }}</td>
+                                    <td>{{ row.dt_create|date:'m/d/Y H:i:s'|default_if_none:'' }}</td>
+                                    <td>
+                                       <a href="{% url 'reports_views.views.jasper_template_edit' row.id %}" class="button small grey tooltip" data-gravity='s' original title="{% trans "Show" %}"><i class="icon-eye-open"></i></a>
+                                       <a href="{% url 'reports_views.views.remove_jasper_template' %}" data-name="{{ row.name|default_if_none:'' }}" data-id="{{ row.id }}" class="button small grey tooltip removeJasperTemplate" data-gravity='s' original title="{% trans "Remove" %}"><i class="icon-remove"></i></a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

@@ -1,0 +1,2 @@
+{% load i18n %}
+{% if slot.status_id == 1 and slot.disk and slot.disk.state_id == 0 or slot.status_id == 5 %}<a href="{% url 'kiosks.views.ajax_disk_to_eject' slot.id 1 %}" class="add-to-eject-list button small grey tooltip" data-gravity=s title="{% trans "Add to eject list" %}"><i class="icon-arrow-down"></i></a>{% elif slot.status_id == 7 %}<a href="{% url 'kiosks.views.ajax_disk_to_eject' slot.id 0 %}" class="remove-from-eject-list button small grey tooltip" data-gravity=s title="{% trans "Remove from eject list" %}"><i class="icon-share-alt"></i></a>{% endif %}

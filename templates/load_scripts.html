@@ -1,0 +1,76 @@
+{% load staticfiles %}
+<!-- The Scripts -->
+<!-- ----------- -->
+
+<!-- JavaScript at the top (will be cached by browser) -->
+
+
+<!-- Grab frameworks from CDNs -->
+    <!-- Grab jQuery from a CDN; fall back to local if offline -->
+<script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+<script>window.jQuery || document.write('<script src="{% static 'js/libs/jquery-1.10.2.min.js' %}"><\/script>')</script>
+
+    <!-- Do the same with jquery-migrate -->
+<script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+<script>window.jQuery || document.write('<script src="{% static 'js/libs/jquery-migrate-1.2.1.min.js' %}"><\/script>')</script>
+
+    <!-- Do the same with jQuery UI -->
+<script src="http://code.jquery.com/ui/1.9.1/jquery-ui.min.js"></script>
+<script>window.jQuery.ui || document.write('<script src="{% static 'js/libs/jquery-ui-1.9.1.min.js' %}"><\/script>')</script>
+
+    <!-- Do the same with Lo-Dash.js -->
+<!--[if gt IE 8]><!-->
+<script src="http://cdnjs.cloudflare.com/ajax/libs/lodash.js/0.8.2/lodash.min.js"></script>
+<script>window._ || document.write('<script src="{% static 'js/libs/lo-dash.min.js' %}"><\/script>')</script>
+<!--<![endif]-->
+<!-- IE8 doesn't like lodash -->
+<!--[if lt IE 9]><script src="http://documentcloud.github.com/underscore/underscore.js"></script><![endif]-->
+
+<!-- Do the same with require.js -->
+<script src="http://cdnjs.cloudflare.com/ajax/libs/require.js/2.0.6/require.min.js"></script>
+<script>window.require || document.write('<script src="{% static 'js/libs/require-2.0.6.min.js' %}"><\/script>')</script>
+
+
+<!-- Load Webfont loader -->
+<script type="text/javascript">
+    window.WebFontConfig = {
+        google: { families: [ 'PT Sans:400,700' ] },
+        active: function(){ $(window).trigger('fontsloaded') }
+    };
+</script>
+<script defer async src="https://ajax.googleapis.com/ajax/libs/webfont/1.0.28/webfont.js"></script>
+
+<!-- Essential polyfills -->
+<script src="{% static 'js/mylibs/polyfills/modernizr-2.6.1.min.js' %}"></script>
+<script src="{% static 'js/mylibs/polyfills/respond.js' %}"></script>
+<script src="{% static 'js/mylibs/polyfills/matchmedia.js' %}"></script>
+<!--[if lt IE 9]><script src="{% static 'js/mylibs/polyfills/selectivizr.js' %}"></script><![endif]-->
+<!--[if lt IE 10]><script src="{% static 'js/mylibs/polyfills/excanvas.js' %}"></script><![endif]-->
+<!--[if lt IE 10]><script src="{% static 'js/mylibs/polyfills/classlist.js' %}"></script><![endif]-->
+
+
+
+<!-- scripts concatenated and minified via build script -->
+
+<!-- Scripts required everywhere -->
+<script src="{% static 'js/mylibs/jquery.hashchange.js' %}"></script>
+<script src="{% static 'js/mylibs/jquery.idle-timer.js' %}"></script>
+<script src="{% static 'js/mylibs/jquery.plusplus.js' %}"></script>
+<script src="{% static 'js/mylibs/jquery.scrollTo.js' %}"></script>
+<script src="{% static 'js/mylibs/jquery.ui.touch-punch.js' %}"></script>
+<script src="{% static 'js/mylibs/jquery.ui.multiaccordion.js' %}"></script>
+<script src="{% static 'js/mylibs/number-functions.js' %}"></script>
+<script src="{% static 'js/mylibs/fullstats/jquery.css-transform.js' %}"></script>
+<script src="{% static 'js/mylibs/fullstats/jquery.animate-css-rotate-scale.js' %}"></script>
+<script src="{% static 'js/mylibs/forms/jquery.validate.js' %}"></script>
+<script src="{% static 'js/mylibs/dynamic-tables/jquery.dataTables.js' %}"></script>
+<script src="{% static 'js/mylibs/forms/jquery.ui.datetimepicker.js' %}"></script>
+
+<!-- Do not touch! -->
+<!--<script src="{% static 'js/libs/jquery.form.js' %}"></script>-->
+<script src="{% static 'js/mango.js' %}"></script>
+<script src="{% static 'js/plugins.js' %}"></script>
+<script src="{% static 'js/script.js' %}"></script>
+<script src="{% static 'js/reports.js' %}"></script>
+<script src="{% static 'js/jasper_reports.js' %}"></script>
+<script src="{% static 'js/movies.js' %}"></script>

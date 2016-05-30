@@ -1,0 +1,21 @@
+{% extends 'site/base.html' %}
+{% load staticfiles %}
+{% load filters %}
+{% load i18n %}
+{% block title %}{% trans "Movies of" %} {{kiosk.settings.alias}} {% trans "kiosk" %}{% endblock %}
+{% block content %}
+{% include 'site/search_panel.html' %}
+    <section class="container">
+        <div class="col-sm-12">
+            {% include 'site/partials/movies.html' %}
+        </div>
+        <div class="clearfix"></div>
+    </section>
+{%endblock%}
+{% block script %}
+ <script type="text/javascript">
+              $(document).ready(function() {
+                  init_KioskDiscsMovies();
+              });
+		  </script>
+ {% endblock %}

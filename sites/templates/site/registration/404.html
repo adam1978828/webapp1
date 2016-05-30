@@ -1,0 +1,57 @@
+{% load staticfiles %}
+{% load i18n %}
+<!doctype html>
+<html>
+<head>
+  <!-- Basic Page Needs -->
+  <meta charset="utf-8">
+  <title>404 - {{ request.company.name }}</title>
+  <meta name="description" content="404">
+  <meta name="keywords" content="404">
+
+  <!-- Mobile Specific Metas-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta content="telephone=no" name="format-detection">
+
+  <!-- Fonts -->
+  <!-- Font awesome - icon font -->
+  <link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+
+  <!-- Stylesheets -->
+
+  <!-- Custom -->
+  <link href="{% static 'site/css/style.css' %}" rel="stylesheet"/>
+
+
+  <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!--[if lt IE 9]>
+    	<script src="http://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7/html5shiv.js"></script>
+		<script src="http://cdnjs.cloudflare.com/ajax/libs/respond.js/1.3.0/respond.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+<div class="wrapper">
+  <div class="error-wrapper">
+    <a href='/' class="logo logo--dark">
+      <img alt='logo' src="{% static 'site/images/logo-dark.png' %}">
+
+      <p class="slogan--dark">{% trans "fun to search, fun to watch" %}</p>
+    </a>
+
+    <div class="error">
+      <img alt='' src="{% static 'site/images/error.png' %}" class="error__image">
+
+      <h1 class="error__text">{{ error }}</h1>
+      <a href="/" class="btn btn-md btn--warning">{% trans "return to homepage" %}</a>
+    </div>
+  </div>
+
+  <div class="copy-bottom">
+    <p class="copy">&copy; {% trans "Kit-XXI, 2014-2015. All rights reserved" %}</p>
+  </div>
+
+</div>
+
+</body>
+</html>

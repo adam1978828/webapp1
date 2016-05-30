@@ -1,0 +1,135 @@
+{% extends 'acc_base.html' %}
+{% load staticfiles %}
+{% load acctags %}
+{% load filters %}
+{% load i18n %}
+{% block breadcrumb %}
+    <div class="left">
+        <ul class="breadcrumb">
+            <li><a href="/">{% trans "Home" %}</a></li>
+            <li><a href="{% url 'companies.views.view_list' %}">{% trans "Company" %}</a></li>
+            <li><a href="{% url 'companies.views.trailers' %}">{% trans "Trailers" %}</a></li>
+        </ul>
+    </div>
+{% endblock %}
+{% block title %}{% trans "Company Trailers" %}{% endblock %}
+
+{% block acc_content %}
+    <script>
+        $('#bt_company_trailers').addClass('current');
+        $('.accordion li a').removeClass('open');
+        $('#bt_company_trailers').parent().prev().addClass('open');
+    </script>
+    <section id="content" class="container_12 clearfix ui-sortable" data-sort="true">
+
+        {% if 'company_add_trailer' in request.user.rights %}
+            <h1 class="grid_12">{% trans "Add trailer" %}</h1>
+            <div class="spacer"></div>
+            <div class="grid_12">
+                <div id="addTrailerBox" class="box">
+                    <div class="header">
+                        <h2>{% trans "Trailer info" %}</h2>
+                    </div>
+                    <form action="{% url 'companies.views.add_trailer' %}" method="post" class="full content validate" id="addTrailer">
+                        {% csrf_token %}
+                        <fieldset>
+
+                            {% if request.user.is_focus %}
+                                <div class="row">
+                                    <label for="f_company_id">
+                                        <strong>{% trans "Company" %}</strong>
+                                    </label>
+
+                                    <div>
+                                        <select name=f_company_id id=f_company_id class="search" data-placeholder="{% trans "Choose a Company" %}">
+                                            <option value="">{% trans 'All Companies' %}</option>
+                                            {% for company in companies %}
+                                                <option value="{{ company.id }}">{{ company.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                            {% endif %}
+
+                            <div class="row">
+                                <label for="trailer">
+                                    <strong>{% trans "Trailer" %}</strong>
+                                </label>
+
+                                <div>
+                                    <input type="file" name="trailer" id="trailer" accept="video/*">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <label for="title">
+                                    <strong>{% trans "Title" %}</strong>
+                                </label>
+
+                                <div>
+                                    <input type="text" name="title" id="title">
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+                    <div class="actions">
+                        <div class="right">
+                            <input id="addTrailerBtn" type="submit" value="{% trans "Add" %}">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+
+        <div class="grid_12">
+            <div id="addTrailerBox" class="box">
+                <div class="header">
+                    <h2>{% trans "Trailers" %}</h2>
+                </div>
+                <table id="companyTrailersTable" class="dynamic styled" data-filter-bar="always" data-max-items-per-page="25">
+                    <thead>
+                    <tr>
+                        <th>{% trans "id" %}</th>
+                        <th>{% trans "Title" %}</th>
+                        <th>{% trans "Length" %}</th>
+                        <th>{% trans "Date modified" %}</th>
+
+                        {% if request.user.is_focus %}
+                            <th>{% trans "Company" %}</th>
+                        {% endif %}
+
+                        <th>{% trans "Actions" %}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for file in video_files %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ file.alias }}</td>
+                            <td>{{ file.length }}</td>
+                            <td>{{ file.dt_modify }}</td>
+
+                            {% if request.user.is_focus %}
+                                <td>{{ file.company.name }}</td>
+                            {% endif %}
+
+                            <td class="center">
+                                {% if 'company_add_trailer' in request.user.rights %}
+                                    <a href="{% url 'companies.views.edit_trailer' file.id %}" class="button small grey tooltip" data-gravity=s
+                                       title="{% trans "Edit" %}"><i class="icon-pencil"></i></a>
+                                    <a href="{% url 'companies.views.remove_trailer' file.id %}" class="button small grey tooltip removeTrailerBtn"
+                                       data-gravity=s title="{% trans "Remove" %}"><i class="icon-remove"></i></a>
+                                {% else %}
+                                    <a class="button small grey tooltip disabled" href=""><i class="icon-pencil"></i></a>
+                                    <a class="button small grey tooltip disabled" href=""><i class="icon-remove"></i></a>
+                                {% endif %}
+                            </td>
+
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+{% endblock %}

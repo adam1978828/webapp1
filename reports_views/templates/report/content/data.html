@@ -1,0 +1,26 @@
+<table class="styled">
+    <thead>
+        {% if agg_caption %}
+            <tr>
+                <td colspan="{{ rep_data.0|length }}"><strong>{{ agg_caption }}</strong></td>
+            </tr>
+        {% endif %}
+        {% autoescape off %}{{ report_table_header }}{% endautoescape %}
+    </thead>
+    <tbody>
+        {% for row in rep_data %}
+            <tr>
+            {% for col in row %}
+                <td>{{ col }}</td>
+            {% endfor %}
+            </tr>
+        {% endfor %}
+        {% if sub_total %}
+            <tr>
+            {% for col in sub_total %}
+                <td><strong>{{ col }}</strong></td>
+            {% endfor %}
+            </tr>
+        {% endif %}
+    </tbody>
+</table>

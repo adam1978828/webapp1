@@ -1,0 +1,164 @@
+{% extends 'acc_base.html' %}
+{% load staticfiles %}
+{% load acctags %}
+{% load i18n %}
+{% block breadcrumb %}
+    <div class="left">
+        <ul class="breadcrumb">
+            <li><a href="/">{% trans "Home" %}</a></li>
+            <li><a href="{% url 'reports_views.views.data_sources' %}">{% trans "Data Sources" %}</a></li>
+            <li><a>{% trans "Data Sources" %} {{ ds.name }}</a></li>
+        </ul>
+    </div>
+{% endblock %}
+{% block title %}
+    {% trans "Data sources" %}
+{% endblock %}
+{% block acc_content %}
+    <script>
+        $('#bt_sources').addClass('current');
+        $('.accordion li a').removeClass('open');
+        $('#bt_sources').parent().prev().addClass('open');
+    </script>
+    <section id="content" class="container_12 clearfix ui-sortable" data-sort="true">
+        <h1 class="grid_12"><span>{% trans "Data Sources" %} <strong>{{ ds.name }}</strong></span></h1>
+        <div class="grid_12">
+            <a href="{% url 'reports_views.views.data_source_save' %}" class="button pull-right" id="save-ds"><i class="icon icon-save"></i> {% trans "Save" %}</a>
+            <div class="clear"></div>
+            <br />
+        </div>
+        <div class="row">
+            <div class="grid_4 overflow-y" style="height: 600px">
+                <form id="ds-fields">
+                    <input type="text" style="display: none" name="ds-alias" value="{{ ds.alias }}">
+                    <table class="styled">
+                        <thead>
+                            <tr>
+                                <th colspan="3">{% trans "Column" %}</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ds-fields-sortable">
+                            {% for field in fields %}
+                                <tr>
+                                    <td><i class="icon icon-sort"></i></td>
+                                    <td>
+                                        <input type="text" name="alias" value="{{ field.column_name }}" style="display: none">
+                                        <strong class="text-primary">{{ field.column_name }}</strong> [{{ field.field_type }}] {{ field.order_num }}
+                                    </td>
+                                    <td><a class="button ds-setup-field" alias="{{ field.column_name }}"><i class="icon icon-cogs"></i> {% trans "Settings" %}</a></td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+            <div class="grid_8">
+                <div class="row">
+                {% for val in fields %}
+                    <form class="grid_12 no-box ds_settings" alias="{{ val.column_name }}" style="display: none">
+                        <fieldset>
+                            <div class="row">
+                                <label for="column_name">{% trans "Column" %}</label>
+                                <div>
+                                    <input class="form-control input-sm" style="display: none" type="text" name="id" value="{{ val.id }}">
+                                    <input class="form-control input-sm" style="display: none" type="text" name="field_alias" value="{{ val.column_name }}">
+                                    <input class="form-control input-sm" readonly type="text" name="column_name" value="{{ val.column_name }}">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <label for="name">{% trans "Readable Name" %}</label>
+                                <div>
+                                    <input class="form-control input-sm" type="text" maxlength="200"  name="name" value="{{ val.name }}">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <label for="field_type">{% trans "Data Type" %}</label>
+                                <div>
+                                    <select class="form-control" name="field_type">
+                                        {% for t in types %}
+                                            <option value="{{ t.alias }}" {% if t.alias == val.field_type %}selected{% endif %}>{{ t.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <label for="allow_display">{% trans "Visible" %}</label>
+                                <div class="col-md-10">
+                                    <select class="form-control" name="allow_display">
+                                        <option value="1" {% if val.allow_display == 1 %}selected=""{% endif %}>{% trans "Yes" %}</option>
+                                        <option value="0" {% if val.allow_display == 0 %}selected=""{% endif %}>{% trans "No" %}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <label for="allow_ordering">{% trans "Allow Order By" %}</label>
+                                <div>
+                                    <select class="form-control" name="allow_ordering">
+                                        <option value="1" {% if val.allow_ordering == 1 %}selected=""{% endif %}>{% trans "Yes" %}</option>
+                                        <option value="0" {% if val.allow_ordering == 0 %}selected=""{% endif %}>{% trans "No" %}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <label for="allow_grouping">{% trans "Allow Group By" %}</label>
+                                <div>
+                                    <select class="form-control" name="allow_grouping">
+                                        <option value="1" {% if val.allow_grouping == 1 %}selected=""{% endif %}>{% trans "Yes" %}</option>
+                                        <option value="0" {% if val.allow_grouping == 0 %}selected=""{% endif %}>{% trans "No" %}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <label for="need_sub_total">{% trans "Add Sub Total" %}</label>
+                                <div>
+                                    <select class="form-control" name="need_sub_total">
+                                        <option value="1" {% if val.need_sub_total == 1 %}selected=""{% endif %}>{% trans "Yes" %}</option>
+                                        <option value="0" {% if val.need_sub_total == 0 %}selected=""{% endif %}>{% trans "No" %}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <label for="aggregations">{% trans "Aggregation Functions" %}</label>
+                                <div>
+                                    <select class="form-control" name="aggregations" multiple size="6">
+                                        {% for op in aggregations %}
+                                            <option value="{{ op.alias }}" {% if op.alias in val.aggregations %}selected="selected"{% endif %} >{{ op.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <label for="search_column_name">{% trans "Search By Column" %}</label>
+                                <div>
+                                    <select class="form-control" name="search_column_name">
+                                        <option value="">{% trans "Without Filter" %}</option>
+                                        {% for f in fields %}
+                                            <option value="{{ f.column_name }}" {% ifequal f.column_name val.filter.column_name %}selected="selected"{% endifequal %}>{{ f.column_name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <label class="control-label col-lg-2" for="search_operations">{% trans "Search Condition Expressions" %}</label>
+                                <div>
+                                    <select class="form-control" name="search_operations" multiple size="12">
+                                        {% for op in operations %}
+                                            <option value="{{ op.alias }}" {% if op.alias in val.operations %} selected{% endif %} >{{ op.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <label for="search_source">{% trans "SQL for Search Values" %}</label>
+                                <div>
+                                    <textarea class="form-control input-sm" name="search_source" rows="6">{{ val.filter.source }}</textarea>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+                {% endfor %}
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

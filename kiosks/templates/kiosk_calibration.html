@@ -1,0 +1,134 @@
+{% extends 'acc_base.html' %}
+{% load staticfiles %}
+{% load acctags %}
+{% load filters %}
+{% load i18n %}
+{% block breadcrumb %}
+    <div class="left">
+        <ul class="breadcrumb">
+            <li><a href="/">{% trans "Home" %}</a></li>
+            <li><a href="{% url 'kiosks.views.view_list' %}">{% trans "Kiosks" %}</a></li>
+            <li><a href="">{% trans "Kiosk Calibration" %}</a></li>
+        </ul>
+    </div>
+{% endblock %}
+{% block title %}{% trans "Kiosk Calibration" %}{% endblock %}
+{% block acc_content %}
+    <script>
+        $('#bt_kiosks_list').addClass('current');
+        $('.accordion li a').removeClass('open');
+    </script>
+
+    <section id="content" class="container_12 clearfix">
+        <section class="grid_12">
+            <div class="grid_X">
+                <form id="sendCalibration" class="box">
+                    <div class="header">
+                        <h2>{% trans "Calibration" %} {% if not calibration %}{% trans "( This kiosk does not have calibration settings )" %}{% endif %}</h2>
+                    </div>
+                    <div class="content">
+                        <div class="row">
+                            <label for="command_line">
+                                <strong>{% trans "Top offset" %}</strong>
+                                <span class="calib-detal">(-25.086..34.914)</span>
+                            </label>
+                            <div>
+                                <input type="text" name='topOffset' id="topOffset" value="{{ calibration.top_offset }}"/>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label for="command_line">
+                                <strong>{% trans "Bottom offset" %}</strong>
+                                <span class="calib-detal">(200)</span>
+                            </label>
+                            <div>
+                                <input type="text" name='bottomOffset' id="bottomOffset" value="{{ calibration.bottom_offset }}"/>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label for="command_line">
+                                <strong>{% trans "Exchange offset" %}</strong>
+                                <span class="calib-detal">(70..110)</span>
+                            </label>
+                            <div>
+                                <input type="text" name='exchangeOffset' id="exchangeOffset" value="{{ calibration.exchange_offset }}"/>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label for="command_line">
+                                <strong>{% trans "Back offset" %}</strong>
+                                <span class="calib-detal">(-20..10)</span>
+                            </label>
+                            <div>
+                                <input type="text" name='backOffset' id="backOffset" value="{{ calibration.back_offset }}"/>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label for="command_line">
+                                <strong>{% trans "Pulses per slot" %}</strong>
+                                <span class="calib-detal">(390.095..390.5)</span>
+                            </label>
+                            <div>
+                                <input type="text" name='pulsesPerSlot' id="pulsesPerSlot" value="{{ calibration.pulses_per_slot }}"/>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label for="command_line">
+                                <strong>{% trans "Distance 1" %}</strong>
+                                <span class="calib-detal">(27050..27130, 0 - to skip)</span>
+                            </label>
+                            <div>
+                                <input type="text" name='distance1' id="distance1" value="{{ calibration.distance1 }}"/>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label for="command_line">
+                                <strong>{% trans "Distance 2" %}</strong>
+                                <span class="calib-detal">(27335..27267, 0 - to skip)</span>
+                            </label>
+                            <div>
+                                <input type="text" name='distance2' id="distance2" value="{{ calibration.distance2 }}"/>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label for="command_line">
+                                <strong>{% trans "Retry" %}</strong>
+                                <span class="calib-detal">(0)</span>
+                            </label>
+                            <div>
+                                <input type="text" name='retry' id="retry" value="{{ calibration.retry|stringformat:"1d" }}"/>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label for="command_line">
+                                <strong>{% trans "Offset 2xx" %}</strong>
+                                <span class="calib-detal">(-10..20)</span>
+                            </label>
+                            <div>
+                                <input type="text" name='offset2xx' id="offset2xx" value="{{ calibration.offset2xx }}"/>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label for="command_line">
+                                <strong>{% trans "Offset 6xx" %}</strong>
+                                <span class="calib-detal">(-10..20)</span>
+                            </label>
+                            <div>
+                                <input type="text" name='offset6xx' id="offset6xx" value="{{ calibration.offset6xx }}"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="actions">
+                        <div class="right">
+                            <input id="butCalibration"
+                                   data-url="{% url 'kiosks.views.ajax_kiosk_calibration' kiosk_id %}"
+                                   type="submit" value="{% trans "Send" %}" name="send"/>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+        </section>
+    </section>
+{% endblock %}
+

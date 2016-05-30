@@ -1,0 +1,56 @@
+{% load i18n %}
+<form class="grid_12 no-box" name="" method="post" action="" novalidate="novalidate" id="repGeneral">
+    <input type="text" maxlength="64" name="alias" value="{{ report.alias }}" hidden style="display:none;">
+    <input type="text" name="pattern_id" value="{{ pattern_id|default_if_none:'' }}" hidden style="display:none;">
+    <input type="text" name="report_id" value="{{ report_id|default_if_none:'' }}" hidden style="display:none;">
+    <fieldset>
+        <div class="row">
+            <label for="f_k_id">
+                <strong>{% if 'pattern' in mode %}{% trans "Template" %}{% elif 'report' in mode %}{% trans "Report" %}{% endif %} {% trans "Name" %}</strong>
+            </label>
+            <div>
+                <input type="text" class="form-control input-sm" maxlength="1024" name="header" value="{% if pattern %}{{ pattern.header }}{% else %}{{ report.readable_name }}{% endif %}"
+                        {% if mode == 'show_report' %}readonly{% endif %}>
+            </div>
+        </div>
+        {% if 'pattern' in mode %}
+        <div class="row">
+            <label for="f_k_id">
+                <strong>{% trans "Is available for" %}</strong>
+            </label>
+            <div>
+                <select class="form-control input-sm" name="is_available_for">
+                    <option value="-1" {% if is_for == -1 %}selected="selected"{% endif %}>{% trans "Focus Only" %}</option>
+                    <option value="-2" {% if is_for == -2 %}selected="selected"{% endif %}>{% trans "All Companies" %}</option>
+                    {% for val in companies %}
+                        <option value="{{ val.id }}" {% if is_for == val.id %}selected="selected"{% endif %}>{{ val.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        {% endif %}
+    </fieldset>
+    <div class="actions">
+        <div class="right">
+            {% if mode == 'new_pattern' %}
+                <a data-url="{% url 'reports_views.views.edit_report_pattern' '' %}" href="{% url 'reports_views.views.save_report_pattern' %}" class="button medium save-pattern"><i class="icon icon-save"></i> {% trans "Save template" %}</a>
+            {% endif %}
+
+            {% if mode == 'edit_pattern' %}
+                <a href="{% url 'reports_views.views.save_report_pattern' %}" class="button medium save-existing-pattern"><i class="icon icon-save"></i> {% trans "Save Template" %}</a>
+            {% endif %}
+
+            {% if mode == 'new_report' %}
+                <a data-url="{% url 'reports_views.views.show_report' '' %}" href="{% url 'reports_views.views.save_report' %}" class="button medium save-report"><i class="icon icon-save"></i> {% trans "Save Report" %}</a>
+            {% endif %}
+
+            {% if mode == 'show_report' %}
+                <a class="button medium" href="{% url 'reports_views.views.download_report' report_id %}" target="_blank"><i class="icon icon-download"></i> {% trans "Download Report" %}</a>
+            {% endif %}
+
+            {% if mode == 'new_report' or mode == 'new_pattern' or mode == 'edit_pattern' %}
+                <a href="{% url 'reports_views.views.build_report_pattern' %}" class="button medium build-report"><i class="icon icon-play"></i> {% trans "Build" %}</a>
+            {% endif %}
+        </div>
+    </div>
+</form>

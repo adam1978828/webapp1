@@ -1,0 +1,20 @@
+{% load acctags %}
+{% load i18n %}
+<div id="couponCodeModal" class="overlay overlay-hugeinc">
+    <section class="container">
+        <div class="col-sm-4 col-sm-offset-4">
+            <button type="button" class="overlay-close">{% trans "Close" %}</button>
+            <form id="couponForm" action="{% url 'sites.views.add_coupon' %}" class="login" method='post' novalidate=''>
+                {% csrf_token %}
+                <p class="login__title"><span class="login-edition">{% trans "Please, enter coupon code" %}</span></p>
+                <div class="field-wrap">
+                    <input type='text' id="couponCode" placeholder='{% trans "Coupon code" %}' name='couponCode' class="login__input">
+                </div>
+                <div class="login__control">
+                    <button type='submit' id="apply" class="btn btn-md btn--warning btn--wider">apply</button>
+                </div>
+                <div class="clear"></div>
+            </form>
+        </div>
+    </section>
+</div>

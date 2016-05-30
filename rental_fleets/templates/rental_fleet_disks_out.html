@@ -1,0 +1,53 @@
+{% extends 'acc_base.html' %}
+{% load staticfiles %}
+{% load acctags %}
+{% load filters %}
+{% load i18n %}
+{% block breadcrumb %}
+    <div class="left">
+        <ul class="breadcrumb">
+            <li><a href="/">{% trans "Home" %}</a></li>
+            <li><a href="{% url 'rental_fleets.views.index' %}">{% trans "Rental fleet" %}</a></li>
+            <li><a href="{% url 'rental_fleets.views.disks_out' %}">{% trans "Disks Out" %}</a></li>
+        </ul>
+    </div>
+{% endblock %}
+{% block title %}{% trans "Rental Fleet Disks Out" %}{% endblock %}
+
+{% block acc_content %}
+    <script>
+        $('#bt_rental_fleets_disks_out').addClass('current');
+        $('.accordion li a').removeClass('open');
+        $('#bt_rental_fleets_disks_out').parent().prev().addClass('open');
+    </script>
+    <section id="content" class="container_12 clearfix ui-sortable" data-sort="true">
+        <h1 class="grid_12">{% trans "Disks Out" %}</h1>
+
+        <div class="spacer"></div>
+        <div class="grid_12">
+            <div class="box">
+                <div class="content">
+                    <table data-id="rentalFleets" class="dynamic styled" data-show-Filter-Bar="true" data-max-items-per-page=25
+                           data-data-table='{"bServerSide":true, "bDeferRender":true,"bProcessing":true,"sAjaxSource":"{% url 'rental_fleets.views.json_disks_out' %}"}'>
+                        <thead>
+                        <tr>
+                            {% if request.user.is_focus %}
+                                <th>{% trans "Company" %}</th>
+                            {% endif %}
+                            <th>{% trans "RFID" %}</th>
+                            <th>{% trans "UPC" %}</th>
+                            <th>{% trans "Title" %}</th>
+                            <th>{% trans "Format" %}</th>
+                            <th>{% trans "Status" %}</th>
+                            <th>{% trans "Rental Started" %}</th>
+                            <th>{% trans "Rented From" %}</th>
+                        </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- End of .content -->
+    </section>
+{% endblock %}

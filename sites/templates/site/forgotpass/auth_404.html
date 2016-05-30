@@ -1,0 +1,56 @@
+{% load staticfiles %}
+{% load i18n %}
+<!doctype html>
+<html>
+<head>
+	<!-- Basic Page Needs -->
+        <meta charset="utf-8">
+        <title>{% trans "404 reset pass" %} - {{request.company.name}}</title>
+        <meta name="description" content="A Template by Gozha.net">
+        <meta name="keywords" content="HTML, CSS, JavaScript">
+        <meta name="author" content="Gozha.net">
+
+    <!-- Mobile Specific Metas-->
+    	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta content="telephone=no" name="format-detection">
+
+    <!-- Fonts -->
+        <!-- Font awesome - icon font -->
+        <link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+
+    <!-- Stylesheets -->
+
+        <!-- Custom -->
+        <link href="css/style.css" rel="stylesheet" />
+
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    	<script src="http://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7/html5shiv.js"></script>
+		<script src="http://cdnjs.cloudflare.com/ajax/libs/respond.js/1.3.0/respond.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+    <div class="wrapper">
+        <div class="error-wrapper">
+            <a href='index.html' class="logo logo--dark">
+                <img alt='logo' src="images/logo-dark.png">
+                <p class="slogan--dark">{% trans "fun to search, fun to watch" %}</p>
+            </a>
+
+            <div class="error">
+                <img alt='' src='images/error.png' class="error__image">
+                <h1 class="error__text">{% trans "sorry, but page can’t be found" %}</h1>
+                <a href="index.html" class="btn btn-md btn--warning">{% trans "return to homepage" %}</a>
+            </div>
+        </div>
+
+        <div class="copy-bottom">
+            <p class="copy">&copy; {% trans "A.Movie, 2013. All rights reserved. Done by Olia Gozha" %}</p>
+        </div>
+
+    </div>
+
+</body>
+</html>

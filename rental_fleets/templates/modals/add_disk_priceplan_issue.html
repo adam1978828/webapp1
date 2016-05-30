@@ -1,0 +1,53 @@
+{% load i18n %}
+<div class="full content validate">
+  <div class="profile no-box">
+    <div class="upc-details details">
+      <section>
+        <div class="disk-cover">
+          <img src="/media/movie/poster{{upc.movie.img_path}}" width="120px">
+        </div>
+        <table>
+          <tr>
+            <th>{% trans "UPC:" %}</th><td>{{upc.upc|default:'-'}}</td>
+          </tr>
+          <tr>
+            <th>{% trans "Content type:" %}</th><td>{% trans "Movie" %}</td>
+          </tr>
+          <tr>
+            <th>{% trans "Format:" %}</th><td>{{upc.format.name|default:'-'}}</td>
+          </tr>
+          <tr>
+            <th>{% trans "Name:" %}</th><td>{{upc.movie.get_name|default:'-'}}</td>
+          </tr>
+          <tr>
+            <th>{% trans "Year of release:" %}</th><td>{{ upc.movie.release_year|default:'-' }}</td>
+          </tr>
+        </table>
+      </section>
+    </div><!-- End of .details -->
+  </div>
+
+  <form action="{% url 'rental_fleets.views.add_upc_price_plan' upc.upc %}" method="post" id="upcMissingTariffAssign">
+    {% csrf_token %}
+    <fieldset>
+      <div class="row">
+        <label for="tariffPlanId">
+          <strong>{% trans "Price Plan" %}</strong>
+        </label>
+        <div>
+          <select name="tariffPlanId" id="tariffPlanId" class="search" data-placeholder="{% trans "Choose price plan" %}">
+            <option value=""></option>
+            {% for tp in tariffPlans %}
+              <option value="{{tp.id}}">{{ tp.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+    </fieldset>
+  </form>
+</div>
+<div class="actions">
+  <div class="right">
+    <input type="submit" value="{% trans "Add" %}" />
+  </div>
+</div>

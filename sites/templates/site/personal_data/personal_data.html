@@ -1,0 +1,46 @@
+{% extends 'site/base.html' %}
+{% load staticfiles %}
+{% load filters %}
+{% load i18n %}
+{% block title %}{% trans "Personal data" %}{% endblock %}
+{% block content %}
+{% include 'site/search_panel.html' %}
+    <section class="container">
+            <h2 class="page-heading heading--outcontainer">{% trans "Edit personal data" %} </h2>
+            <div id="success-edit-reg" class="col-md-12" style="display:none;">
+                <div style="margin-bottom: 15px;" class="alert alert-info">
+                        <span class="icon-info"></span>
+                        {% trans "You are successfully edit personal data." %}
+                </div>
+            </div>
+            <form id="edit-registration-form" class="login select" action="{% url 'sites.views.ajax_personal_data' %}" method="post" novalidate=''>
+                {% csrf_token %}
+                    <div class="field-wrap">
+                        <input type='email' placeholder='{% trans "Email" %}' name='email' class="login__input" value="{{ request.user.email }}">
+                        <input type='text' placeholder='{% trans "First name" %}' name='firstName' class="login__input" value="{{ request.user.first_name }}">
+                        <input type='text' placeholder='{% trans "Last name" %}' name='lastName' class="login__input" value="{{ request.user.last_name }}">
+                        <input type='text' placeholder='{% trans "Zip code" %}' name='zipCode' class="login__input" value="{{ request.user.zip_code }}">
+                        <div class="genreskiosk">{% trans "Primary kiosk" %}</div>
+                        <select name="primaryKioskId" class="select__sort" tabindex="0">
+                            {% for kiosk in request.company.active_kiosks %}
+                                <option value="{{ kiosk.id }}" {% if request.user.preferred_kiosk_id == kiosk.id %}selected{% endif %}>{{ kiosk.settings.alias }}</option>
+                            {% endfor %}
+                        </select>
+                         <div class="clearfix"></div>
+                    </div>
+                    <div class="login__control">
+                        <button type='submit' id="edituserRegistration" class="btn btn-md btn--warning btn--wider">{% trans "save" %}</button>
+                    </div>
+                </form>
+
+        <div class="clearfix"></div>
+    </section>
+
+{%endblock%}
+{% block script %}
+ <script type="text/javascript">
+              $(document).ready(function() {
+                  init_Registration();
+              });
+		  </script>
+ {% endblock %}

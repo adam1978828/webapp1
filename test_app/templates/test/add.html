@@ -1,0 +1,87 @@
+{% extends 'acc_base.html' %}
+{% load staticfiles %}
+{% load acctags %}
+{% load filters %}
+{% load i18n %}
+{% block breadcrumb %}
+        <div class="left">
+            <ul class="breadcrumb">
+                <li><a href="/">{% trans "Home" %}</a></li>
+                <li><a href="{% url 'rental_fleets.views.index' %}">{% trans "Rental fleets" %}</a></li>
+            </ul>
+        </div>
+{% endblock %}
+{% block title %}{% trans "Add disc" %}{% endblock %}
+
+{% block acc_content %}
+<script>
+    $('#bt_rental_fleets_view').addClass('current');
+    $('.accordion li a').removeClass('open');
+    $('#bt_rental_fleets_view').parent().prev().addClass('open');
+</script>
+  <section id="content" class="container_12 clearfix ui-sortable" data-sort="true">
+    <h1 class="grid_12">{% trans "Add disc" %}</h1>
+    <div class="spacer"></div>
+    <form action="{% url 'rental_fleets.views.index' %}" method="post" class="grid_12 full no-box validate" id="addDisc" name="addDisc">
+      {% csrf_token %}
+      <fieldset>
+        <div class="row">
+          <label for="upcLink2">
+            <strong>{% trans "UPC" %}</strong>
+          </label>
+          <div>
+            <select data-search-url="{% url 'rental_fleets.views.upc_search' %}" name="upcLink" id="upcLink2" class="search" data-placeholder="{% trans "Search for UPC" %}">
+              <option value=""></option>
+              {% for upc in upcs %}
+                <option value="{{upc.upc}}">{{upc.upc}}</option>
+              {% endfor %}
+              <option value="" disabled>{% trans "And" %} {{upcs_amount}} {% trans "others" %}...</option>
+            </select>
+          </div>
+        </div>
+        <div class="row responce" style="display:none;">
+        </div>
+        <div class="row">
+          <label for="rfId">
+            <strong>{% trans "RFID" %}</strong>
+          </label>
+          <div>
+            <input data-error-type="inline" class="required" type="text" name="rfId" id="rfId">
+          </div>
+        </div>
+        <div class="actions">
+          <div class="right">
+            <input type="submit" value="{% trans "Add" %}">
+          </div>
+        </div>
+      </fieldset>
+    </form>
+    <div class="grid_12">
+    <div class="box">
+			<div class="content">
+      <table data-id='rentalFleets' class="styled" data-filter-Bar="none">
+        <thead>
+          <tr>
+            <th>{% trans "RFID" %}</th>
+            <th>{% trans "UPC" %}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for rf in rentalFleets %}
+            <tr>
+              <td class="center">{{ forloop.counter }}</td>
+              <td class="center">{{ rf.upc.upc }}</td>
+            </tr>
+          {% endfor %}
+            {% if not rentalFleets %}
+                <tr>
+                    <td colspan="2">{% trans "No data available in table" %}</td>
+                </tr>
+            {% endif %}
+        </tbody>
+      </table>
+            </div>
+    </div>
+    </div><!-- End of .content -->
+  </section>
+{% endblock %}

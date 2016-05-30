@@ -1,0 +1,69 @@
+{% load i18n %}
+<form action="{% url 'payments.views.ajax_upload_archive' %}"
+      enctype="multipart/form-data" accept="" id="linkpoint" method="POST"
+      class="grid_12 no-box">
+  <fieldset class="">
+    <legend>{% trans "Adding Linkpoint key" %}</legend>
+    <div class="row">
+      <div>
+        <input id="linkpointfile" type="file" name="key_archive">
+      </div>
+    </div>
+
+    {% if request.user.is_focus %}
+      <div class="row">
+        <label for="f_company_id">
+          <strong>{% trans "Company" %}</strong>
+        </label>
+
+        <div>
+          <select name="f_company_id" id="f_company_id" class="search"
+                  data-placeholder="{% trans "Choose a Company" %}">
+            {% for company in companies %}
+              <option value="{{ company.id }}">{{ company.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+    {% endif %}
+
+    <div class="row">
+      <div>
+        <input id="firstdatasubmit" type="submit"
+               value="{% trans "Upload key" %}">
+      </div>
+    </div>
+  </fieldset>
+</form>
+<script>
+  $('#linkpointsubmit').live('click', function (event) {
+    event.preventDefault();
+    var linkajax = $('#linkpoint').attr('action');
+    var fd = new FormData();
+    fd.append('key_archive', $("#linkpointfile")[0].files[0]);
+    fd.append('f_company_id', $('#f_company_id').val());
+    $.ajax({
+      type: "POST",
+      url: linkajax,
+      data: fd,
+      processData: false,
+      contentType: false,
+      //dataType: "json",
+      success: function (data) {
+        if (data.type == 'success') {
+          document.location = "/payments/";
+        }
+        else if (data.type == 'error') {
+          var dialog_modal = $("#dialog_modal");
+          dialog_modal.find(".error").text(data.message);
+          dialog_modal.dialog({
+            autoOpen: false, modal: true, resizable: false, draggable: false
+          }).find('button').click(function () {
+            $(this).parents('.ui-dialog-content').dialog('close');
+          });
+          dialog_modal.dialog("open");
+        }
+      }
+    });
+  });
+</script>

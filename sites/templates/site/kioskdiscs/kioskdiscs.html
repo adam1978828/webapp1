@@ -1,0 +1,43 @@
+{% extends 'site/base.html' %}
+{% load staticfiles %}
+{% load filters %}
+{% load i18n %}
+{% block title %}{% trans "Movies of" %} {{kiosk.settings.alias}} {% trans "kiosk" %}{% endblock %}
+{% block content %}
+{% include 'site/search_panel.html' %}
+        <section class="container">
+            <div class="col-sm-12">
+                <h2 class="page-heading">{% trans "Info kiosk" %} - {{kiosk.settings.alias}}</h2>
+                <div class="col-sm-6">
+                    {{ kiosk.address.line_1 }}
+                    {{ kiosk.address.city }}
+                </div>
+                <div id='location-map-kiosk' class="map col-sm-6"></div>
+                    <div class="hide" style="display:none;">
+                        <div class="kioskpattern">
+                            <span class="pop_up_box_text">
+                                <div>{% trans "Kiosk Name" %}: <span id="kioskname"></span></div>
+                                <div>{% trans "Address" %}: <span id="kioskaddress"></span></div>
+                                <div>{% trans "City:" %} <span id="kioskcity"></span></div>
+                                <div>{% trans "State:" %} <span id="kioskstate"></span></div>
+                                <div>{% trans "Postal code:" %} <span id="kioskpostalcode"></span></div>
+                                <div id="kiosklink"><a href="">{% trans "All Kiosk Movies" %}</a></div>
+                            </span>
+                        </div>
+                    </div>
+                <div class="clearfix"></div>
+            {% include 'site/partials/movies.html' %}
+            </div>
+        <div class="clearfix"></div>
+        </section>
+{%endblock%}
+{% block script %}
+    <script type="text/javascript">
+        $(document).ready(function() {
+            {% if kiosk.has_geolocation %}
+                window['kiosks'] = [['{{ kiosk.settings.alias }}',{{kiosk.address.latitude}},{{ kiosk.address.longitude}},'', '{{ kiosk.address.line_1 }}','{{ kiosk.address.city }}','{{ kiosk.address.state }}','{{ kiosk.address.postalcode }}' ]];
+            {% endif %}
+            init_KioskDiscs();
+        });
+    </script>
+ {% endblock %}

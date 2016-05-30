@@ -1,0 +1,81 @@
+{% extends 'site/base.html' %}
+{% load staticfiles %}
+{% load i18n %}
+{% block title %}{% trans "Kiosks map" %} - {{request.company.name}}{% endblock %}
+{% block content %}
+    {% include 'site/search_panel.html' %}
+    <!-- Main content -->
+        <section class="container">
+            <h2 class="page-heading heading--outcontainer">{% trans "Our kiosks" %}</h2>
+        </section>
+        <div class="tabs tabs--horisontal">
+            <!-- Nav tabs -->
+            <div class="container">
+                <ul class="nav nav-tabs" id="hTab">
+                    <li><a href="#movie1" data-toggle="tab">{% trans "Kiosks list" %}</a></li>
+                    <li class="active"><a href="#map1" data-toggle="tab">{% trans "Map" %}</a></li>
+                </ul>
+            </div>
+            <!-- Tab panes -->
+            {% if kiosks %}
+                <div class="tab-content">
+                    <div class="tab-pane" id="movie1">
+                        <div class="container">
+                            <div class="movie-time-wrap">
+                                <div class="rates-wrapper rates--full">
+                                    <table>
+                                        <colgroup class="col-width"></colgroup>
+                                        <colgroup class="col-width"></colgroup>
+                                            {% for kiosk in kiosks %}
+                                        <colgroup class="col-width-sm"></colgroup>
+                                        <tbody>
+                                                <tr class="rates rates--top">
+                                                    <td class="rates__obj"><a class="rates__obj-name" href="{{ kiosk.3 }}">{{ kiosk.0 }}</a></td>
+                                                    <td class="rates__vote">{{ kiosk.4 }}, {{ kiosk.5 }}, {{ kiosk.6 }}, {{ kiosk.7 }}</td>
+                                                    <td class="rates__result"><a class="rates__obj-name" href="{{ kiosk.3 }}">{% trans "View All Kiosk Movies" %}</a></td>
+                                                </tr>
+                                            {% endfor %}
+                                            <tr class="rates rates--top">
+                                                <td class="rates__obj"><a class="rates__obj-name" href="{% url 'sites.views.movies_search' %}">{% trans "All kiosks" %}</a></td>
+                                                <td class="rates__vote">{{request.company.name}}</td>
+                                                <td class="rates__result"><a class="rates__obj-name" href="{% url 'sites.views.movies_search' %}">{% trans "View All Kiosk Movies" %}</a></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane active" id="map1">
+                        <div id='location-map' class="map"></div>
+                        <div class="hide" style="display:none;">
+                            <div class="kioskpattern">
+                                <span class="pop_up_box_text">
+                                    <div>{% trans "Kiosk Name:" %} <span id="kioskname"></span></div>
+                                    <div>{% trans "Address:" %} <span id="kioskaddress"></span></div>
+                                    <div>{% trans "City:" %} <span id="kioskcity"></span></div>
+                                    <div>{% trans "State:" %} <span id="kioskstate"></span></div>
+                                    <div>{% trans "Postal code:" %} <span id="kioskpostalcode"></span></div>
+                                    <div id="kiosklink"><a href="">{% trans "All Kiosk Movies" %}</a></div>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="alert alert-info" style="margin-bottom: 15px;">
+                <span class="icon-info"></span>
+                {% trans "This company doesn't have any kiosks yet." %}
+            </div>
+        {% endif %}
+    <!-- End Main content -->
+{% endblock %}
+{% block script %}
+ <script type="text/javascript">
+              $(document).ready(function() {
+                 window['kiosks'] = {% autoescape off %}{{ kiosks }}{% endautoescape %};
+                 init_KiosksMap ();
+              });
+		  </script>
+ {% endblock %}

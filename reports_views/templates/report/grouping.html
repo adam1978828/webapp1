@@ -1,0 +1,43 @@
+{% load i18n %}
+<form class="grid_12 no-box" name="" method="post" action="" novalidate="novalidate" id="repGrouping">
+    <fieldset>
+        <legend>{% trans "Group By" %}</legend>
+        <div class="row">
+            <label> <strong>{% trans "Add" %}</strong></label>
+            <div class="grid_6">
+                <select class="form-control input-sm" id="grouping-set">
+                    {% for val in report.grouping %}
+                        <option value="{{ val.model_field_name }}" {% if val.model_field_name in pattern.group_by_fields %}hidden style="display:none;"{% endif %}>
+                            {{ val.readable_name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <a class="button medium addreport pull-left" id="addGrouping"><i class="icon-plus"></i></a>
+            <div class="clear"></div>
+        </div>
+    </fieldset>
+    <fieldset>
+        <legend>{% trans "Group By Fields" %}</legend>
+        <table class="styled2 row" id="group_by_fields">
+            {% for val in report.grouping %}
+                {% if val.model_field_name in pattern.group_by_fields %}
+                    <tr>
+                        <td><i class="icon icon-sort"></i></td>
+                        <td>
+                            <div class="rep-group-by group-by-{{ val.model_field_name }}">
+                                <div class="grid_10">
+                                    <input type="text" name="alias" value="{{ val.model_field_name }}" hidden style="display:none;">
+                                    <input type="text" readonly class="form-control input-sm"
+                                           value="{{ val.readable_name }}">
+                                </div>
+                                <a class="button medium remove-group pull-left"><i class="icon-minus"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </table>
+    </fieldset>
+    {% include 'report/config/grouping.html' %}
+</form>

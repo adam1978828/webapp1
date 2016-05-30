@@ -1,0 +1,97 @@
+{% load i18n %}
+<form action="{% url 'payments.views.ajax_add_firstdata' %}" id="firstdata"
+      method="POST" class="grid_12 no-box">
+  <fieldset class="">
+    <legend>{% trans "Adding FirstData key" %}</legend>
+    <input type="hidden" name="ps_id" id="ps_id" value="2">
+    <div class="row">
+      <label for="gateway_id">
+          <strong>{% trans "Gateway ID" %}</strong>
+      </label>
+      <div>
+        <input type="text" name="gateway_id" autocomplete="off" id="gateway_id"/>
+      </div>
+    </div>
+
+    <div class="row">
+      <label for="password">
+          <strong>{% trans "Password" %}</strong>
+      </label>
+      <div>
+        <input type="text" name="password" autocomplete="off" id="password"/>
+      </div>
+    </div>
+
+    <div class="row">
+      <label for="key_id">
+          <strong>{% trans "Key ID" %}</strong>
+      </label>
+      <div>
+        <input type="text" name="key_id" autocomplete="off" id="key_id"/>
+      </div>
+    </div>
+
+    <div class="row">
+      <label for="hmac_key">
+          <strong>{% trans "HMAC key" %}</strong>
+      </label>
+      <div>
+        <input type="text" name="hmac_key" autocomplete="off" id="hmac_key"/>
+      </div>
+    </div>
+
+    {% if request.user.is_focus %}
+      <div class="row">
+        <label for="f_company_id">
+          <strong>{% trans "Company" %}</strong>
+        </label>
+
+        <div>
+          <select name="f_company_id" id="f_company_id" class="search"
+                  data-placeholder="{% trans "Choose a Company" %}">
+            {% for company in companies %}
+              <option value="{{ company.id }}">{{ company.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+    {% endif %}
+  </fieldset>
+
+    <div class="actions">
+      <div class="right">
+        <input id="firstdatasubmit" type="submit"
+               value="{% trans "Submit" %}">
+      </div>
+    </div>
+</form>
+<script>
+  $('#firstdatasubmit').live('click', function (event) {
+    event.preventDefault();
+    var $form = $('#firstdata');
+    var linkajax = $form.attr('action');
+    var fd = $form.serialize();
+    $.ajax({
+      type: "POST",
+      url: linkajax,
+      data: fd,
+      processData: false,
+      contentType: false,
+      success: function (data) {
+        if (data.type == 'success') {
+          document.location = "/payments/";
+        }
+        else if (data.type == 'error') {
+          var dialog_modal = $("#dialog_modal");
+          dialog_modal.find(".error").text(data.message);
+          dialog_modal.dialog({
+            autoOpen: false, modal: true, resizable: false, draggable: false
+          }).find('button').click(function () {
+            $(this).parents('.ui-dialog-content').dialog('close');
+          });
+          dialog_modal.dialog("open");
+        }
+      }
+    });
+  });
+</script>

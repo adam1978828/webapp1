@@ -1,0 +1,169 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-10-18 15:56+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+#: templates/auth_404.html:5 templates/restore.html:6
+#: templates/restore_pass.html:6
+msgctxt "page title"
+msgid "Restore password"
+msgstr "Відновлення паролю"
+
+#: templates/auth_404.html:19
+msgid "Authentication"
+msgstr "Аутентифікація"
+
+#: templates/auth_404.html:29
+msgid "Something went wrong here..."
+msgstr "Щось пішло не так.."
+
+#: templates/auth_404.html:37
+msgid "Oops! Sorry, an error has occured."
+msgstr "Ой! На жаль, сталася помилка."
+
+#: templates/auth_404.html:40
+msgid "Requested page not found!"
+msgstr "Запитувана сторінка не знайдена!"
+
+#: templates/auth_base.html:18
+msgctxt "process, like 'to sign in', button label"
+msgid "Login"
+msgstr "Увійти"
+
+#: templates/login.html:6
+msgctxt "page title"
+msgid "Login"
+msgstr "Вхід"
+
+#: templates/login.html:19
+msgctxt "process, like 'to sign in', form label"
+msgid "Login"
+msgstr "Вхід"
+
+#: templates/login.html:26
+msgid "Welcome back!"
+msgstr "Вітаємо!"
+
+#: templates/login.html:27
+msgid "Invalid credentials."
+msgstr "Невірний логін чи пароль."
+
+#: templates/login.html:45 templates/restore.html:56
+msgid "E-mail"
+msgstr "E-mail"
+
+#: templates/login.html:55 templates/restore_pass.html:45
+msgid "Password"
+msgstr "Пароль"
+
+#: templates/login.html:58
+msgid "Forgot it?"
+msgstr "Забули пароль?"
+
+#: templates/login.html:73
+msgctxt "Submit button label"
+msgid "Sign In"
+msgstr "Увійти"
+
+#: templates/restore.html:23
+msgid "Restore"
+msgstr "Відновлення паролю"
+
+#: templates/restore.html:32
+msgid "Please, enter your e-mail"
+msgstr "Будь ласка, введіть ваш e-mail"
+
+#: templates/restore.html:35
+msgid "Invalid e-mail."
+msgstr "Невірний e-mail."
+
+#: templates/restore.html:70
+msgctxt "button label"
+msgid "Restore"
+msgstr "Відновити"
+
+#: templates/restore_pass.html:23
+msgid "Restore password for "
+msgstr "Відновлення паролю для "
+
+#: templates/restore_pass.html:32
+msgid "Please, enter new password"
+msgstr "Будь ласка, введіть новий пароль"
+
+#: templates/restore_pass.html:35
+msgid "Invalid passwords."
+msgstr "Невірний пароль."
+
+#: templates/restore_pass.html:57
+msgid "Repeat Password"
+msgstr "Повторіть пароль"
+
+#: templates/restore_pass.html:73
+msgid "Login"
+msgstr "Увійти"
+
+#: views.py:46
+msgid "Please, fill email field"
+msgstr "Будь-ласка, заповніть поле email"
+
+#: views.py:48
+#, fuzzy
+#| msgid "Please, enter your e-mail"
+msgid "Please, enter a valid email"
+msgstr "Будь ласка, введіть ваш e-mail"
+
+#: views.py:53
+#, python-format
+msgid ""
+"Press this link and follow commands to restore your password: \n"
+" %(url)s"
+msgstr "Натисніть на посилання та слідуйте рекомендаціям для відновлення паролю: \n"
+" %(url)s"
+
+#: views.py:55
+msgid "Password restoring."
+msgstr "Відновлення паролю."
+
+#: views.py:65
+msgid "This email is not registered"
+msgstr "Цю електронну адресу не зареєстровано."
+
+#: views.py:85
+#, fuzzy
+#| msgid "Please, enter new password"
+msgid "Please, enter valid password"
+msgstr "Будь ласка, введіть новий пароль"
+
+#: views.py:87
+msgid "Your password does't match"
+msgstr "Ваші паролі не співпадають"
+
+#: views.py:128
+#, fuzzy
+#| msgid "Invalid passwords."
+msgid "Wrong old password"
+msgstr "Невірний пароль."
+
+#: views.py:130
+msgid "Too short password"
+msgstr "Відновлення паролю"
+
+#: views.py:132
+msgid "Passwords doesn't match"
+msgstr "Ваші паролі не співпадають"

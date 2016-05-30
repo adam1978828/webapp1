@@ -1,0 +1,198 @@
+{% extends 'acc_base.html' %}
+{% load staticfiles %}
+{% load acctags %}
+{% load filters %}
+{% load i18n %}
+{% block breadcrumb %}
+    <div class="left">
+        <ul class="breadcrumb">
+            <li><a href="/">{% trans "Home" %}</a></li>
+            <li><a href="{% url 'coupons.views.all_coupons' %}">{% trans "Coupons" %}</a></li>
+        </ul>
+    </div>
+{% endblock %}
+{% block title %}{% trans "Coupon Edit" %}{% endblock %}
+
+
+{% block acc_content %}
+    <script>
+        $('#bt_all_coupons').addClass('current');
+        $('.accordion li a').removeClass('open');
+        $('#bt_all_coupons').parent().prev().addClass('open');
+    </script>
+    <section id="content" class="container_12 clearfix ui-sortable" data-sort="true">
+        <h1 class="grid_12">{% trans "Coupon Edit" %}</h1>
+
+        <div class="spacer"></div>
+        {% if 'coupons_edit' in request.user.rights and not coupon.is_deleted %}
+
+            <div class="grid_12">
+                <div id="addCouponBox" class="box">
+                    <div class="header">
+                        <h2>{% trans "Coupon details" %}</h2>
+                    </div>
+                    <form action="{% url 'coupons.views.add' coupon.id %}" method="post" class="full content validate" id="addCoupon">
+                        {% csrf_token %}
+                        <fieldset>
+
+                            {% if request.user.is_focus %}
+                                <div class="row">
+                                    <label for="f_company_id">
+                                        <strong>{% trans "Company" %}</strong>
+                                    </label>
+
+                                    <div>
+                                        <input type="text" value="{{ coupon.company.id }}" name="f_company_id" id="f_company_id" hidden="hidden">
+                                        <input type="text" value="{{ coupon.company.name }}" readonly>
+                                    </div>
+                                </div>
+                            {% endif %}
+
+                            <div class="row">
+                                <label for="couponTypeId">
+                                    <strong>{% trans "Type" %}</strong>
+                                </label>
+
+                                <div>
+                                    <select name="couponTypeId" id="couponTypeId" class="search">
+                                        <option selected="selected" value="{{ coupon.type.id }}">{{ coupon.type.alias }}</option>
+                                        {% for pattern in patterns %}
+                                            <option value="{{ pattern.id }}">{{ pattern.alias }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            {#            <div class="hidden row">#}
+                            <div class="row">
+                                <label for="params">
+                                    <strong>{% trans "Explanation" %}</strong>
+                                </label>
+
+                                <div>
+                                    <div id='params'>
+                                        {% for param in coupon.params|proc_params:coupon.type.id %}
+                                            <input type="text" class="inline-store" name="params" value="{{ param }}">
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <label for="code">
+                                    <strong>{% trans "Code" %}</strong>
+                                </label>
+
+                                <div>
+                                    <input type="text" name="code" id="code" value="{{ coupon.code }}">
+
+                                    <div>
+                                        <button id="genCouponCode" class="button">{% trans "Generate" %}</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <label for="usageAmount">
+                                    <strong>{% trans "# of times to be used" %}</strong>
+                                </label>
+
+                                <div>
+                                    <input type="text" name="usageAmount" id="usageAmount" pattern='[0-9]+' value="{{ coupon.usage_amount }}">
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <label for="perCardUsage">
+                                    <strong>{% trans "# of times to be used per card" %}</strong>
+                                </label>
+
+                                <div>
+                                    <input type="text" name="perCardUsage" id="perCardUsage" pattern='[0-9]+' value="{{ coupon.per_card_usage }}">
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <label for="usageAmount">
+                                    <strong>{% trans "Due from" %}</strong>
+                                </label>
+
+                                <div>
+                                    <input type="date" name="dtStart" id="dtStart"
+                                           value="{{ coupon.dt_start|default:coupon.dt_create|date:'m/d/y'|default:'Removal' }}">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <label for="usageAmount">
+                                    <strong>{% trans "Due till" %}</strong>
+                                </label>
+
+                                <div>
+                                    <input type="date" name="dtEnd" id="dtEnd" value="{{ coupon.dt_end|date:'m/d/y'|default:'Removal' }}">
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+                    <div class="actions">
+                        <div class="right">
+                            <input type="submit" value="{% trans "Save" %}" id='submitCouponEdit'>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% elif coupon.is_deleted %}
+            <div class="grid_12">
+                <div class="alert warning sticky no-margin-top">
+                    <span class="icon"></span>
+                    <strong>{% trans 'Warning!' %}</strong> {% trans 'Coupon is deleted! Modifications is not allowed!' %}
+                </div>
+            </div>
+        {% endif %}
+
+        <div class="grid_12">
+            <div class="box">
+                <div class="content">
+                    <table class="couponsTable dynamic styled" data-show-Filter-Bar="true" data-max-items-per-page="25"
+                           data-data-table='{"oLanguage": {"sEmptyTable":"No coupons yet"}}'>
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>{% trans "Type" %}</th>
+                            <th>{% trans "Code" %}</th>
+                            <th>{% trans "Details" %}</th>
+                            <th>{% trans "Usage Amount" %}</th>
+                            <th>{% trans "Per Card Usage" %}</th>
+                            <th>{% trans "Due from" %}</th>
+                            <th>{% trans "Due till" %}</th>
+                            <th>{% trans "Modified At" %}</th>
+                            <th>{% trans "Modified By" %}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for coupon in coupons %}
+                            <tr>
+                                <td class="center">{{ coupon.id }}</td>
+                                <td class="center">{{ coupon.type.alias }}</td>
+                                <td class="center">{{ coupon.code }}</td>
+                                <td class="center">{{ coupon.formula }}</td>
+                                <td class="center">{{ coupon.usage_amount }}</td>
+                                <td class="center">{{ coupon.per_card_usage }}</td>
+                                <td class="center">{{ coupon.dt_start|default:coupon.dt_create|date:'m/d/y H:i:s' }}</td>
+                                <td class="center">{{ coupon.dt_end|date:'m/d/y H:i:s'|default:'Removal' }}</td>
+                                <td class="center">{{ coupon.dt_modify|date:'m/d/y H:i:s'|default:'Removal' }}</td>
+                                <td class="center">{{ coupon.modified_by.first_name }} {{ coupon.modified_by.last_name }}</td>
+                            </tr>
+                        {% endfor %}
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- End of .content -->
+    </section>
+
+{% endblock %}
+
+
+
+{% block post_scripts %}
+    <script src="{% static 'js/coupons.js' %}"></script>
+{% endblock %}

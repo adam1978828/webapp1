@@ -1,0 +1,255 @@
+{% extends 'acc_base.html' %}
+{% load staticfiles %}
+{% load i18n %}
+{% block breadcrumb %}
+    <div class="left">
+        <ul class="breadcrumb">
+            <li><a href="/">{% trans "Home" %}</a></li>
+            <li><a href="{% url 'kiosks.views.view_list' %}">{% trans "Kiosk slots" %}</a></li>
+        </ul>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}
+
+{% block title %}{% trans "Kiosk slots" %}{% endblock %}
+
+
+{% block acc_content %}
+    <script>
+        $('#bt_kiosks_list').addClass('current');
+        $('.accordion li a').removeClass('open');
+    </script>
+
+
+    <!-- Here goes the content. -->
+    <section id="content" class="container_12 clearfix">
+        <h1 class="grid_12">{% trans "Kiosk" %} {{ kiosk.id }} {% trans "slots" %}</h1>
+
+        {% if curr_review %}
+            <div class="grid_12">
+                <div class="alert warning sticky no-margin-top">
+                    <span class="icon"></span>
+                    {% if not curr_review.dt_break %}
+                        <strong>{% trans 'Warning!' %}</strong> {% trans 'Review is runing on the kiosk!' %}
+                    {% else %}
+                        <strong>{% trans 'Warning!' %}</strong> {% trans 'Review is stopping!' %}
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="grid_12">
+                <p><strong>{% trans 'Started At' %}</strong>: {{ curr_review.dt_start|date:'m/d/y h:iA' }}</p>
+                <p><strong>{% trans 'Last Updated At' %}</strong>: {{ curr_review.dt_start|date:'m/d/y h:iA' }}</p>
+                <p><strong>{% trans 'Slot Reviewed' %}</strong>: {{ curr_review.checked_total }}</p>
+                <p><strong>{% trans 'Last Slot' %}</strong>: {{ curr_review.last_slot.number }}</p>
+            </div>
+        {% endif %}
+
+        <div class="grid_12">
+            <button id="order-date"
+                    {% if kiosk.ordering_list and kiosk.ordering_list.type_id == 1 %}
+                    original-title="{% trans "Ordering by Release Date" %}" disabled
+                    {% else %}
+                    original-title="{% trans "Order by Release Date" %}"
+                    {% endif %}
+                    data-gravity="s" class="button tooltip" data-href="{% url 'kiosks.views.ajax_order_by' kiosk.id 1 %}">
+                <span class="icon icon-sort-by-order-alt"></span>
+                {% if kiosk.ordering_list and kiosk.ordering_list.type_id == 1 %}
+                    {% trans "Ordering by date" %}{% else %}{% trans "Order by Date" %}
+                {% endif %}
+            </button>
+            <button id="order-name"
+                    {% if kiosk.ordering_list and kiosk.ordering_list.type_id == 2 %}
+                    original-title="{% trans "Ordering by Movie Title" %}" disabled
+                    {% else %}
+                    original-title="{% trans "Order by Movie Title" %}"
+                    {% endif %}
+                    data-gravity="s" class="button tooltip" data-href="{% url 'kiosks.views.ajax_order_by' kiosk.id 2 %}">
+                <span class="icon icon-sort-by-alphabet"></span>
+                {% if kiosk.ordering_list and kiosk.ordering_list.type_id == 2 %}
+                    {% trans "Ordering by name" %}{% else %}{% trans "Order by Name" %}
+                {% endif %}
+            </button>
+            {% if not curr_review %}
+                <button data-gravity="s" class="button tooltip review-inventory" {% if curr_review %}disabled{% endif %}
+                        data-review-type="all" data-href="{% url 'kiosks.views.ajax_review_inventory' kiosk.id 1 %}">
+                    <span class="icon icon-list"></span>
+                    {% trans "Review All Slots" %}
+                </button>
+{#                <!--#}
+                <button data-gravity="s" class="button tooltip review-inventory" {% if curr_review %}disabled{% endif %}
+                        data-review-type="slots" data-href="{% url 'kiosks.views.ajax_review_inventory' kiosk.id 2 %}">
+                    <span class="icon icon-eye-open"></span>
+                    {% trans "Review Selected Slots" %}
+                </button>
+{#                -->#}
+            {% else %}
+                <button data-gravity="s" class="button red tooltip review-stop" {% if curr_review.dt_break %}disabled{% endif %}
+                        data-href="{% url 'kiosks.views.ajax_review_kill' kiosk.id curr_review.id %}">
+                    <span class="icon icon-stop"></span>
+                    {% trans "Cancel Current Review" %}
+                </button>
+            {% endif %}
+            <br> <br>
+
+            <div class="box tabbedBox">
+                <div class="header">
+                    <h2>{% trans "Slot racks" %}</h2>
+                    <ul>
+                        <li><a href="#tc1">{% trans "First rack" %}</a></li>
+                        <li><a href="#tc2">{% trans "Second rack" %}</a></li>
+                        <li><a href="#tc3">{% trans "Third rack" %}</a></li>
+                        <li><a href="#tc4">{% trans "Fourth rack" %}</a></li>
+                    </ul>
+                </div>
+                <!-- End of .header -->
+                <div class="content tabbed marginedtop">
+                    {% for rack in racks %}
+                        <div id="tc{{ forloop.counter }}" class="box">
+                            <table class="styled" data-filter-bar="always" data-max-items-per-page='-1'>
+                                <colgroup>
+                                    <col span="1">
+                                    <col span="1">
+                                    <col span="1">
+                                    <col span="1">
+                                    <col span="1">
+                                </colgroup>
+
+                                <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>{% trans "Slot number" %}</th>
+                                    <th>{% trans "Slot status" %}</th>
+                                    <th>{% trans "RF ID" %}</th>
+                                    <th>{% trans "Content" %}</th>
+                                    <th>{% trans "Photo" %}</th>
+                                    <th>{% trans "Actions" %}</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for slot in rack %}
+                                    <tr>
+                                        {# Slot id for review #}
+                                        <td class="center">
+                                            {% if not curr_review %}
+{#                                                <!--#}
+                                                <input type="checkbox" name="slot_id" class="slot-id" value="{{ slot.id }}">
+{#                                                -->#}
+                                            {% else %}
+                                                {% if slot.id in reviewed %}
+                                                  <span class="badge block green">{% trans 'CHECKED' %}</span>
+                                                {% elif slot.id in in_review_list  %}
+                                                  <span class="badge block blue">{% trans 'WAITING' %}</span>
+                                                {% else %}
+                                                  <span></span>
+                                                {% endif %}
+                                            {% endif %}
+                                        </td>
+                                        {# Slot number #}
+
+                                        <td class="center">{{ slot.number }}</td>
+
+                                        {# Slot status #}
+                                        <td class="slot-status">
+                                            {% if slot.status_id == 1 %}
+                                                {% if slot.disk %}
+                                                    {% trans "Occupied" %}
+                                                {% else %}
+                                                    {% trans "Empty" %}
+                                                {% endif %}
+                                            {% elif slot.status_id == 5 %}
+                                                {% trans "No rfid" %}
+                                            {% elif slot.status_id == 7 %}
+                                                {% trans "To eject" %}
+                                            {% else %}
+                                                {{ slot.status.alias }}
+                                            {% endif %}
+                                        </td>
+
+                                        {# Disk rfid #}
+                                        <td class="center">
+                                            {% if slot.disk %}
+                                                <a href="{% url 'rental_fleets.views.show_disk' slot.disk.rf_id %}">
+                                                    {{ slot.disk.rf_id|default:'-' }}
+                                                </a>
+                                                {{ rf_id }}
+                                            {% elif slot.status_id == 5 or slot.status_id == 7 %}
+                                                {% trans "UNKNOWN RFID" %}
+                                            {% endif %}
+                                        </td>
+
+                                        {# Disk content #}
+                                        <td class="center">
+                                            {% if slot.disk %}
+                                                {% if slot.disk.upc %}
+                                                    {{ slot.disk.upc.movie.get_name }}
+                                                    ({{ slot.disk.upc.format.name }})
+                                                    / {{ slot.disk.upc.movie.release_year }}
+                                                {% else %}
+                                                    {% trans "UNKNOWN DISK" %}
+                                                {% endif %}
+                                            {% elif slot.status_id == 5 or slot.status_id == 7 %}
+                                                {% trans "UNKNOWN DISK" %}
+                                            {% endif %}
+                                        </td>
+
+                                        {# Disk image #}
+                                        <td class="center">
+                                            {% if slot.disk %}
+                                                {% if not slot.disk.upc and slot.disk.disk_photo %}
+                                                    <span data-id='clickTooltip' data-html=true class="tooltip pointing block orange badge"
+                                                          hover-title='<img src="/media/disk_photo/{{ slot.disk.disk_photo.id }}.jpg" width="320" height="240">'
+                                                          click-title='<i data-id="closePopUp" class="top-right icon icon-remove"></i><input class="medium-width" data-kiosk-id="{{ slot.kiosk.id }}" data-assign-url="{% url "rental_fleets.views.reassign_disk_upc" slot.disk.rf_id 100001 %}" data-search-url="{% url "movies.views.search_by_title" %}" id="movieSearch" type="text"><div id="popUpResults"></div><a id="mapDiskToUpc" class="button">{% trans "Assign" %}</a>'>
+                              <i class="icon icon-picture"></i>
+                            </span>
+                                                {% endif %}
+                                            {% elif slot.status_id == 5 or slot.status_id == 7 %}
+                                                {% if slot.photo %}
+                                                    <span data-html=true class="tooltip pointing block orange badge"
+                                                          original-title='<img src="/media/disk_photo/{{ slot.photo.id }}.jpg" width="320" height="240">'>
+                                <i class="icon icon-picture"></i></span>
+                                                {% endif %}
+                                            {% endif %}
+                                        </td>
+
+                                        {# Disk actions #}
+                                        <td class="center">
+                                            {% if slot.status_id == 1 and slot.disk and slot.disk.state_id == 0 or slot.status_id == 5 %}
+                                                <a href="{% url 'kiosks.views.ajax_disk_to_eject' slot.id 1 %}"
+                                                   class="add-to-eject-list button small grey tooltip" data-gravity=s title="{% trans "Add to eject list" %}">
+                                                    <i class="icon-arrow-down"></i>
+                                                </a>
+                                            {% elif slot.status_id == 7 %}
+                                                <a href="{% url 'kiosks.views.ajax_disk_to_eject' slot.id 0 %}"
+                                                   class="remove-from-eject-list button small grey tooltip" data-gravity=s
+                                                   title="{% trans "Remove from eject list" %}">
+                                                    <i class="icon-share-alt"></i>
+                                                </a>
+                                            {% endif %}
+                                        </td>
+
+
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% endfor %}
+                </div>
+                <!-- End of .content -->
+            </div>
+            <!-- End of .box -->
+        </div>
+        <!-- End of .grid_12 -->
+
+        {% include 'kiosk_slot_review.html' %}
+    </section><!-- End of #content -->
+
+{% endblock %}
+
+{% block addons %}
+    <!-- The settings dialog -->
+
+{% endblock %}

@@ -1,0 +1,33 @@
+{% load staticfiles %}
+{% load i18n %}
+<script type="text/javascript" src="{% static 'sites/js/app.js' %}"></script>
+
+<div>{% trans "Test site index" %}</div>
+<!-- company - object presenting site owner company -->
+<div>{{company.name}}</div>
+
+<!-- featured - represents featured movies of this company -->
+{% for movie in featured %}
+  <p>{{movie.get_name}}</p>
+  <p>{{movie.get_description}}</p>
+  <p>{{movie.release_year}}</p>
+  {% if movie.img_path %}
+    <img src="/media/movie/poster{{movie.img_path}}" alt="">
+  {% endif %}
+  {% if movie.bd_path %}
+    <img src="/media/movie/backdrop{{movie.bd_path}}" alt="">
+  {% endif %}
+{% endfor %}
+
+<!-- movies - represents just random movies -->
+{% for movie in movies %}
+  <p>{{movie.get_name}}</p>
+  <p>{{movie.get_description}}</p>
+  <p>{{movie.release_year}}</p>
+  {% if movie.img_path %}
+    <img src="/media/movie/poster{{movie.img_path}}" alt="">
+  {% endif %}
+  {% if movie.bd_path %}
+    <img src="/media/movie/backdrop{{movie.bd_path}}" alt="">
+  {% endif %}
+{% endfor %}

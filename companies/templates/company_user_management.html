@@ -1,0 +1,91 @@
+{% extends 'acc_base.html' %}
+{% load staticfiles %}
+{% load static %}
+{% load acctags %}
+{% load i18n %}
+{% block breadcrumb %}
+  <div class="left">
+    <ul class="breadcrumb">
+      <li><a href="/">{% trans "Home" %}</a></li>
+      <li><a>{% trans "Company" %}</a></li>
+      <li><a>{% trans "List" %}</a></li>
+    </ul>
+  </div>
+{% endblock %}
+{% block scripts %}
+{% endblock %}
+{% block title %}{% trans "Company" %}{% endblock %}
+{% block acc_content %}
+  <script>
+  $('#bt_list_user_management').addClass('current');
+  </script>
+  <!-- Here goes the content. -->
+  <section id="content" class="container_12 clearfix" data-sort=true>
+    <h1 class="grid_12">{{company.name}} {% trans "staff" %}</h1>
+    <div class="grid_12">
+      <div class="box">
+        <div class="content">
+          <table class="dynamic styled" data-show-Filter-Bar="true">
+            <colgroup>
+              <!--<col span="1">-->
+              <col span="1">
+              <col span="1">
+              <col span="1">
+              <col span="1">
+              <col span="1">
+              {% if request.user.is_focus %}<col span="1">{% endif %}
+              <col span="1" style="width: 100px;">
+            </colgroup>
+            <thead>
+              <tr>
+                <!--<th>id</th>-->
+                <th>{% trans "First Name" %}</th>
+                <th>{% trans "Last Name" %}</th>
+                <th>{% trans "E-mail" %}</th>
+                <th>{% trans "Phone" %}</th>
+                <th>{% trans "Mobile phone" %}</th>
+
+                {% if request.user.is_focus %}
+                <th>{% trans "Company" %}</th>
+                {% endif %}
+
+                <th>{% trans "Actions" %}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for person in staff %}
+                <tr>
+                  <!--<td><input type="checkbox"></td>-->
+                  <!--<td>{{person.id}}</td>-->
+                  <td>{{person.first_name}}</td>
+                  <td>{{person.last_name}}</td>
+                  <td>{{person.email}}</td>
+                  <td>{{person.phone|phonenumber}}</td>
+                  <td>{{person.m_phone|phonenumber}}</td>
+
+                  {% if request.user.is_focus %}
+                  <td>{{person.company.name}}</td>
+                  {% endif %}
+
+                  <td class="center">
+                    {% if 'price_plan_view' in request.user.rights %}
+                       <a href="{% url 'companies.views.user_info_by_id' person.id %}"
+                          class="showUserInfo button small grey tooltip" data-gravity="s" title="{% trans "Show user info" %}"><i
+                            class="icon-info-sign"></i></a>
+                    {% else %}
+                       <a class="showUserInfo button small grey tooltip disabled" data-gravity=s title="{% trans "Show user info" %}"><i
+                            class="icon-info-sign"></i></a>
+                    {% endif %}
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div><!-- End of .content -->
+      </div><!-- End of .box -->
+    </div><!-- End of .grid_12 -->
+  </section><!-- End of #content -->
+{% endblock %}
+{% block addons %}
+  <!-- The settings dialog -->
+{% endblock %}

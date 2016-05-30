@@ -1,0 +1,34 @@
+{% load i18n %}
+<table id="report-pattern-table" class="dynamic styled" data-show-Filter-Bar="true" data-max-items-per-page="25">
+        <thead>
+        <tr>
+            <th id="id-col" class="required-col">{% trans "ID" %}</th>
+            <th id="patternname-col">{% trans "Template Name" %}</th>
+            <th id="patternname-col">{% trans "Is For ...?" %}</th>
+            <th id="createdate-col">{% trans "Created At" %}</th>
+            <th>{% trans "Actions" %}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for row in data %}
+            <tr row-id="{{ row.id }}" data-id="{{ row.id }}" data-marker="0">
+                <td>{{ row.id }}</td>
+                <td>{{ row.name|default_if_none:'' }}</td>
+                <td>
+                    {% if row.is_for_company == 0 %}
+                        {% trans "Focus Only" %}
+                    {% elif row.company_id != None %}
+                        {{ row.company.name }}
+                    {% else %}
+                        {% trans "All Companies" %}
+                    {% endif %}
+                </td>
+                <td>{{ row.dt_create|date:'d.m.Y H:i:s'|default_if_none:'' }}</td>
+                <td>
+                    <a href="{% url 'reports_views.views.edit_report_pattern' row.id %}" class="button small grey tooltip" data-gravity='s' original title="{% trans "Edit" %}"><i class="icon-pencil"></i></a>
+                   <a href="{% url 'reports_views.views.remove_report_pattern' %}" data-name="{{ row.name|default_if_none:'' }}" data-id="{{ row.id }}" class="button small grey tooltip removeShablon" data-gravity='s' original title="{% trans "Remove" %}"><i class="icon-remove"></i></a>
+                </td>
+             </tr>
+        {% endfor %}
+        </tbody>
+    </table>

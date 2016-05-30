@@ -1,0 +1,139 @@
+{% extends 'acc_base.html' %}
+{% load staticfiles %}
+{% load acctags %}
+{% load filters %}
+{% load i18n %}
+{% block breadcrumb %}
+    <div class="left">
+        <ul class="breadcrumb">
+            <li><a href="/">{% trans "Home" %}</a></li>
+            <li><a href="{% url 'movies.views.all' %}">{% trans "Movies" %}</a></li>
+            <li><a href="{% url 'movies.views.add_edit' %}">{% if mode == 'edit' %}{% trans "Edit Movie" %}{% else %}{% trans "Add Movie" %}{% endif %}</a></li>
+        </ul>
+    </div>
+{% endblock %}
+{% block title %}
+    {% if mode == 'edit' %}{% trans "Edit Movie" %}{% else %}{% trans "Add New Movie" %}{% endif %}
+{% endblock %}
+
+{% block acc_content %}
+    <script>
+        {% if mode == 'add' %}
+            $('#bt_add_movie').addClass('current');
+            $('.accordion li a').removeClass('open');
+            $('#bt_add_movie').parent().prev().addClass('open');
+        {% else %}
+            $('#bt_movies_list_view').addClass('current');
+            $('.accordion li a').removeClass('open');
+            $('#bt_movies_list_view').parent().prev().addClass('open');
+        {% endif %}
+    </script>
+    <section id="content" class="container_12 clearfix ui-sortable" data-sort="true">
+        <h1 class="grid_12">{% if mode == 'edit' %}{% trans "Edit Movie" %}{% else %}{% trans "Add Movie" %}{% endif %}</h1>
+
+        <div class="spacer"></div>
+        <div class="grid_12">
+            <div id="addMovieBox" class="box">
+                <div class="header">
+                    <h2>{% trans "Movie Details" %}</h2>
+                </div>
+                <form action="{% url 'movies.views.add_edit' mode movie.id %}" method="post" class="full content validate" id="addMovie">
+                    {% csrf_token %}
+                    <fieldset>
+                        <div class="row">
+                            <label for="imgPath">
+                                <strong>{% trans "Cover" %}</strong>
+                            </label>
+
+                            <div>
+                                <input type="file" name="imgPath" id="imgPath" accept="image/gif, image/jpeg, image/png">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label for="length">
+                                <strong>{% trans "Length" %}</strong>
+                            </label>
+
+                            <div>
+                                <input type="text" name="length" id="length" pattern='[0-9]+' value="{{ movie.length|default_if_none:'' }}">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label for="releaseYear">
+                                <strong>{% trans "Release Year" %}</strong>
+                            </label>
+
+                            <div>
+                                <input type="text" name="releaseYear" id="releaseYear" pattern='[1-9]{1}[0-9]{3}' value="{{ movie.release_year|default_if_none:'' }}">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label for="releaseDate">
+                                <strong>{% trans "Release Date" %}</strong>
+                            </label>
+
+                            <div>
+                                <input readonly class="default-date-picker" type="text" name="releaseDate" id="releaseDate"
+                                       date-format="mm/dd/yy" value="{{ movie.dt_release|date:'m/d/y' }}">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label for="dvdReleaseDate">
+                                <strong>{% trans "DVD Release Date" %}</strong>
+                            </label>
+
+                            <div>
+                                <input readonly class="default-date-picker" type="text" name="dvdReleaseDate" id="dvdReleaseDate"
+                                       date-format="mm/dd/yy" value="{{ movie.dt_dvd_release|date:'m/d/y' }}">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label for="rating">
+                                <strong>{% trans "Rating" %}</strong>
+                            </label>
+
+                            <div>
+                                <select name="rating" id="rating" class="search" data-placeholder="{% trans "Choose movie rating" %}">
+                                    <option value=""></option>
+                                    {% for rating in ratings %}
+                                        <option value="{{ rating.id }}" {% if rating.id == movie.movie_rating_id %}selected{% endif %}>{{ rating.value }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label for="rating">
+                                <strong>{% trans "Translations" %}</strong>
+                            </label>
+
+                            <div>
+                                <select id="movieTranslation" class="search" data-placeholder="{% trans "Choose language of translation to be added" %}">
+                                    <option value=""></option>
+                                    {% for lang in languages %}
+                                        <option data-name="{{ lang.name }}" value="{{ lang.id }}" {% if lang.id in exclude_langs %}disabled{% endif %}>{{ lang.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+                <div data-name="translations" id="movieTranslations">
+                    {% for trans in movie_trans %}
+                        {% include 'movies_trans_pattern.html' %}
+                    {% endfor %}
+                </div>
+                <div class="actions">
+                    <div class="right">
+                        <input type="submit" value="{% if mode == 'edit' %}{% trans "Save" %}{% else %}{% trans "Add" %}{% endif %}">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="hidden">
+        {% with need_id=True %}
+            {% include 'movies_trans_pattern.html' %}
+        {% endwith %}
+    </div>
+{% endblock %}

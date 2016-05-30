@@ -1,0 +1,19 @@
+{% for val in report_data %}
+    {% with agg_caption=val.agg_caption report_table_header=report_table_header rep_data=val.rep_data agg_data=val.agg_data sub_total=val.sub_total_data %}
+        {% if val.rep_data %}
+            <div class="row">
+                <div class="grid_12">
+                    <div class="overflow-x">
+                        {% include 'report/content/data.html' %}
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+        <div class="row">
+            <div class="grid_6">
+                {% include 'report/content/aggregations.html' %}
+            </div>
+        </div>
+    {% endwith %}
+{% endfor %}

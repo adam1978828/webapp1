@@ -1,0 +1,46 @@
+{% load i18n %}
+<div class="filters-set" hidden style="display:none;">
+    {% for filter in report.filters %}
+        <div class="grid_12 rep-filter filter-by-{{ filter.model_field_name }}">
+            <input type="text" name="alias" value="{{ filter.model_field_name }}" hidden style="display:none;">
+            <label class="grid_2">{{ filter.readable_name }}</label>
+
+            <div class="grid_3">
+                <select class="form-control input-sm" name="op_alias">
+                    {% for op in filter.filters.operations %}
+                        <option value="{{ op.alias }}">{{ op.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="grid_3">
+                {% if filter.filters.values %}
+                    <select class="form-control input-sm" name="data">
+                        {% for val in filter.filters.values %}
+                            <option value="{{ val.key }}">{{ val.val }}</option>
+                        {% endfor %}
+                    </select>
+                {% elif filter.field_type.alias == 'date' %}
+                    <input readonly class="default-date-picker" name="data" type="text" value="">
+                {% elif filter.field_type.alias == 'datetime' %}
+                    <input readonly class="default-date-picker2" name="data" type="text" value="">
+                {% else %}
+                    <input class="form-control input-sm" name="data" type="text" value="">
+                {% endif %}
+            </div>
+
+            <div class="grid_3">
+                {% if 'pattern' in mode %}
+                    <select class="form-control input-sm" name="is_final">
+                        <option value="2" {% if fil.is_final == 2 %}selected{% endif %}>{% trans "Condition is final" %}</option>
+                        <option value="1" {% if fil.is_final == 1 %}selected{% endif %}>{% trans "Condition and value are final" %}</option>
+                        <option value="0" {% if fil.is_final == 0 %}selected{% endif %}>{% trans "Not final" %}</option>
+                    </select>
+                {% endif %}
+            </div>
+            {% if 'pattern' in mode %}
+                <a class="button medium remove-filter pull-left"><i class="icon-minus"></i></a>
+            {% endif %}
+        </div>
+    {% endfor %}
+</div>

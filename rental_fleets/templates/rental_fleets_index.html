@@ -1,0 +1,144 @@
+{% extends 'acc_base.html' %}
+{% load staticfiles %}
+{% load acctags %}
+{% load filters %}
+{% load i18n %}
+{% block breadcrumb %}
+        <div class="left">
+            <ul class="breadcrumb">
+                <li><a href="/">{% trans "Home" %}</a></li>
+                <li><a href="{% url 'rental_fleets.views.index' %}">{% trans "Rental fleet" %}</a></li>
+            </ul>
+        </div>
+{% endblock %}
+{% block title %}{% trans "Rental Fleet" %}{% endblock %}
+
+{% block acc_content %}
+<script>
+    $('#bt_rental_fleets_view').addClass('current');
+    $('.accordion li a').removeClass('open');
+    $('#bt_rental_fleets_view').parent().prev().addClass('open');
+</script>
+  <section id="content" class="container_12 clearfix ui-sortable" data-sort="true">
+
+    {% if filter_company %}<h1 class="grid_12">{% trans "Company:" %} {{ company.name }}</h1><div class="spacer"></div>{% endif %}
+
+    <h1 class="grid_12">{% trans "Rental Fleet" %}</h1>
+    <div class="spacer"></div>
+
+    {% if 'price_plans_add_assignment' in request.user.rights %}
+    <form action="{% url 'rental_fleets.views.index' %}" method="post" class="grid_12" id="rentalFleets" name="rentalFleets">
+      {% csrf_token %}
+      <fieldset>
+
+        {% if request.user.is_focus %}
+        <div class="row" {% if filter_company %}style="display: none"{% endif %}>
+            <label for="f_company_id">
+                <strong>{% trans "Company" %}</strong>
+            </label>
+            <div>
+                <select name="f_company_id" id="rentalFleetCompany" class="search" data-placeholder="{% trans "Choose a Company" %}" data-tariff-plans-url="{% url 'rental_fleets.views.ajax_get_tariff_plans' %}">
+                    {% for compan in companies %}
+                        <option value="{{compan.id}}" {% if company.id == compan.id %}selected{% endif %} >{{compan.name}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+            {% if filter_company %}
+            <input type="text" name="filter_company" value="{{company.id}}" style="display: none">
+            {% endif %}
+
+        {% endif %}
+
+         <div class="row">
+          <label for="upcLink">
+            <strong>{% trans "UPC" %}</strong>
+          </label>
+          <div>
+            <select data-search-url="{% url 'rental_fleets.views.upc_search' %}" name="upcLink" id="upcLink" class="search" data-placeholder="{% trans "Search for UPC" %}">
+              <option value=""></option>
+              {% for upc in upcs %}
+                <option value="{{upc.upc}}">{{upc.upc}}</option>
+              {% endfor %}
+              <option value="" disabled>{% trans "And" %} {{upcs_amount}} {% trans "others..." %}</option>
+            </select>
+          </div>
+        </div>
+        <div class="row">
+          <label for="tariffPlanId">
+            <strong>{% trans "Price Plan" %}</strong>
+          </label>
+          <div>
+            <select name="tariffPlanId" id="rentalFleetTariffPlanId" class="search" data-placeholder="{% trans "Choose price plan" %}">
+              <option value=""></option>
+              {% for tp in tariffPlans %}
+                <option value="{{tp.id}}">{{ tp.name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+        <div class="actions">
+          <div class="right">
+            <input type="submit" value="{% trans "Add" %}" />
+          </div>
+        </div>
+      </fieldset>
+    </form>
+    {% endif %}
+
+    <div class="grid_12">
+    <div class="box">
+			<div class="content">
+      <table data-id='rentalFleets' class="styled" data-show-Filter-Bar="true">
+        <thead>
+          <tr>
+            <th>{% trans "id" %}</th>
+            <th>{% trans "Content" %}</th>
+            <th>{% trans "UPC" %}</th>
+            <th>{% trans "Price Plan" %}</th>
+
+            {% if request.user.is_focus and not filter_company %}
+            <th>{% trans "Company" %}</th>
+            {% endif %}
+
+            <th>{% trans "Actions" %}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for disk in rentalFleets %}
+            <tr>
+              <td class="center">{{ forloop.counter }}</td>
+              <td class="center">{{ disk.upc.movie.get_name }} ({{ disk.upc.format.name }}) / {{ disk.upc.movie.release_year }}</td>
+              <td class="center"><a href="{% url 'rental_fleets.views.show_upc' disk.upc.upc %}">{{ disk.upc.upc }}</a></td>
+              <td class="center">{{ disk.tariff_plan.name }}</td>
+
+                {% if request.user.is_focus and not filter_company %}
+                  <td>{{ disk.company.name }}</td>
+                {% endif %}
+
+              <td class="center">
+                <a data-id="editRentalFlit" class="small grey button tooltip" title="{% trans "Edit rental fleet" %}">
+                  <i class="icon-edit"></i>
+                </a>
+                <a href="{% url 'rental_fleets.views.show_upc' disk.upc.upc %}" data-id="showUPC" class="small grey button tooltip" title="{% trans "Show UPC" %}">
+                  <i class="icon-info-sign"></i>
+                </a>
+                <a data-id="showPricePlan" class="small grey button tooltip" title="{% trans "Show price plan" %}">
+                  <i class="icon-cog"></i>
+                </a>
+              </td>
+            </tr>
+          {% endfor %}
+            {% if not rentalFleets %}
+                <tr>
+                    <td colspan="4">{% trans "No data available in table" %}</td>
+                </tr>
+            {% endif %}
+        </tbody>
+      </table>
+            </div>
+    </div>
+    </div><!-- End of .content -->
+  </section>
+{% endblock %}

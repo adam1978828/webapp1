@@ -1,0 +1,26 @@
+<!-- Search bar -->
+{% load staticfiles %}
+<div class="search-wrapper">
+  <div class="container container--add">
+    <form id='search-form' method='get'
+          action="{% if request.preferred_kiosk %}{% url 'sites.views.specific_kiosk' request.preferred_kiosk.id %}{% else %}{% url 'sites.views.movies_search' %}{% endif %}"
+          class="search mega-select">
+      <input type="text" class="search__field" name="query" placeholder="Search">
+      <select name="category" id="search-sort" class="search__sort" tabindex="0">
+        <option value="title" {% if search_category == "title" %}selected{% endif %}>by title</option>
+        <option value="description" {% if search_category == "description" %}selected{% endif %}>by plot</option>
+        <option value="genre" {% if search_category == "genre" %}selected{% endif %}>by genre</option>
+        <option value="rating" {% if search_category == "rating" %}selected{% endif %}>by rating</option>
+        <option value="year" {% if search_category == "year" %}selected{% endif %}>by year</option>
+      </select>
+      <button type='submit' class="btn btn-md btn--danger search__button">search a movie</button>
+      <div class="select__dropdowns">
+        <ul class="select__group genre">
+          {% for genre in genres %}
+            <li class="select__variant" data-value="{{ genre }}">{{ genre }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </form>
+  </div>
+</div>

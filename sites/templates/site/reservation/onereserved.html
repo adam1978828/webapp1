@@ -1,0 +1,56 @@
+{% extends 'site/base.html' %}
+{% load staticfiles %}
+{% load i18n %}
+{% block title %} {% trans "Reservation" %} - {{request.company.name}}{% endblock %}
+{% block content %}
+    {% include 'site/search_panel.html' %}
+    <!-- Main content -->
+        <section class="container">
+            <div class="order-container">
+                <div class="order">
+                    <img class="order__images" alt='' src="/static/site/images/tickets.png">
+                    <p class="order__title">{% trans "Thank you" %} <br><span class="order__descript">{% trans "you have successfully purchased movie" %}</span></p>
+                </div>
+
+                <div class="ticket">
+                    <div class="ticket-position">
+                        <div class="ticket__indecator indecator--pre"><div class="indecator-text pre--text">{% trans "online reservetion" %}</div> </div>
+                        <div class="ticket__inner">
+                            <div class="ticket-secondary">
+                                <span class="ticket__item">{% trans "Reserved number" %} <strong class="ticket__number">a126bym4</strong></span>
+                                <span class="ticket__item ticket__date">25/10/2013</span>
+                                <span class="ticket__item ticket__time">17:45</span>
+                                <span class="ticket__item">{% trans "Kiosk:" %} <span class="ticket__cinema">{% trans "Cineworld" %}</span></span>
+                                <span class="ticket__item">{% trans "Hall:" %} <span class="ticket__hall">{% trans "Visconti" %}</span></span>
+                                <span class="ticket__item ticket__price">{% trans "price:" %} <strong class="ticket__cost">$60</strong></span>
+                            </div>
+                            <div class="ticket-primery">
+                                <span class="ticket__item ticket__item--primery ticket__film">{% trans "Movies" %}
+                                    {% for movie in reservation %}
+                                    <br><strong class="ticket__movie">{{ movie.upc.movie.get_name }}</strong>
+                                    {% endfor %}
+                                </span>
+                            </div>
+
+
+                        </div>
+                        <div class="ticket__indecator indecator--post"><div class="indecator-text post--text">{% trans "online reservation" %}</div></div>
+                    </div>
+                </div>
+
+                <div class="ticket-control">
+                    <a href="#" class="watchlist list--download">{% trans "Download" %}</a>
+                    <a href="#" class="watchlist list--print">{% trans "Print" %}</a>
+                </div>
+
+            </div>
+        </section>
+    <!-- End Main content -->
+{% endblock %}
+{% block script %}
+ <script type="text/javascript">
+              $(document).ready(function() {
+                 init_onereserved();
+              });
+		  </script>
+ {% endblock %}

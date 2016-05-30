@@ -1,0 +1,71 @@
+{% extends 'acc_base.html' %}
+{% load staticfiles %}
+{% load acctags %}
+{% load filters %}
+{% load i18n %}
+{% block breadcrumb %}
+    <div class="left">
+        <ul class="breadcrumb">
+            <li><a href="/">{% trans "Home" %}</a></li>
+            <li><a href="{% url 'companies.views.view_list' %}">{% trans "Company" %}</a></li>
+            <li><a href="{% url 'companies.views.settings' %}">{% trans "Company settings" %}</a></li>
+        </ul>
+    </div>
+{% endblock %}
+{% block scripts %}
+    <script type="text/javascript" 
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAVZeU0hq_SAiOlFfbsO1Gz4ZQuHTLxz3Q"></script>
+{% endblock %}
+{% block title %}{% trans "Company settings" %}{% endblock %}
+{% block acc_content %}
+<script>
+    $('#bt_list_settings').addClass('current');
+</script>
+    <section id="content" class="container_12 clearfix ui-sortable" data-sort="true">
+        <h1 class="grid_12">{% trans "Company settings" %}</h1>
+        <div class="spacer"></div>
+
+    <div class="grid_12">
+				<div class="box">
+					<div class="content">
+
+						<table class="dynamic styled" data-show-Filter-Bar="true">
+							<colgroup>
+							   <col span="1">
+							</colgroup>
+
+							<thead>
+								<tr>
+                                    <th>{% trans "Company" %}</th>
+								</tr>
+							</thead>
+							<tbody>
+                            {% for company in companies %}
+								<tr>
+									<td><a href="{% url 'companies.views.company_settings' company.id %}">{{company.name}}</a></td>
+								</tr>
+                            {% endfor %}
+							</tbody>
+						</table>
+
+					</div><!-- End of .content -->
+
+				</div><!-- End of .box -->
+			</div><!-- End of .grid_12 -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </section>
+{% endblock %}
+

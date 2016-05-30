@@ -1,0 +1,44 @@
+{% extends 'acc_base.html' %}
+{% load staticfiles %}
+{% load i18n %}
+
+{% block breadcrumb %}
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}
+
+{% block title %}{% trans "Error 404" %}{% endblock %}
+
+
+{% block acc_content %}
+
+
+		<!-- Here goes the content. -->
+        <section id="content" class="container_12 clearfix" data-sort=true>
+			<div class="big error">
+
+				<div class="big">
+					<h2>{% trans "Something went wrong here..." %}</h2>
+					<h1>{% trans "404" %}</h1>
+				</div>
+
+				<div class="small">
+
+					<span>
+						{% trans "Oops! Sorry, an error has occured." %}
+					</span>
+					<span>
+						{% trans "Requested page not found!" %}
+					</span>
+
+				</div><!-- End of .small -->
+
+			</div><!-- End of .error -->
+        </section><!-- End of #content -->
+
+{% endblock %}
+
+{% block addons %}
+
+{% endblock %}

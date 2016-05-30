@@ -1,0 +1,52 @@
+{% load i18n %}
+
+<h1 class="grid_12"><span>{{ template.name }}</span></h1>
+
+<form class="grid_12 no-box" method="post" novalidate="novalidate" id="jasperReportParams" action="{% url 'reports_views.views.download_jasper_report' %}" target="_blank">
+    {% csrf_token %}
+    <input type="text" class="hidden" id="alias" name="alias" value="{{ template.alias }}">
+    <fieldset>
+        <legend>{% trans "Report Parameters" %}</legend>
+
+        {% for val in controls %}
+            <div class="row {% if request.user.is_company and val.id == 'Company_ID' %}hidden{% endif %}">
+                <label for="{{ val.id }}">
+                    <strong>{{ val.label }} {% if val.mandatory %}*{% endif %}</strong>
+                </label>
+
+                <div>
+                    {% if val.type == 'singleValueDate' %}
+                        {% with rule=val.validationRules|get_dict_item_from_list:'dateTimeFormatValidationRule' %}
+                            <!--date-format="{{ rule.format|default_if_none:'dd.mm.yy' }}"-->
+                            <input readonly class="default-date-picker" type="text" name="{{ val.id }}" id="{{ val.id }}" date-format="yy-mm-dd">
+                        {% endwith %}
+                    {% elif val.type == 'singleValueDateTime' %}
+                        <input readonly class="default-date-picker2" type="text" name="{{ val.id }}" id="{{ val.id }}">
+                    {% elif val.type == 'singleValueNumber' %}
+                        <input class="form-control input-sm {% if request.user.is_company %}hidden{% endif %}" type="text" name="{{ val.id }}" id="{{ val.id }}" {% if request.user.is_company %}value='{{ request.user.company.id }}'{% endif %}>
+                    {% elif val.type == 'singleValueString' %}
+                        <input class="form-control input-sm" type="text" name="{{ val.id }}" id="{{ val.id }}">
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    </fieldset>
+    <div class="actions">
+        <div class="left">
+            <button class="" id="jasperBuildButton" data-url="{% url 'reports_views.views.build_jasper_html_report' %}">
+                <span class="icon icon-play"></span> {% trans "Build" %}
+            </button>
+        </div>
+        <div class="right">
+            <select class="" id="format" name="format">
+                {% for val in formats %}
+                    <option value="{{ val.format }}">{{ val.name }}</option>
+                {% endfor %}
+            </select>
+
+            <button>
+                <span class="icon icon-download"></span> {% trans "Download" %}
+            </button>
+        </div>
+    </div>
+</form>

@@ -1,0 +1,72 @@
+{% extends 'site/base.html' %}
+{% load staticfiles %}
+{% load filters %}
+{% load i18n %}
+{% block title %}{% trans "Movie info" %} {{movie.get_name}}{% endblock %}
+{% block content %}
+{% include 'site/search_panel.html' %}
+    <!-- Main content -->
+        <section class="container">
+            <div class="col-md-12">
+                <div class="movie">
+                    <h2 class="page-heading">{{movie.get_name}}</h2>
+                    <div class="movie__info">
+                        <div class="col-sm-6 col-md-4 movie-mobile">
+                            <div class="movie__images">
+                                 <img alt="{{movie.get_name}}" src="{{ MEDIA_URL }}movie/poster{{movie.img_path}}">
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-8">
+                            <p class="movie__time">{{movie.length}} {% trans "min" %}</p>
+                            <p class="movie__option"><strong>{% trans "Year:" %} </strong><a href="#">{{movie.release_year}}</a></p>
+                            <p class="movie__option"><strong>{% trans "Genre:" %} </strong>{% for genre in movie.movie_genre %}<a href="{% url 'sites.views.movies_search' %}?query={{ genre.get_title }}&category=genre">{{genre.get_title}}</a>{% if not forloop.last %} | {% endif %}{% endfor %}</p>
+                            <p class="movie__option"><strong>{% trans "Rating:" %} </strong>{{movie.movie_rating.value}}</p>
+                            <div class="movie__btns">
+                                {% with kiosk_available_formats=movie|available_kiosk_formats:request.preferred_kiosk %}
+                                    {% for format in movie|available_formats:request.company %}
+                                         {% if movie|get_upc:format.id|intersect:request.movies_in_cart %}
+                                            <a href="{% url 'sites.views.cart' %}" class="btn btn-md btn--warning">{% trans "Movie" %} {{ format.name }} {% trans "in cart" %}</a>
+                                        {% else %}
+                                            {% if movie in request.preferred_kiosk.movies and format in kiosk_available_formats or not request.preferred_kiosk %}
+                                                <a href="{% url 'sites.views.add_to_cart' %}" data-movie="{{ movie.id }}" data-id="{{ format.id }}" class="btn btn-md btn--warning btn-add-cart-pref">{% trans "Reserve" %} {{ format.name }}</a>
+                                                <a href="{% url 'sites.views.cart' %}" class="btn btn-hides btn-md btn--warning" style="display:none;">{% trans "Movie" %} {{ format.name }} {% trans "in cart" %}</a>
+                                            {% else %}
+                                                <a href="{% url 'sites.views.add_to_cart' %}" data-movie="{{ movie.id }}" data-id="{{ format.id }}" class="btn btn-md btn--warning btn-add-cart-pref">{{ format.name }} {% trans "not available in this kiosk" %}</a>
+                                            {% endif %}
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endwith %}
+                                {% csrf_token %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <h2 class="page-heading">{% trans "The plot" %}</h2>
+                    <p class="movie__describe">{{movie.get_description}}</p>
+                </div>
+                <div  class="map">
+                    <div id='cimenas-map'></div>
+                    <div id='no-map' style="display:none;">{% trans "No kiosks" %}</div>
+                    <div class="hide" style="display:none;">
+                        <div class="kioskpattern">
+                            <span class="pop_up_box_text">
+                                <div>{% trans "Kiosk Name:" %} <span id="kioskname"></span></div>
+                                <div>{% trans "Address:" %} <span id="kioskaddress"></span></div>
+                                <div id="kiosklink"><a href="">{% trans "All Kiosk Movies" %}</a></div>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <div class="clearfix"></div>
+    <!-- End Main content -->
+{%endblock%}
+{% block script %}
+    <script type="text/javascript">
+        $(document).ready(function() {
+            window['kiosks'] = {% autoescape off %}{{ kiosks }}{% endautoescape %};
+            init_MoviePage();
+        });
+    </script>
+{% endblock %}

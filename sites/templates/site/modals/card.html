@@ -1,0 +1,35 @@
+{% load acctags %}
+{% load i18n %}
+<div class="overlay card overlay-hugeinc">
+    <section class="container">
+        <div class="col-sm-4 col-sm-offset-4">
+            <button type="button" class="overlay-close">{% trans "Close" %}</button>
+            <form id="card-form" action="{% url 'sites.views.choose_card' %}" class="login" method='post' novalidate=''>
+                {% csrf_token %}
+                {% if request.user.cards %}
+                    <p class="login__title">{% trans "Select a card" %}</p>
+                    <div class="field-wrap select">
+                        <div class="choosekiosk">{% trans "From existing:" %}</div>
+                        <select id="cardnumberexisting" class="select__sort" tabindex="0" name="cardId">
+                            {% for r in request.user.cards %}
+                                <option value="{{r.id}}">{{r.number|maskcardnumber}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <p class="login__tracker">{% trans "or" %}</p>
+                    <p class="login__title"><span class="login-edition">{% trans "Add a New One" %}</span></p>
+                {% else %}
+                    <p class="login__title"><span class="login-edition">{% trans "Enter Credit Card Details" %}</span></p>
+                {% endif %}
+                <div class="field-wrap">
+                    <input type='text' id="cardNumber" placeholder='{% trans "Card number" %}' name='cardNumber' class="login__input">
+                    <input type='text' id="cardExpiry" placeholder='{% trans "Card expiry" %}' name='cardExpiry' class="login__input">
+                </div>
+                <div class="login__control">
+                    <button type='submit' id="pay" class="btn btn-md btn--warning btn--wider">{% trans "pay" %}</button>
+                </div>
+                <div class="clear"></div>
+            </form>
+        </div>
+    </section>
+</div>

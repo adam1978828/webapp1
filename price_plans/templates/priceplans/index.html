@@ -1,0 +1,110 @@
+{% extends 'acc_base.html' %}
+{% load staticfiles %}
+{% load acctags %}
+{% load i18n %}
+{% block breadcrumb %}
+  <div class="left">
+    <ul class="breadcrumb">
+      <li><a href="/">{% trans "Home" %}</a></li>
+      <li><a href="{% url 'price_plans.views.all_price_plans' %}">{% trans "Price plans" %}</a></li>
+    </ul>
+  </div>
+{% endblock %}
+{% block title %}{% trans "Price plans" %}{% endblock %}
+{% block acc_content %}
+  <script>
+    $('#priceplans').addClass('current');
+    $('.accordion li a').removeClass('open');
+  </script>
+  <section id="content" class="container_12 clearfix" data-sort=true>
+    <h1 class="grid_12">{% trans "Price plans" %}</h1>
+
+    <div class="grid_12">
+
+      {% if 'price_plan_add' in request.user.rights %}
+      <a id="addTariffPlan" original-title="{% trans "Add price plan" %}" class="button"
+         href="{% url 'price_plans.views.add_price_plan' %}"><span class="icon icon-plus"></span>{% trans "Add new" %}</a>
+      <div class="spacer"></div>
+      {% endif %}
+
+      <div class="box">
+        <div class="content">
+          <table id="tablePayments" class="styled">
+            <thead>
+            <tr>
+              <th>№</th>
+              <th>{% trans "Name" %}</th>
+              <th>{% trans "First-night" %}</th>
+              <th>{% trans "Next-night" %}</th>
+              <th>{% trans "Sale" %}</th>
+              <th>{% trans "Charge per Day" %}</th>
+              <th>{% trans "Last change by" %}</th>
+              <th>{% trans "Date" %}</th>
+
+                {% if request.user.is_focus %}
+                  <th>{% trans "Company" %}</th>
+                {% endif %}
+
+              <th>{% trans "Actions" %}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% if tariff_plans|length > 0 %}
+              {% for plan in tariff_plans %}
+                <tr>
+                  <td>{{ forloop.counter }}</td>
+                  <td>{{ plan.name }}</td>
+                  <td>{{ plan.last_tariff_value.first_night|stringformat:"0.2f" }}</td>
+                  <td>{{ plan.last_tariff_value.next_night|stringformat:"0.2f" }}</td>
+                  <td>{{ plan.last_tariff_value.sale|stringformat:"0.2f" }}</td>
+                  <td>
+                    {% if plan.last_tariff_value.sun_night %}Sun: ${{plan.last_tariff_value.sun_night}} {% endif %}
+                    {% if plan.last_tariff_value.mon_night %}Mon: ${{plan.last_tariff_value.mon_night}} {% endif %}
+                    {% if plan.last_tariff_value.tue_night %}Tue: ${{plan.last_tariff_value.tue_night}} {% endif %}
+                    {% if plan.last_tariff_value.wed_night %}Wed: ${{plan.last_tariff_value.wed_night}} {% endif %}
+                    {% if plan.last_tariff_value.thu_night %}Thu: ${{plan.last_tariff_value.thu_night}} {% endif %}
+                    {% if plan.last_tariff_value.fri_night %}Fri: ${{plan.last_tariff_value.fri_night}} {% endif %}
+                    {% if plan.last_tariff_value.sat_night %}Sat: ${{plan.last_tariff_value.sat_night}}{% endif %}
+                  </td>
+                  <td>{{ plan.last_tariff_value.user.name }}</td>
+                  <td>{{ plan.last_tariff_value.dt_start|date:'m.d.Y H:i:s' }}</td>
+
+                    {% if request.user.is_focus %}
+                      <td>{{ plan.company.name }}</td>
+                    {% endif %}
+
+                  <td class="center">
+
+                    {% if 'price_plan_edit' in request.user.rights %}
+                       <a href="{% url 'price_plans.views.edit_price_plan' plan.id %}"
+                       class="editTariffPlan button small grey tooltip" data-gravity="s" title="{% trans "Edit price plan" %}"><i
+                            class="icon-pencil"></i></a>
+                    {% else %}
+                       <a class="editTariffPlan button small grey tooltip disabled" data-gravity="s" title="{% trans "Edit price plan" %}"><i
+                            class="icon-pencil"></i></a>
+                    {% endif %}
+
+                    {% if 'price_plan_view' in request.user.rights %}
+                       <a href="{% url 'price_plans.views.show_price_plan' plan.id %}"
+                          class="showTariffPlan button small grey tooltip" data-gravity="s" title="{% trans "Show price plan" %}"><i
+                            class="icon-info-sign"></i></a>
+                    {% else %}
+                       <a class="showTariffPlan button small grey tooltip disabled" data-gravity=s title="{% trans "Show price plan" %}"><i
+                            class="icon-info-sign"></i></a>
+                    {% endif %}
+
+                  </td>
+                </tr>
+              {% endfor %}
+            {% else %}
+              <tr>
+                <td colspan="9">{% trans "Add first tarif plan" %}</td>
+              </tr>
+            {% endif %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}

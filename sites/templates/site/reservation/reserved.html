@@ -1,0 +1,55 @@
+{% extends 'site/base.html' %}
+{% load staticfiles %}
+{% load i18n %}
+{% block title %}{% trans "My reservation" %}{% endblock %}
+{% block content %}
+    {% include 'site/search_panel.html' %}
+    <!-- Main content -->
+        <section class="container">
+            <div class="col-sm-12">
+                <h2 class="page-heading">{% trans "My reservations" %}</h2>
+                {% if not reservations %}
+                    <div class="alert alert-info" style="margin-bottom: 15px;">
+                        <span class="icon-info"></span>
+                        {% trans "No reservations" %}
+                    </div>
+                {% endif %}
+                {% regroup reservations by secret_code as res_by_code %}
+                            {% for res_group in res_by_code %}
+                                <a href="{# {% url 'sites.views.user_reservation' res_group.grouper %} #}"><h1>{{res_group.grouper}}</h1></a>
+                <div class="row" id="cartrefresh">
+                    <div class="movie-best2">
+                        <div class="col-sm-12 change--col">
+                                {% for r in res_group.list %}
+                                    <div class="movie-beta__item ">
+                                        <a href="{% url 'sites.views.movie_details' r.disk.upc.movie.id %}">
+                                            <div style="background-image: url({{ MEDIA_URL }}movie/poster{{ r.disk.upc.movie.img_path }});" class="imgbg">
+                                                <img alt="" src="/media/movie/poster/back.png">
+                                            </div>
+                                        </a>
+                                        <div class="movie__info">
+                                            <a href='{% url 'sites.views.movie_details' r.disk.upc.movie.id %}' class="movie__title">{{r.disk.upc.movie.get_name}}</a>
+                                            <p class="movie__option disk_format"><img src="{{ MEDIA_URL }}{{r.disk.upc.format.img_path}}"></p>
+                                       <!-- <p class="movie__time">{{ r.disk.upc.movie.length }} min</p>-->
+                                            <p class="movie__option">{% for genre in r.disk.upc.movie.movie_genre %}<a href="{% url 'sites.views.movies_search' %}?query={{ genre.get_title }}&category=genre">{{genre.get_title}}</a>{% if not forloop.last %} | {% endif %}{% endfor %}</p>
+                                            <p class="movie__option">{% trans "First night:" %} <span class="book-result__count booking-cost">{{request.preferred_kiosk.settings.currency.symbol }}{{ r.tariff_value.first_night }}</span></p>
+                                            <p class="movie__option">{% trans "Next night:" %} <span class="book-result__count booking-cost">{{request.preferred_kiosk.settings.currency.symbol }}{{ r.tariff_value.next_night }}</span></p>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </section>
+    <!-- End Main content -->
+
+{% endblock %}
+
+{% block script %}
+<script type="text/javascript">
+$(document).ready(function(){init_Reserved();});
+</script>
+ {% endblock %}

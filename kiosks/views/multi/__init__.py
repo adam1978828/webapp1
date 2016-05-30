@@ -1,0 +1,2 @@
+from settings import multi_settings
+from global_inventory import global_review_inventory

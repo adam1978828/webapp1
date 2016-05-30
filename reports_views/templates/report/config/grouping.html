@@ -1,0 +1,11 @@
+<div class="grouping-set" hidden style="display:none;">
+    {% for val in report.grouping %}
+        <div class="rep-group-by group-by-{{ val.model_field_name }}">
+            <div class="grid_10">
+                <input type="text" name="alias" value="{{ val.model_field_name }}" hidden style="display:none;">
+                <input type="text" readonly class="form-control input-sm" value="{{ val.readable_name }}">
+            </div>
+            <a class="button medium remove-group pull-left"><i class="icon-minus"></i></a>
+        </div>
+    {% endfor %}
+</div>

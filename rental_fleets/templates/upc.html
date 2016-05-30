@@ -1,0 +1,87 @@
+{% extends 'acc_base.html' %}
+{% load static %}
+    {% get_media_prefix as media_prefix %}
+{% load acctags %}
+{% load filters %}
+{% load i18n %}
+{% block breadcrumb %}
+        <div class="left">
+            <ul class="breadcrumb">
+                <li><a href="/">{% trans "Home" %}</a></li>
+                <li><a href="{% url 'rental_fleets.views.index' %}">{% trans "Rental fleets" %}</a></li>
+                <li><a href="">{% trans "UPC details" %}</a></li>
+            </ul>
+        </div>
+{% endblock %}
+{% block title %}{% trans "UPC Details" %}{% endblock %}
+
+{% block acc_content %}
+    <script>
+    $('#bt_rental_fleets_view').addClass('current');
+    $('.accordion li a').removeClass('open');
+    $('#bt_rental_fleets_view').parent().prev().addClass('open');
+</script>
+  <section id="content" class="container_12 clearfix" data-sort="true">
+    <div class="profile">
+      <div class="details grid_12">
+        <h2>{% trans "UPC Details" %}</h2>
+        <section>
+          <table>
+            <tr>
+              <th>{% trans "UPC:" %}</th><td>{{upc.upc}}</td>
+            </tr>
+            <tr>
+              <th>{% trans "Content type:" %}</th><td>{% trans "Movie" %}</td>
+            </tr>
+            <tr>
+              <th>{% trans "Format:" %}</th><td>{{upc.format.name}}</td>
+            </tr>
+            <tr>
+              <th>{% trans "Price Plan:" %}</th><td>{{ tariff_plan.name }}</td>
+            </tr>
+            <tr>
+              <th>{% trans "Disk Amount:" %}</th><td>{{upc.disk|length}}</td>
+            </tr>
+          </table>
+        </section>
+      </div><!-- End of .details -->
+      {% if movie %}
+        <div class="details grid_12">
+          <h2>{% trans "Content" %}</h2>
+          <section>
+            <div class="disk-cover">
+              <img src="/media/movie/poster{{movie.img_path}}" width="120px">
+            </div>
+            <table>
+              <tr>
+                <th>{% trans "Name:" %}</th><td>{{movie.get_name}}</td>
+              </tr>
+              <tr>
+                <th>{% trans "Description:" %}</th><td>{{movie.get_description}}</td>
+              </tr>
+              <tr>
+                <th>{% trans "Length:" %}</th><td>{{movie.length}}</td>
+              </tr>
+              <tr>
+                <th>{% trans "Release year:" %}</th><td>{{movie.release_year}}</td>
+              </tr>
+              <tr>
+                <th>{% trans "Rating:" %}</th><td>{{movie.movie_rating.value}}</td>
+              </tr>
+              <tr>
+                <th>{% trans "Languages:" %}</th><td>{{movie.language_string}}</td>
+              </tr>
+            </table>
+          </section>
+        </div><!-- End of .details -->
+      </div>
+    {% else %}
+      <div class="details grid_12">
+          <h2>{% trans "Content" %}</h2>
+          <section>
+            {% trans "No movies" %}
+          </section>
+        </div><!-- End of .details -->
+    {% endif %}
+  </section>
+{% endblock %}

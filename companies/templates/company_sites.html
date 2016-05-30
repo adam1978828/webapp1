@@ -1,0 +1,91 @@
+{% extends 'acc_base.html' %}
+{% load staticfiles %}
+{% load acctags %}
+{% load filters %}
+{% load i18n %}
+{% block breadcrumb %}
+        <div class="left">
+            <ul class="breadcrumb">
+                <li><a href="/">{% trans "Home" %}</a></li>
+                <li><a href="{% url 'companies.views.view_list' %}">{% trans "Company" %}</a></li>
+
+                {% if request.user.is_focus %}
+                <li><a href="{% url 'companies.views.company_sites' company.id %}">{% trans "Client site management" %}</a></li>
+                {% else %}
+                <li><a href="{% url 'companies.views.sites' %}">{% trans "Client site management" %}</a></li>
+                {% endif %}
+
+            </ul>
+        </div>
+{% endblock %}
+{% block title %}{% trans "Company client site management" %}{% endblock %}
+
+{% block acc_content %}
+  <script>
+    $('#bt_company_client_sites').addClass('current');
+    $('.accordion li a').removeClass('open');
+    $('#bt_company_client_sites').parent().prev().addClass('open');
+  </script>
+  <section id="content" class="container_12 clearfix ui-sortable" data-sort="true">
+
+    {% if request.user.is_focus %}<h1 class="grid_12">{% trans "Company:" %} {{ company.name }}</h1>{% endif %}
+
+    <div class="grid_12">
+      <div  class="box">
+        <div class="header">
+          <h2>{% trans "Client site management (Your current domain:" %} <span id='curDomain'>{{ site.domain }}</span>)</h2>
+        </div>
+
+        {% if request.user.is_focus %}
+            <form id='companySite' action="{% url 'companies.views.ajax_save_company_sites' company.id %}" method="post" class="full content validate">
+        {% else %}
+            <form id='companySite' action="" method="post" class="full content validate">
+        {% endif %}
+
+
+          {% csrf_token %}
+          <fieldset>
+            <div class="row">
+              <label for="domain">
+                <strong>{% trans "Domain" %}</strong>
+              </label>
+              <div>
+                <input data-error-type="inline" type="text" class="required" name="domain" id="domain" value="{{site.domain|default:""}}">
+              </div>
+            </div>
+            <div class="row">
+              <label for="logo">
+                <strong>{% trans "Logo" %}</strong>
+                {% if site.logo_path %}
+                <img src="/media/company/{{ site.company.id }}/sites/logos/{{ site.logo_path }}" id="f_img_logo" class="f_site_img_logo" alt="{{ site.name }}" width="100" height="100">
+                {% else %}
+                <img src="" id="f_img_logo" class="f_site_img_logo" alt="{{ site.name }}" width="100" height="100">
+                {% endif %}
+              </label>
+              <div>
+                <input type="file" name="logo" id="logo" class="f_site_logo" accept="image/gif, image/jpeg, image/png">
+              </div>
+            </div>
+            <div class="row">
+              <label for="supportEmail">
+                <strong>{% trans "Support Email" %}</strong>
+              </label>
+              <div>
+                <input data-error-type="inline" type="text" class="required" name="supportEmail" id="supportEmail" value="{{ site.support_email|default:"" }}">
+              </div>
+            </div>
+          </fieldset>
+        </form>
+
+        {% if 'company_edit_sites' in request.user.rights %}
+        <div class="actions">
+          <div class="right">
+            <input id='bindSiteToCompany' type="submit" value="{% trans "Bind" %}">
+          </div>
+        </div>
+        {% endif %}
+
+      </div>
+    </div>
+  </section>
+{% endblock %}

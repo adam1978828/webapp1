@@ -1,0 +1,28 @@
+{% load i18n %}
+<table id="report-table" class="dynamic styled" data-show-Filter-Bar="true" data-max-items-per-page="25">
+    <thead>
+        <tr>
+            <th id="id-col" class="required-col">{% trans "ID" %}</th>
+            <th id="reprotname-col">{% trans "Report Name" %}</th>
+            <th id="createdate-col">{% trans "Created At" %}</th>
+            <th id="patternname-col">{% trans "Report Pattern Name" %}</th>
+            <th>{% trans "Actions" %}</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        {% for row in data %}
+            <tr row-id="{{ row.id }}" data-id="{{ row.id }}" data-marker="0">
+                <td>{{ row.id }}</td>
+                <td>{{ row.name|default_if_none:'' }}</td>
+                <td>{{ row.dt_create|date:'d.m.Y H:i:s'|default_if_none:'' }}</td>
+                <td>{{ row.pattern.name|default_if_none:'' }}</td>
+                <td>
+                   <a href="{% url 'reports_views.views.show_report' row.id %}" class="button small grey tooltip" data-gravity='s' original title="{% trans "Show" %}"><i class="icon-eye-open"></i></a>
+                   <a class="button small grey tooltip" data-gravity='s' original title="{% trans "Download" %}" href="{% url 'reports_views.views.download_report' row.id %}" target="_blank"><i class="icon-download"></i></a>
+                   <a href="{% url 'reports_views.views.remove_report' %}" data-name="{{ row.name|default_if_none:'' }}" data-id="{{ row.id }}" class="button small grey tooltip removeOtchet" data-gravity='s' original title="{% trans "Remove" %}"><i class="icon-remove"></i></a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+</table>

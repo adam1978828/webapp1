@@ -1,0 +1,42 @@
+{% load filters %}
+{% load i18n %}
+{% for movie in movies %}
+    <div class="movie movie--preview movie--full release">
+        <div class="col-sm-3 col-md-2 col-lg-2">
+            <div class="movie__images">
+                <a href="{% url 'sites.views.movie_details' movie.id %}">
+                    <img alt='{{movie.get_name}}' src="{{ MEDIA_URL }}movie/poster{{movie.img_path}}">
+                </a>
+            </div>
+        </div>
+        <div class="col-sm-9 col-md-10 col-lg-10 movie__about">
+            <a href="{% url 'sites.views.movie_details' movie.id %}" class="movie__title link--huge">{{movie.get_name}}</a>
+            <p class="movie__time">{{movie.length}} {% trans "min" %}</p>
+            <p class="movie__option"><strong>{% trans "Genre:" %} </strong>{% for genre in movie.movie_genre %}<a href="{% url 'sites.views.movies_search' %}?query={{ genre.get_title }}&category=genre">{{genre.get_title}}</a>{% if not forloop.last %} | {% endif %}{% endfor %}</p>
+            <p class="movie__option"><strong>{% trans "Year:" %} </strong>{{movie.release_year}}</p>
+            {% if movie.dt_dvd_release %}
+            <p class="movie__option"><strong>{% trans "DVD Release:" %} </strong>{{movie.dt_dvd_release|date:'m/d/y' }}</p>
+            {% endif %}
+            <p class="movie__option"><strong>{% trans "Rating:" %} </strong>{{movie.movie_rating.value}}</p>
+            <p class="movie__option"><strong>{% trans "Plot Synopsis:" %} </strong>{{movie.get_description|truncatewords:50}}</p>
+            <div class="movie__btns">
+                {% with kiosk_available_formats=movie|available_kiosk_formats:request.preferred_kiosk %}
+                    {% for format in movie|available_formats:request.company %}
+                        {% if movie|get_upc:format.id|intersect:request.movies_in_cart %}
+                            <a href="{% url 'sites.views.cart' %}" class="btn btn-md btn--warning">{% trans "Movie" %} {{ format.name }} {% trans "in cart" %}</a>
+                        {% else %}
+                            {% if movie in request.preferred_kiosk.movies and format in kiosk_available_formats or not request.preferred_kiosk %}
+                                <a href="{% url 'sites.views.add_to_cart' %}" data-movie="{{ movie.id }}" data-id="{{ format.id }}" class="btn btn-md btn--warning btn-add-cart-pref">{% trans "Reserve" %} {{ format.name }}</a>
+                                <a href="{% url 'sites.views.cart' %}" class="btn btn-hides btn-md btn--warning" style="display:none;">{% trans "Movie" %} {{ format.name }} {% trans "in cart" %}</a>
+                            {% else %}
+                                <a href="{% url 'sites.views.add_to_cart' %}" data-movie="{{ movie.id }}" data-id="{{ format.id }}" class="btn btn-md btn--warning btn-add-cart-pref">{{ format.name }} {% trans "not available in this kiosk" %}</a>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                {% endwith %}
+                {% csrf_token %}
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+{% endfor %}

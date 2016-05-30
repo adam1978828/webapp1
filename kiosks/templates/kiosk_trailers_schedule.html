@@ -1,0 +1,76 @@
+{% extends 'acc_base.html' %}
+{% load staticfiles %}
+{% load acctags %}
+{% load filters %}
+{% load i18n %}
+{% block breadcrumb %}
+  <div class="left">
+    <ul class="breadcrumb">
+      <li><a href="/">{% trans "Home" %}</a></li>
+      <li><a href="{% url 'kiosks.views.view_list' %}">{% trans "All Kiosks" %}</a></li>
+      <li><a href="{% url 'kiosks.views.trailers_schedule' kiosk_id %}">{% trans "Trailers Schedule" %}</a></li>
+    </ul>
+  </div>
+{% endblock %}
+{% block title %}{% trans "Trailers Schedule" %}{% endblock %}
+{% block acc_content %}
+  <script>
+  $('#bt_kiosks_list').addClass('current');
+  $('.accordion li a').removeClass('open');
+  </script>
+  <section id="content" class="container_12 clearfix ui-sortable" data-sort="true">
+    <div class="grid_12">
+      <div  class="box">
+        <div class="header">
+          <h2>{% trans "Trailers Schedule" %}</h2>
+        </div>
+        <form id='kioskTrailersSchedule' action="" method="post" class="full content validate">
+          {% csrf_token %}
+          <fieldset>
+            <div class="row">
+              <label for="schedule">
+                <strong>{% trans "Schedule" %}</strong>
+              </label>
+              <div>
+                <div class="scheduler small">
+                  <div class="left">
+                    <input data-id='filter' class="ignore" placeholder="{% trans "Filter entries..." %}" type="text">
+                    <select multiple="" class="ignore">
+                      {% for trailer, title in company_trailers %}
+                        <option data-id="{{trailer}}" name="trailer">{{title}}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                  <div class="buttons">
+                    <a data-id='add' class="button flat">&nbsp;&gt;&nbsp;</a>
+                    <a data-id='del' class="button flat">&nbsp;&lt;&nbsp;</a>
+                    <a data-id='up' class="button flat">&nbsp;&uarr;&nbsp;</a>
+                    <a data-id='down' class="button flat">&nbsp;&darr;&nbsp;</a>
+                  </div>
+                  <div class="right">
+                    <input data-id='filter' class="ignore" placeholder="{% trans "Filter entries..." %}" type="text">
+                    <select multiple="" class="ignore">
+                      {% for trailer, title in schedule %}
+                        <option data-id="{{trailer}}" name="trailer">{{title}}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </fieldset>
+        </form>
+
+        {% if 'kiosk_trailers_schedule_add' in request.user.rights %}
+        <div class="actions">
+          <div class="right">
+            <input id='defTrailerSchedule' type="submit" value="{% trans "Save" %}">
+          </div>
+        </div>
+        {% endif %}
+
+
+      </div>
+    </div>
+  </section>
+{% endblock %}

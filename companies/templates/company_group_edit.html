@@ -1,0 +1,74 @@
+{% extends 'acc_base.html' %}
+{% load staticfiles %}
+{% load static %}
+{% load acctags %}
+{% load i18n %}
+{% block breadcrumb %}
+  <div class="left">
+    <ul class="breadcrumb">
+      <li><a href="/">{% trans "Home" %}</a></li>
+      <li><a>{% trans "Company" %}</a></li>
+      <li><a>{% trans "Permission group settings" %}</a></li>
+    </ul>
+  </div>
+{% endblock %}
+{% block scripts %}
+{% endblock %}
+{% block title %}{% trans "Permission group settings" %}{% endblock %}
+{% block acc_content %}
+  <script>
+  $('#bt_list_group').addClass('current');
+  </script>
+  <!-- Here goes the content. -->
+<section id="content" class="container_12 clearfix" data-sort=true>
+    <h1 class="grid_12">{% trans "Edit permissions:" %}</h1>
+    <form id="editGroupForm" action="{% url 'companies.views.save_group' group.id %}" class="grid_12 validate" method="post">
+        {% csrf_token %}
+
+        <fieldset>
+            <legend>{% trans "Group Name" %}</legend>
+            <div class="row">
+              <label for="group_name">
+                <strong>{% trans "Name" %}</strong>
+              </label>
+              <div>
+                <input type="text" name="group_name" id="group_name" value="{{ group.name }}">
+              </div>
+            </div>
+        </fieldset>
+        {% for object in sys_objects %}
+            <fieldset>
+                <legend>{{object.name}}</legend>
+                {% for function in object.functions %}
+
+                    {% if function.for_company %}
+                    <div class="row">
+                        <label for="{{prefix}}{{function.id}}">
+                            <strong>{{function.name}}</strong>
+                        </label>
+                        <div>
+                            <div>
+                                <input type="checkbox" name='{{prefix}}{{function.id}}' id='{{prefix}}{{function.id}}'
+                                {% if function.id in functions %}
+                                    checked
+                                {% endif %}
+                                />
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                {% endfor %}
+            </fieldset>
+        {% endfor %}
+        <div class="actions">
+            <div class="right">
+                <input id="editGroupBtn" type="submit" value="{% trans "Submit" %}" />
+            </div>
+        </div><!-- End of .actions -->
+    </form>
+</section><!-- End of #content -->
+{% endblock %}
+{% block addons %}
+  <!-- The settings dialog -->
+{% endblock %}

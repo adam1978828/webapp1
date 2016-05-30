@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load i18n %}
+
+{% block breadcrumb %}
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/script_auth.js' %}"></script>
+{% endblock %}
+
+{% block right_buttons %}
+    <div class="right">
+        <ul>
+            <li>
+                <a href="{% url 'authentication.views.login' %}">
+                    <span class="icon i14_admin-user"></span>
+                    {% trans "Login" context "process, like 'to sign in', button label" %}
+                </a>
+            </li>
+            <!--<li class="red"><a href="#">Red Button</a></li>-->
+        </ul>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <!-- The header containing the logo -->
+    <script type="text/javascript">document.getElementsByTagName('body')[0].className+=' login'</script>
+	<header class="container_12">
+
+		<div class="container">
+
+			<!-- Your logos -->
+			<a href="#"><img src="{% static 'img/focus-logo.png' %}" alt="Focus" height="60"></a>
+			<a class="phone-title" href="#"><img src="{% static 'img/focus-logo.png' %}" alt="Focus" width="70"></a>
+
+		</div><!-- End of .container -->
+
+	</header><!-- End of header -->
+
+    {% block form %}
+    {% endblock %}
+
+{% endblock %}
+

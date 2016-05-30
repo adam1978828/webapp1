@@ -1,0 +1,11 @@
+<div class="field-wrapper" {% if not without_id %}id="notBlankFieldWrapper"{% endif %}>
+    <div class="grid_3">
+        <input type="text" class="form-control input-sm" name="readable_name" value="{{ tmp_readable_name|default_if_none:'' }}" readonly>
+    </div>
+
+    <div class="grid_3 col-xs-10">
+        <input type="text" name="alias" value="{{ tmp_alias|default_if_none:'' }}" hidden style="display:none;">
+        <input type="text" class="form-control input-sm" maxlength="50" name="header" value="{{ tmp_header|default_if_none:'' }}">
+    </div>
+    <a class="button medium remove-field"><i class="icon-minus"></i></a>
+</div>

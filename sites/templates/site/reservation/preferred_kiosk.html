@@ -1,0 +1,32 @@
+{% load i18n %}
+<form method="POST">
+  {% csrf_token %}
+  <label for="kioskId">{% trans "Kiosk Id" %}</label>
+  <input type="text" name="kioskId" id="kioskId">
+  <input type="submit" value="Submit">
+</form>
+
+<br>
+
+<h2>{% trans "Current:" %}</h2>
+<p>{{request.preferred_kiosk.id}}</p>
+<p>{{request.preferred_kiosk.settings.alias}}</p>
+<!--
+  URL: 
+    => {% url 'sites.views.preferred_kiosk' %}
+    => /company/kiosks/preferred/
+  
+  Тут должна быть возможность смотреть предпочитаемый киоск и менять предпочтение, если нужно.
+  Запросы:
+  => Для просмотра "GET":
+    - без входных параметров
+    - получить текущий предпочитаемый киоск можно через request.preferred_kiosk (будет либо киоск, либо None)
+    - список всех киосков компании (для возможности изменения предпочтений) получить через request.company.kiosks
+  => Для изменения предпочтений "POST":
+    - входной параметр kiosk_id - id киоска
+    - возвращаю JSON ответ в стандартном формате (success/error) - выводить модалкой ответ по типу
+    <div>
+      <div class="header">{{response.type}}</div>
+      <div class="content">{{response.message}}</div>
+    </div>
+  -->

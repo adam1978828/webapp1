@@ -1,0 +1,95 @@
+{% extends 'acc_base.html' %}
+{% load staticfiles %}
+{% load acctags %}
+{% load filters %}
+{% load i18n %}
+{% block breadcrumb %}
+    <div class="left">
+        <ul class="breadcrumb">
+            <li><a href="/">{% trans "Home" %}</a></li>
+            <li><a href="{% url 'kiosks.views.view_list' %}">{% trans "Kiosks" %}</a></li>
+            <li><a href="">{% trans "Kiosk Bash" %}</a></li>
+        </ul>
+    </div>
+{% endblock %}
+{% block title %}{% trans "Kiosk Bash" %}{% endblock %}
+{% block acc_content %}
+    <script>
+        $('#bt_kiosks_list').addClass('current');
+        $('.accordion li a').removeClass('open');
+    </script>
+
+    <section id="content" class="container_12 clearfix">
+        <section class="grid_12">
+            <div class="grid_X">
+                <form id="sendBash" class="box">
+                    <div class="header">
+                        <h2>{% trans "Command" %}</h2>
+                    </div>
+                    <div class="content">
+                        <div class="row">
+                            <label for="command_line">
+                                <strong>{% trans "Command Line" %}</strong>
+                            </label>
+
+                            <div>
+                                <input type="text" name='command_line' id="command"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="actions">
+                        <div class="left">
+                            <input type="reset" value="{% trans "Clear" %}"/>
+                        </div>
+                        <div class="right">
+                            <input id="butBash"
+                                   data-url="{% url 'kiosks.views.ajax_kiosk_bash' kiosk_id %}"
+                                   type="submit" value="{% trans "Send" %}" name="send"/>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="box">
+                <div class="content">
+                    <table class="newtable styled">
+                        <thead>
+                        <tr>
+                            <th>{% trans "Id" %}</th>
+                            <th>{% trans "User Name" %}</th>
+                            <th>{% trans "Command" %}</th>
+                            <th>{% trans "Exec Result" %}</th>
+                            <!--<th>{% trans "Exec Error" %}</th>-->
+                            <th>{% trans "Created At" %}</th>
+                            <th>{% trans "Executed At" %}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for row in commands %}
+                            <tr>
+                                <td>{{ row.id }}</td>
+                                <td>{{ row.user.email }}
+                                <td>{{ row.command }}</td>
+                                <td>
+                                    {% if row.exec_result %}
+                                        <textarea class="nogrow" style="width: 100%" wrap="off" rows="10" readonly>{{ row.exec_result }}</textarea>
+                                    {% endif %}
+                                </td>
+                                <!--<td>
+                                    {% if row.exec_err %}
+                                        <textarea class="nogrow" style="width: 100%" wrap="off" rows="10" readonly>{{ row.exec_err }}</textarea>
+                                    {% endif %}
+                                </td>-->
+                                <td>{{ row.dt_create|date:'m/d/y H:i:s'|default:'-' }}</td>
+                                <td>{{ row.dt_executed|date:'m/d/y H:i:s'|default:'-' }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <!-- End of .content -->
+            </div>
+            <!-- End of .box -->
+        </section>
+    </section>
+{% endblock %}
+

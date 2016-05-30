@@ -1,0 +1,143 @@
+{% extends 'acc_base.html' %}
+{% load staticfiles %}
+{% load acctags %}
+{% load filters %}
+{% load i18n %}
+{% block breadcrumb %}
+        <div class="left">
+            <ul class="breadcrumb">
+                <li><a href="/">{% trans "Home" %}</a></li>
+                <li><a href="{% url 'rental_fleets.views.index' %}">{% trans "Rental fleets" %}</a></li>
+                <li><a href="{% url 'rental_fleets.views.disks' %}">{% trans "Disks" %}</a></li>
+                <li><a href="">{% trans "Disk details" %}</a></li>
+            </ul>
+        </div>
+{% endblock %}
+{% block title %}{% trans "Disk Details" %}{% endblock %}
+
+{% block acc_content %}
+    <script>
+        $('#bt_rental_fleets_disks').addClass('current');
+        $('.accordion li a').removeClass('open');
+        $('#bt_rental_fleets_disks').parent().prev().addClass('open');
+    </script>
+    <section id="content" class="container_12 clearfix" data-sort="true">
+        <h1 class="grid_12">{% trans "Disk Details" %}</h1>
+        <div class="spacer"></div>
+        <div class="covers">
+            {% if disk.upc %}
+                <img src="{{ MEDIA_URL }}movie/poster{{disk.upc.movie.img_path}}" alt="{% trans "Poster" %}" width="250">
+                <img src="{{ MEDIA_URL }}movie/backdrop{{disk.upc.movie.bd_path}}" alt="{% trans "Backdrop" %}" width="250">
+            {% else %}
+                <img src="{{ MEDIA_URL }}disk_photo/{{disk.disk_photo.id}}.jpg" alt="{% trans "Photo from kiosk" %}" width="250">
+            {% endif %}
+        </div>
+        <form class="grid_12 no-box">
+            <fieldset>
+                <div class="row">
+                    <label>
+                        <strong>{% trans "RF id:" %}</strong>
+                    </label>
+                    <div class="topmargin">
+                        {{disk.rf_id}}
+                    </div>
+                </div>
+                <div class="row">
+                    <label>
+                        <strong>{% trans "UPC:" %}</strong>
+                    </label>
+                    <div class="topmargin">
+                        {{disk.upc.upc}}
+                    </div>
+                </div>
+                <div class="row">
+                    <label>
+                        <strong>{% trans "Name:" %}</strong>
+                    </label>
+                    <div class="topmargin">
+                        {{disk.upc.movie.get_name}}
+                    </div>
+                </div>
+                <div class="row">
+                    <label>
+                        <strong>{% trans "Format:" %}</strong>
+                    </label>
+                    <div class="topmargin">
+                        {{ disk.upc.format.name }}
+                    </div>
+                </div>
+                <div class="row">
+                    <label>
+                        <strong>{% trans "Kiosk:" %}</strong>
+                    </label>
+                    <div class="topmargin">
+                        {% if disk.kiosk.settings.alias %}
+                          {{disk.kiosk.settings.alias}}
+                        {% else %}
+                          {{disk.kiosk.address.to_string}}
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="row">
+                    <label>
+                        <strong>{% trans "Kiosk slot:" %}</strong>
+                    </label>
+                    <div class="topmargin">
+                       {{disk.slot.number}}
+                    </div>
+                </div>
+                <div class="row">
+                    <label>
+                        <strong>{% trans "Status:" %}</strong>
+                    </label>
+                    <div class="topmargin">
+                        {% trans "Lorem Ipsum etc." %}
+                    </div>
+                </div>
+                <div class="row">
+                    <label>
+                        <strong>{% trans "Disk condition:" %}</strong>
+                    </label>
+                    <div class="topmargin">
+                        {{disk.disk_condition.value}}
+                    </div>
+                </div>
+            </fieldset>
+                <!-- End of .details -->
+        </form>
+    </section>
+    <section id="content" class="container_12 clearfix ui-sortable" data-sort="true">
+        <h1 class="grid_12">{% trans "Transactions" %}</h1>
+
+        <div class="spacer"></div>
+        <div class="grid_12">
+            <div class="box">
+                <div class="content"><!-- dynamic -->
+                    <input id="data-url" type="text" class="hidden" value="{% url 'deals.views.show_deal' 'replace' %}">
+                    <table id="deals-table" class="dynamic styled all-deals"
+                           data-show-Filter-Bar="true" data-max-items-per-page=25
+                           data-data-table='{"aaSorting":[[4, "desc" ]], "bServerSide":true, "bProcessing":true, "sAjaxSource":"{% url 'deals.views.json_deals' disk.rf_id %}" }'>
+                        <thead>
+                            <tr>
+                                <!--<th>{% trans "ID" %}</th>-->
+                                <th>{% trans "ID" %}</th>
+                                <th>{% trans "Card" %}</th>
+                                <th>{% trans "Title" %}</th>
+                                <th>{% trans "Status" %}</th>
+                                <th>{% trans "Date Start" %}</th>
+                                <th>{% trans "Date End" %}</th>
+                                <th>{% trans "Start Kiosk" %}</th>
+                                {% if request.user.is_focus %}
+                                    <th>{% trans "Company" %}</th>
+                                {% endif %}
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- End of .content -->
+    </section>
+
+{% endblock %}

@@ -1,0 +1,87 @@
+{% extends 'auth_base.html' %}
+{% load staticfiles %}
+{% load i18n %}
+
+{% block title %}
+    {% trans "Restore password" context "page title" %}
+{% endblock %}
+
+{% block breadcrumb %}
+{% endblock %}
+
+
+{% block form %}
+    <!-- The container of the sidebar and content box -->
+	<section id="login" class="container_12 clearfix">
+
+		<form method="post" class="box validate" name="new_password_form" id="new_password_form">
+            {% csrf_token %}
+
+			<div class="header">
+				<h2>
+                    <span class="icon icon-lock"></span>
+                    {% trans "Restore password for " %}{{email}}
+                </h2>
+			</div>
+
+			<div class="content">
+
+				<!-- Login messages -->
+				<div class="login-messages">
+					<div class="message welcome">
+                        {% trans "Please, enter new password" %}
+                    </div>
+					<div class="message failure">
+                        {% trans "Invalid passwords." %}
+                    </div>
+				</div>
+
+				<!-- The form -->
+				<div class="form-box">
+
+					<div class="row">
+                        <label for="v1_password">
+                            <strong>
+                                {% trans "Password" %}
+                            </strong>
+                        </label>
+                        <div>
+                            <input class="required meter password" type="password" name="v1_password" id="v1_password" />
+                            <!--<input class="required strongpw small password meter ready" name="settings-password">-->
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <label for="v1_repeat_password">
+                            <strong>
+                                {% trans "Repeat Password" %}
+                            </strong>
+                        </label>
+                        <div>
+                            <input class="required" equalTo="#v1_password" type="password" name="v1_repeat_password" id="v1_repeat_password" />
+                        </div>
+                    </div>
+
+				</div><!-- End of .form-box -->
+
+			</div><!-- End of .content -->
+
+            <div class="center-elements" id="login_div" style="display: none;">
+                <div class="right">
+                    <a href="{% url 'authentication.views.login' %}" class="button block">
+                        <span class="icon i14_admin-user"></span>
+                        {% trans "Login" %}
+                    </a>
+                </div>
+            </div>
+
+			<div class="actions">
+				<div class="right">
+					<input tabindex=2 type="submit" value="{% trans "Restore" %}" name="login_btn" />
+				</div>
+			</div><!-- End of .actions -->
+
+		</form><!-- End of form -->
+
+	</section>
+{% endblock %}

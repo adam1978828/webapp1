@@ -1,0 +1,57 @@
+{% extends 'acc_base.html' %}
+{% load staticfiles %}
+{% load acctags %}
+{% load i18n %}
+{% block breadcrumb %}
+    <div class="left">
+        <ul class="breadcrumb">
+            <li><a href="/">{% trans "Home" %}</a></li>
+            <li><a href="{% url 'reports_views.views.reports' %}">{% trans "Reports" %}</a></li>
+        </ul>
+    </div>
+{% endblock %}
+{% block title %}{% trans "Reports" %}{% endblock %}
+
+
+{% block acc_content %}
+  <script>
+      $('#bt_reports').addClass('current');
+      $('.accordion li a').removeClass('open');
+      $('#bt_reports').parent().prev().addClass('open');
+  </script>
+ <section id="content" class="container_12 clearfix ui-sortable" data-sort="true">
+    <h1 class="grid_12">{% trans "Reports" %}</h1>
+    <div class="spacer"></div>
+    <form id="" class="grid_12 no-box" name="" method="post" action="" novalidate="novalidate">
+        <fieldset>
+            <legend>{% trans "Create Report" %}</legend>
+            <div class="row">
+                <label for="f_k_id">
+                    <strong>{% trans "Reports" %}</strong>
+                </label>
+                <div>
+                    <select class="" id="customReportPatterns">
+                        {% for val in patterns %}
+                            <option value="{% url 'reports_views.views.create_report' val.id %}">{{ val.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </fieldset>
+        <div class="actions">
+            <div class="right">
+                <button class="" id="createReport">
+                   <span class="icon icon-plus"></span> {% trans "Add" %}
+                </button>
+            </div>
+        </div>
+    </form>
+    <div class="grid_12">
+        <div class="box">
+            <div class="content">
+                {% include 'reports_table.html' %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

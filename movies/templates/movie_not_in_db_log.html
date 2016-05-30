@@ -1,0 +1,10 @@
+{% load i18n %}
+<p data-id='log'>
+  {% if movie %}
+    {% trans "Try to add:" %} {{movie}} <br/>
+  {% endif %}
+  {% if found %}
+    {% trans "Found:" %} {{found}} <br/>
+  {% endif %}
+  <font color="{{color}}">{{message}}</font> <br/><br/>
+</p>

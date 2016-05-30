@@ -1,0 +1,14 @@
+{% load i18n %}
+<p data-id='log'>
+  {% trans "Try to add:" %} {{movie}} <br/>
+  <font color="green">{% trans "FOUND: in db" %} #{{id}}</font> <br/>
+  {% if wrong %}
+    <font color="red">{{error}}</font><br/>
+    <font color="{{color}}">{{message}}</font><br/><br/>
+  {% else %}
+    {% if need_update %}
+      <font color="#DAA520">{% trans "PRESCRIBED TO UPDATE" %}</font> <br/>
+    {% endif %}
+    <font color="{{color}}">{{message}}</font><br/><br/>
+  {% endif %}
+</p>

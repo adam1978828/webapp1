@@ -1,0 +1,66 @@
+{% load i18n %}
+<fieldset>
+    <legend>{% trans "Address" %}</legend>
+    <div class="row">
+        <label for="line_1">
+            <strong>{% trans "Google map search" %}</strong>
+        </label>
+        <div>
+            <input class="find-input pull-left" data-reverse-geolocation="true" data-geolocation="formatted_address" type="text" name="line_1" id="line1" autocomplete="off"value="{{ addr.line_3|default_if_none:'' }}" />
+            <button class="find pull-left">{% trans "Find" %}</button>
+        </div>
+        <div class="clear"></div>
+    </div>
+    <div class="row">
+        <label for="line_1">
+            <strong>{% trans "Address 1" %}</strong>
+        </label>
+        <div>
+            <input type="text" name="line_3" id="line3" autocomplete="off" value="{{ addr.line_1|default_if_none:'' }}" />
+        </div>
+    </div>
+    <div class="row">
+        <label for="line_2">
+            <strong>{% trans "Address 2" %}</strong>
+        </label>
+        <div>
+            <input type="text" name="line_2" autocomplete="off" id="line2" value="{{ addr.line_2|default_if_none:'' }}" />
+        </div>
+    </div>
+
+    <div class="row">
+        <label for="i_city">
+            <strong>{% trans "City" %}</strong>
+        </label>
+        <div>
+            <input data-geolocation="locality" autocomplete="off" type="text" name="i_city" id="city" value="{{ addr.city|default_if_none:'' }}" />
+        </div>
+    </div>
+
+    <div class="row">
+        <label for="i_state">
+            <strong>{% trans "State" %}</strong>
+        </label>
+        <div>
+            <input data-geolocation="administrative_area_level_1" type="text" autocomplete="off" name="i_state" id="state" value="{{ addr.state|default_if_none:'' }}" />
+        </div>
+    </div>
+
+    <div class="row">
+        <label for="i_post">
+            <strong>{% trans "Postal code" %}</strong>
+        </label>
+        <div>
+            <input data-geolocation="postal_code" type="text" name="i_post" autocomplete="off" id="postalcode" value="{{ addr.postalcode|default_if_none:'' }}" />
+        </div>
+    </div>
+
+    <div class="row">
+        <label for="i_country">
+            <strong>{% trans "Country" %}</strong>
+        </label>
+        <div>
+            <input data-geolocation="country" type="text" name="i_country" autocomplete="off" id="country" value="{{ addr.country|default_if_none:'' }}" />
+        </div>
+    </div>
+</fieldset>

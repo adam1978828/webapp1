@@ -1,0 +1,50 @@
+{% extends 'acc_base.html' %}
+{% load staticfiles %}
+{% load acctags %}
+{% load i18n %}
+{% block breadcrumb %}
+        <div class="left">
+             <ul class="breadcrumb">
+                <li><a href="/">{% trans "Home" %}</a></li>
+                <li><a href="{% url 'payments.views.payments' %}">{% trans "Payments" %}</a></li>
+                <li><a href="{% url 'payments.views.payments_add' %}">{% trans "Add" %}</a></li>
+             </ul>
+        </div>
+{% endblock %}
+
+{% block scripts %}
+<!--<script src="{% static 'js/script_company.js' %}"></script>-->
+{% endblock %}
+
+{% block title %}{% trans "Add payments account" %}{% endblock %}
+
+
+{% block acc_content %}
+    <script>
+    $('#bt_payments').addClass('current');
+</script>
+<section id="content" class="container_12 clearfix ui-sortable" data-sort="true">
+        <h1 class="grid_12">{% trans "Add merchant account" %}</h1>
+            <form class="grid_12 no-box" action="">
+                <fieldset class="">
+                     <legend>{% trans "Add payment system" %}</legend>
+                     <div class="row">
+                         <label for="choosepayment">
+                             <strong>{% trans "Choose payment system" %}</strong>
+                             <small>{% trans "Without search" %}</small>
+                         </label>
+                         <div>
+                             <select id="choosepayment" data-action="{% url 'payments.views.payments_template' %}" name="choosepayment" data-placeholder="{% trans "Choose a payment system" %}">
+                                 <option value=""></option>
+                                 <option value="1">{% trans "Linkpoint" %}</option>
+                                 <option value="2">{% trans "Firstdata" %}</option>
+                             </select>
+                         </div>
+                     </div>
+                </fieldset>
+            </form>
+        <!--Write your code here!-->
+        <div id="pattern">
+        </div>
+</section>
+{% endblock %}

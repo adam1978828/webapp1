@@ -1,0 +1,61 @@
+{% extends 'acc_base.html' %}
+{% load staticfiles %}
+{% load acctags %}
+{% load i18n %}
+{% block breadcrumb %}
+    <div class="left">
+        <ul class="breadcrumb">
+            <li><a href="/">{% trans "Home" %}</a></li>
+            <li><a href="{% url 'reports_views.views.jasper_reports' %}">{% trans "Jasper Reports" %}</a></li>
+        </ul>
+    </div>
+{% endblock %}
+{% block title %}{% trans "Reports" %}{% endblock %}
+
+
+{% block acc_content %}
+    <script>
+        $('#bt_jasper_reports').addClass('current');
+        $('.accordion li a').removeClass('open');
+        $('#bt_jasper_reports').parent().prev().addClass('open');
+    </script>
+    <section id="content" class="container_12 clearfix ui-sortable" data-sort="true">
+        <h1 class="grid_12">{% trans "Reports" %}</h1>
+
+        <div class="spacer"></div>
+        <form id="" class="grid_12 no-box" name="" method="post" action="" novalidate="novalidate">
+            <fieldset>
+                <legend>{% trans "Generate Report" %}</legend>
+                <div class="row">
+                    <label for="jasperReports">
+                        <strong>{% trans "Report" %}</strong>
+                    </label>
+
+                    <div>
+                        <select class="" id="jasperReports">
+                            {% for val in reports %}
+                                <option value="{{ val.alias }}">{{ val.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </fieldset>
+            <div class="actions">
+                <div class="right">
+                    <button class="" id="getJasperReportParams" data-url="{% url 'reports_views.views.get_jasper_report_params' %}">
+                        <span class="icon icon-plus"></span> {% trans "Create" %}
+                    </button>
+                </div>
+            </div>
+        </form>
+
+        <div id="reportContent">
+
+        </div>
+
+        <div class="grid_12" id="htmlReportContent">
+
+        </div>
+
+    </section>
+{% endblock %}

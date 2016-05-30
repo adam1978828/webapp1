@@ -1,0 +1,27 @@
+{% load i18n %}
+<h1 class="grid_12">{% trans "Review Log" %}</h1>
+
+<div class="spacer"></div>
+<div class="grid_12">
+    <div class="box">
+        <div class="content">
+            <table id='reviewsTable' class="dynamic styled" data-show-Filter-Bar="true" data-max-items-per-page="50" data-data-table='{"bServerSide":true, "bDeferRender":true,"bProcessing":true,"sAjaxSource":"{% url 'kiosks.views.ajax_review_all' kiosk.id %}"}'>
+                <thead>
+                <tr>
+                    <th>{% trans "ID" %}</th>
+                    <th>{% trans "Kiosk ID" %}</th>
+                    <th>{% trans "Start At" %}</th>
+                    <th>{% trans "End At" %}</th>
+                    <th>{% trans "Break At" %}</th>
+                    <th>{% trans "Reviewed" %}</th>
+                    <th>{% trans "Last Slot" %}</th>
+                    <th>{% trans "Runned By" %}</th>
+                </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+            <!--do your stuff-->
+        </div>
+        <!-- End of .content -->
+    </div>
+</div>

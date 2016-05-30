@@ -1,0 +1,339 @@
+{% load i18n %}
+ {% if mode == "add" %}
+        <form id="addPricePlans" action="{% url 'price_plans.views.add_price_plan' %}" class="full no-box validate">
+
+                {% if request.user.is_focus %}
+                <div class="row">
+                    <label for="f_company_id">
+                        <strong>{% trans "Company" %}</strong>
+                    </label>
+                    <div>
+                        <select name=f_company_id id=f_company_id class="search" data-placeholder="{% trans "Choose a Company" %}">
+                            {% for company in companies %}
+                                <option value="{{company.id}}">{{company.name}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                {% endif %}
+
+                <div class="row">
+                    <label for="name" style="padding: 10px 0;">
+                        <strong>{% trans "Name" %}</strong>
+                    </label>
+                    <div>
+                        <input style="margin: 5px 0;" data-error-type="inline" class="required" type="text" name="name" id="name" pattern="^.+">
+                    </div>
+                </div>
+                <div class="row">
+                    <label for="firstNight" style="padding: 10px 0;">
+                        <strong>{% trans "First night" %}</strong>
+                    </label>
+                    <div>
+                        <input style="margin: 5px 0;" data-error-type="inline" class="required" type="text" name="firstNight" id="firstNight" pattern="^([0-9]{0,1}(\.|\,){0,1}[0-9]{1,2}){0,1}|[1-9]{1,1}[0-9]{0,}((\.|\,){0,1}[0-9]{1,2}){0,1}$">
+                    </div>
+                </div>
+                <div class="row">
+                    <label for="nextNight" style="padding: 10px 0;">
+                        <strong>{% trans "Next night" %}</strong>
+                    </label>
+                    <div>
+                        <input style="margin: 5px 0;" data-error-type="inline" class="required" type="text" name="nextNight" id="nextNight" pattern="^([0-9]{0,1}(\.|\,){0,1}[0-9]{1,2}){0,1}|[1-9]{1,1}[0-9]{0,}((\.|\,){0,1}[0-9]{1,2}){0,1}$">
+                    </div>
+                </div>
+                <div class="row">
+                    <label for="sale" style="padding: 10px 0;">
+                        <strong>{% trans "Sale" %}</strong>
+                    </label>
+                    <div>
+                        <input style="margin: 5px 0;" data-error-type="inline" class="required" type="text" name="sale" id="sale" pattern="^([0-9]{0,1}(\.|\,){0,1}[0-9]{1,2}){0,1}|[1-9]{1,1}[0-9]{0,}((\.|\,){0,1}[0-9]{1,2}){0,1}$">
+                    </div>
+                </div>
+
+                <div class="row">
+                    <label for="sunNight" style="padding: 10px 0;">
+                        <strong>{% trans "Sunday" %}</strong>
+                    </label>
+                    <div>
+                        <input style="margin: 5px 0;" data-error-type="inline" class="required" type="text" name="sunNight" id="sunNight" pattern="^([0-9]{0,1}(\.|\,){0,1}[0-9]{1,2}){0,1}|[1-9]{1,1}[0-9]{0,}((\.|\,){0,1}[0-9]{1,2}){0,1}$">
+                    </div>
+                </div>
+                <div class="row">
+                    <label for="monNight" style="padding: 10px 0;">
+                        <strong>{% trans "Monday" %}</strong>
+                    </label>
+                    <div>
+                        <input style="margin: 5px 0;" data-error-type="inline" class="required" type="text" name="monNight" id="monNight" pattern="^([0-9]{0,1}(\.|\,){0,1}[0-9]{1,2}){0,1}|[1-9]{1,1}[0-9]{0,}((\.|\,){0,1}[0-9]{1,2}){0,1}$">
+                    </div>
+                </div>
+                <div class="row">
+                    <label for="tueNight" style="padding: 10px 0;">
+                        <strong>{% trans "Tuesday" %}</strong>
+                    </label>
+                    <div>
+                        <input style="margin: 5px 0;" data-error-type="inline" class="required" type="text" name="tueNight" id="tueNight" pattern="^([0-9]{0,1}(\.|\,){0,1}[0-9]{1,2}){0,1}|[1-9]{1,1}[0-9]{0,}((\.|\,){0,1}[0-9]{1,2}){0,1}$">
+                    </div>
+                </div>
+                <div class="row">
+                    <label for="wedNight" style="padding: 10px 0;">
+                        <strong>{% trans "Wednesday" %}</strong>
+                    </label>
+                    <div>
+                        <input style="margin: 5px 0;" data-error-type="inline" class="required" type="text" name="wedNight" id="wedNight" pattern="^([0-9]{0,1}(\.|\,){0,1}[0-9]{1,2}){0,1}|[1-9]{1,1}[0-9]{0,}((\.|\,){0,1}[0-9]{1,2}){0,1}$">
+                    </div>
+                </div>
+                <div class="row">
+                    <label for="thuNight" style="padding: 10px 0;">
+                        <strong>{% trans "Thursday" %}</strong>
+                    </label>
+                    <div>
+                        <input style="margin: 5px 0;" data-error-type="inline" class="required" type="text" name="thuNight" id="thuNight" pattern="^([0-9]{0,1}(\.|\,){0,1}[0-9]{1,2}){0,1}|[1-9]{1,1}[0-9]{0,}((\.|\,){0,1}[0-9]{1,2}){0,1}$">
+                    </div>
+                </div>
+                <div class="row">
+                    <label for="friNight" style="padding: 10px 0;">
+                        <strong>{% trans "Friday" %}</strong>
+                    </label>
+                    <div>
+                        <input style="margin: 5px 0;" data-error-type="inline" class="required" type="text" name="friNight" id="friNight" pattern="^([0-9]{0,1}(\.|\,){0,1}[0-9]{1,2}){0,1}|[1-9]{1,1}[0-9]{0,}((\.|\,){0,1}[0-9]{1,2}){0,1}$">
+                    </div>
+                </div>
+                <div class="row">
+                    <label for="satNight" style="padding: 10px 0;">
+                        <strong>{% trans "Saturday" %}</strong>
+                    </label>
+                    <div>
+                        <input style="margin: 5px 0;" data-error-type="inline" class="required" type="text" name="satNight" id="satNight" pattern="^([0-9]{0,1}(\.|\,){0,1}[0-9]{1,2}){0,1}|[1-9]{1,1}[0-9]{0,}((\.|\,){0,1}[0-9]{1,2}){0,1}$">
+                    </div>
+                </div>
+        <p></p>
+        </form>
+        <div class="actions">
+                <div class="left">
+                    <button class="grey cancel">{% trans "Cancel" %}</button>
+                </div>
+                <div class="right">
+                    <button data-id='changePricePlan' class="submit">{% trans "Add" %}</button>
+                </div>
+            </div>
+    {% elif mode == "edit" %}
+       <form id="editPricePlans" action="{% url 'price_plans.views.edit_price_plan' tariff_plan.id %}" class="full validate no-box">
+
+            {% if request.user.is_focus %}
+            <div class="row">
+                <label for="f_company_id">
+                    <strong>{% trans "Company" %}</strong>
+                </label>
+                <div>
+                    <select name=f_company_id id=f_company_id class="search" data-placeholder="{% trans "Choose a Company" %}">
+                        {% for company in companies %}
+                            <option value="{{company.id}}" {%if tariff_plan.company.id == company.id%}selected{%endif%}>{{company.name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            {% endif %}
+
+            <div class="row">
+                <label for="name" style="padding: 10px 0;">
+                    <strong>{% trans "Name" %}</strong>
+                </label>
+                <div>
+                    <input style="margin: 5px 0;" data-error-type="inline" class="required" value="{{ tariff_plan.name }}" type="text" name="name" id="name" pattern="^.+$">
+                </div>
+            </div>
+            <div class="row">
+                <label for="firstNight" style="padding: 10px 0;">
+                    <strong>{% trans "First night" %}</strong>
+                </label>
+                <div>
+                    <input style="margin: 5px 0;" data-error-type="inline" class="required" value="{{ tariff_plan.last_tariff_value.first_night|stringformat:"0.2f" }}" type="text" name="firstNight" id="firstNight" pattern="^([0-9]{0,1}(\.|\,){0,1}[0-9]{1,2}){0,1}|[1-9]{1,1}[0-9]{0,}((\.|\,){0,1}[0-9]{1,2}){0,1}$">
+                </div>
+            </div>
+            <div class="row">
+                <label for="nextNight" style="padding: 10px 0;">
+                    <strong>{% trans "Next night" %}</strong>
+                </label>
+                <div>
+                    <input style="margin: 5px 0;" data-error-type="inline" class="required" value="{{ tariff_plan.last_tariff_value.next_night|stringformat:"0.2f" }}" type="text" name="nextNight" id="nextNight" pattern="^([0-9]{0,1}(\.|\,){0,1}[0-9]{1,2}){0,1}|[1-9]{1,1}[0-9]{0,}((\.|\,){0,1}[0-9]{1,2}){0,1}$">
+                </div>
+            </div>
+            <div class="row">
+                <label for="sale" style="padding: 10px 0;">
+                    <strong>{% trans "Sale" %}</strong>
+                </label>
+                <div>
+                    <input style="margin: 5px 0;" data-error-type="inline" class="required" value="{{ tariff_plan.last_tariff_value.sale|stringformat:"0.2f" }}" type="text" name="sale" id="sale" pattern="^([0-9]{0,1}(\.|\,){0,1}[0-9]{1,2}){0,1}|[1-9]{1,1}[0-9]{0,}((\.|\,){0,1}[0-9]{1,2}){0,1}$">
+                </div>
+            </div>
+
+
+            <div class="row">
+                <label for="sunNight" style="padding: 10px 0;">
+                    <strong>{% trans "Sunday" %}</strong>
+                </label>
+                <div>
+                    <input style="margin: 5px 0;" data-error-type="inline" class="required" value="{{ tariff_plan.last_tariff_value.sun_night|stringformat:"0.2f" }}" type="text" name="sunNight" id="sunNight" pattern="^([0-9]{0,1}(\.|\,){0,1}[0-9]{1,2}){0,1}|[1-9]{1,1}[0-9]{0,}((\.|\,){0,1}[0-9]{1,2}){0,1}$">
+                </div>
+            </div>
+            <div class="row">
+                <label for="monNight" style="padding: 10px 0;">
+                    <strong>{% trans "Monday" %}</strong>
+                </label>
+                <div>
+                    <input style="margin: 5px 0;" data-error-type="inline" class="required" value="{{ tariff_plan.last_tariff_value.mon_night|stringformat:"0.2f" }}" type="text" name="monNight" id="monNight" pattern="^([0-9]{0,1}(\.|\,){0,1}[0-9]{1,2}){0,1}|[1-9]{1,1}[0-9]{0,}((\.|\,){0,1}[0-9]{1,2}){0,1}$">
+                </div>
+            </div>
+            <div class="row">
+                <label for="tueNight" style="padding: 10px 0;">
+                    <strong>{% trans "Tuesday" %}</strong>
+                </label>
+                <div>
+                    <input style="margin: 5px 0;" data-error-type="inline" class="required" value="{{ tariff_plan.last_tariff_value.tue_night|stringformat:"0.2f" }}" type="text" name="tueNight" id="tueNight" pattern="^([0-9]{0,1}(\.|\,){0,1}[0-9]{1,2}){0,1}|[1-9]{1,1}[0-9]{0,}((\.|\,){0,1}[0-9]{1,2}){0,1}$">
+                </div>
+            </div>
+            <div class="row">
+                <label for="wedNight" style="padding: 10px 0;">
+                    <strong>{% trans "Wednesday" %}</strong>
+                </label>
+                <div>
+                    <input style="margin: 5px 0;" data-error-type="inline" class="required" value="{{ tariff_plan.last_tariff_value.wed_night|stringformat:"0.2f" }}" type="text" name="wedNight" id="wedNight" pattern="^([0-9]{0,1}(\.|\,){0,1}[0-9]{1,2}){0,1}|[1-9]{1,1}[0-9]{0,}((\.|\,){0,1}[0-9]{1,2}){0,1}$">
+                </div>
+            </div>
+            <div class="row">
+                <label for="thuNight" style="padding: 10px 0;">
+                    <strong>{% trans "Thursday" %}</strong>
+                </label>
+                <div>
+                    <input style="margin: 5px 0;" data-error-type="inline" class="required" value="{{ tariff_plan.last_tariff_value.thu_night|stringformat:"0.2f" }}" type="text" name="thuNight" id="thuNight" pattern="^([0-9]{0,1}(\.|\,){0,1}[0-9]{1,2}){0,1}|[1-9]{1,1}[0-9]{0,}((\.|\,){0,1}[0-9]{1,2}){0,1}$">
+                </div>
+            </div>
+            <div class="row">
+                <label for="friNight" style="padding: 10px 0;">
+                    <strong>{% trans "Friday" %}</strong>
+                </label>
+                <div>
+                    <input style="margin: 5px 0;" data-error-type="inline" class="required" value="{{ tariff_plan.last_tariff_value.fri_night|stringformat:"0.2f" }}" type="text" name="friNight" id="friNight" pattern="^([0-9]{0,1}(\.|\,){0,1}[0-9]{1,2}){0,1}|[1-9]{1,1}[0-9]{0,}((\.|\,){0,1}[0-9]{1,2}){0,1}$">
+                </div>
+            </div>
+            <div class="row">
+                <label for="satNight" style="padding: 10px 0;">
+                    <strong>{% trans "Saturday" %}</strong>
+                </label>
+                <div>
+                    <input style="margin: 5px 0;" data-error-type="inline" class="required" value="{{ tariff_plan.last_tariff_value.sat_night|stringformat:"0.2f" }}" type="text" name="satNight" id="satNight" pattern="^([0-9]{0,1}(\.|\,){0,1}[0-9]{1,2}){0,1}|[1-9]{1,1}[0-9]{0,}((\.|\,){0,1}[0-9]{1,2}){0,1}$">
+                </div>
+            </div>
+       <p></p>
+        </form>
+
+        <div class="actions">
+                <div class="left">
+                    <button class="grey cancel">{% trans "Cancel" %}</button>
+                </div>
+                <div class="right">
+                    <button data-id='changePricePlan' class="submit">{% trans "Save" %}</button>
+                </div>
+            </div>
+    {% elif mode == "show" %}
+        <form action="{% url 'price_plans.views.show_price_plan' tariff_plan.id %}" class="full validate no-box">
+            <div class="row">
+                <label for="name" style="padding: 10px 0;">
+                    <strong>{% trans "Name" %}</strong>
+                </label>
+                <div>
+                    <input style="margin: 5px 0;" disabled class="required" value="{{ tariff_plan.name }}" type="text" name="name" id="name">
+                </div>
+            </div>
+            <div class="row">
+                <label for="firstNight" style="padding: 10px 0;">
+                    <strong>{% trans "First night" %}</strong>
+                </label>
+                <div>
+                    <input style="margin: 5px 0;" disabled class="required" value="{{ tariff_plan.last_tariff_value.first_night|stringformat:"0.2f" }}" type="text" name="firstNight" id="firstNight">
+                </div>
+            </div>
+            <div class="row">
+                <label for="nextNight" style="padding: 10px 0;">
+                    <strong>{% trans "Next night" %}</strong>
+                </label>
+                <div>
+                    <input style="margin: 5px 0;" disabled class="required" value="{{ tariff_plan.last_tariff_value.next_night|stringformat:"0.2f" }}" type="text" name="nextNight" id="nextNight">
+                </div>
+            </div>
+            <div class="row">
+                <label for="sale" style="padding: 10px 0;">
+                    <strong>{% trans "Sale" %}</strong>
+                </label>
+                <div>
+                    <input style="margin: 5px 0;" disabled class="required" value="{{ tariff_plan.last_tariff_value.sale|stringformat:"0.2f" }}" type="text" name="sale" id="sale">
+                </div>
+            </div>
+
+
+            <div class="row">
+                <label for="sunNight" style="padding: 10px 0;">
+                    <strong>{% trans "Sunday" %}</strong>
+                </label>
+                <div>
+                    <input style="margin: 5px 0;" disabled data-error-type="inline" class="required" value="{{ tariff_plan.last_tariff_value.sun_night|stringformat:"0.2f" }}" type="text" name="sunNight" id="sunNight" pattern="^([0-9]{0,1}(\.|\,){0,1}[0-9]{1,2}){0,1}|[1-9]{1,1}[0-9]{0,}((\.|\,){0,1}[0-9]{1,2}){0,1}$">
+                </div>
+            </div>
+            <div class="row">
+                <label for="monNight" style="padding: 10px 0;">
+                    <strong>{% trans "Monday" %}</strong>
+                </label>
+                <div>
+                    <input style="margin: 5px 0;" disabled data-error-type="inline" class="required" value="{{ tariff_plan.last_tariff_value.mon_night|stringformat:"0.2f" }}" type="text" name="monNight" id="monNight" pattern="^([0-9]{0,1}(\.|\,){0,1}[0-9]{1,2}){0,1}|[1-9]{1,1}[0-9]{0,}((\.|\,){0,1}[0-9]{1,2}){0,1}$">
+                </div>
+            </div>
+            <div class="row">
+                <label for="tueNight" style="padding: 10px 0;">
+                    <strong>{% trans "Tuesday" %}</strong>
+                </label>
+                <div>
+                    <input style="margin: 5px 0;" disabled data-error-type="inline" class="required" value="{{ tariff_plan.last_tariff_value.tue_night|stringformat:"0.2f" }}" type="text" name="tueNight" id="tueNight" pattern="^([0-9]{0,1}(\.|\,){0,1}[0-9]{1,2}){0,1}|[1-9]{1,1}[0-9]{0,}((\.|\,){0,1}[0-9]{1,2}){0,1}$">
+                </div>
+            </div>
+            <div class="row">
+                <label for="wedNight" style="padding: 10px 0;">
+                    <strong>{% trans "Wednesday" %}</strong>
+                </label>
+                <div>
+                    <input style="margin: 5px 0;" disabled data-error-type="inline" class="required" value="{{ tariff_plan.last_tariff_value.wed_night|stringformat:"0.2f" }}" type="text" name="wedNight" id="wedNight" pattern="^([0-9]{0,1}(\.|\,){0,1}[0-9]{1,2}){0,1}|[1-9]{1,1}[0-9]{0,}((\.|\,){0,1}[0-9]{1,2}){0,1}$">
+                </div>
+            </div>
+            <div class="row">
+                <label for="thuNight" style="padding: 10px 0;">
+                    <strong>{% trans "Thursday" %}</strong>
+                </label>
+                <div>
+                    <input style="margin: 5px 0;" disabled data-error-type="inline" class="required" value="{{ tariff_plan.last_tariff_value.thu_night|stringformat:"0.2f" }}" type="text" name="thuNight" id="thuNight" pattern="^([0-9]{0,1}(\.|\,){0,1}[0-9]{1,2}){0,1}|[1-9]{1,1}[0-9]{0,}((\.|\,){0,1}[0-9]{1,2}){0,1}$">
+                </div>
+            </div>
+            <div class="row">
+                <label for="friNight" style="padding: 10px 0;">
+                    <strong>{% trans "Friday" %}</strong>
+                </label>
+                <div>
+                    <input style="margin: 5px 0;" disabled data-error-type="inline" class="required" value="{{ tariff_plan.last_tariff_value.fri_night|stringformat:"0.2f" }}" type="text" name="friNight" id="friNight" pattern="^([0-9]{0,1}(\.|\,){0,1}[0-9]{1,2}){0,1}|[1-9]{1,1}[0-9]{0,}((\.|\,){0,1}[0-9]{1,2}){0,1}$">
+                </div>
+            </div>
+            <div class="row">
+                <label for="satNight" style="padding: 10px 0;">
+                    <strong>{% trans "Saturday" %}</strong>
+                </label>
+                <div>
+                    <input style="margin: 5px 0;" disabled data-error-type="inline" class="required" value="{{ tariff_plan.last_tariff_value.sat_night|stringformat:"0.2f" }}" type="text" name="satNight" id="satNight" pattern="^([0-9]{0,1}(\.|\,){0,1}[0-9]{1,2}){0,1}|[1-9]{1,1}[0-9]{0,}((\.|\,){0,1}[0-9]{1,2}){0,1}$">
+                </div>
+            </div>
+       <p></p>
+
+
+        </form>
+            <div class="actions">
+                <div class="center">
+                    <button class="blue cancel">{% trans "Okay" %}</button>
+                </div>
+            </div>
+    {% endif %}

@@ -1,0 +1,95 @@
+{% extends 'acc_base.html' %}
+{% load staticfiles %}
+{% load acctags %}
+{% load i18n %}
+{% block breadcrumb %}
+  <div class="left">
+    <ul class="breadcrumb">
+      <li>
+        <a href="/">{% trans "Home" %}</a>
+      </li>
+      <li>
+        <a href="{% url 'companies.views.view_list' %}">
+          {% trans "Company" %}
+        </a>
+      </li>
+      <li>
+        <a href="{% url 'payments.views.payments' %}">
+          {% trans "Merchant Accounts" %}
+        </a>
+      </li>
+    </ul>
+  </div>
+{% endblock %}
+{% block title %}{% trans "Merchant Accounts" %}{% endblock %}
+
+
+{% block acc_content %}
+  <script>
+    $('#bt_payments').addClass('current');
+  </script>
+  <!--Write your code here!-->
+  <section id="content" class="container_12 clearfix" data-sort=true>
+    <h1 class="grid_12">{% trans "Merchant Accounts" %}</h1>
+
+    <div class="grid_12">
+
+      {% if 'company_add_payment' in request.user.rights %}
+        <a class="button" href="{% url 'payments.views.payments_add' %}">
+          <span class="icon icon-plus"></span>
+          {% trans "Add new merchant account" %}
+        </a>
+        <div class="spacer"></div>
+      {% endif %}
+
+      <div class="box">
+        <div class="content">
+          <table id="tablePayments" class="styled">
+            <thead>
+            <tr>
+              <th>№</th>
+              <th>{% trans "Account name" %}</th>
+              <th>{% trans "Account number" %}</th>
+              <th>{% trans "Status" %}</th>
+
+              {% if request.user.is_focus %}
+                <th>{% trans "Company" %}</th>
+              {% endif %}
+
+              <th>{% trans "Actions" %}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% if payment_accounts|length > 0 %}
+              {% for pay in payment_accounts %}
+                <tr>
+                  <td>{{ forloop.counter }}</td>
+                  <td>{{ pay.payment_system.name }}</td>
+                  <td>{{ pay.system.account }}</td>
+                  <td></td>
+
+                  {% if request.user.is_focus %}
+                    <td class="center">{{ pay.company.name }}</td>
+                  {% endif %}
+
+                  <td></td>
+                </tr>
+              {% endfor %}
+            {% else %}
+              <tr>
+                <td colspan="5">{% trans "Add payment system" %}</td>
+              </tr>
+            {% endif %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}
+
+{% block addons %}
+
+  <!-- The settings dialog -->
+
+{% endblock %}

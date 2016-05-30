@@ -1,0 +1,94 @@
+{% extends 'acc_base.html' %}
+{% load staticfiles %}
+{% load acctags %}
+{% load i18n %}
+
+{% block breadcrumb %}
+        <div class="left">
+            <ul class="breadcrumb">
+                <li><a>{% trans "Staff" %}</a></li>
+                <li><a>{% trans "List" %}</a></li>
+            </ul>
+        </div>
+{% endblock %}
+
+{% block scripts %}
+<!--<script src="{% static 'js/script_company.js' %}"></script>-->
+{% endblock %}
+
+{% block title %}{% trans "Staff" %}{% endblock %}
+
+
+{% block acc_content %}
+    <script>
+        $('#bt_staff_list').addClass('current');
+    </script>
+
+
+    <!-- Here goes the content. -->
+        <section id="content" class="container_12 clearfix" data-sort=true>
+            <h1 class="grid_12">{% trans "All Coworkers" %}</h1>
+            <div class="grid_12">
+                <a class="button" href="javascript:void(0);" id="dialog_form_btn"><span class="icon icon-plus"></span>{% trans "Add coworker" %}</a>
+
+                <div class="spacer"></div>
+
+                <ul class="searchresults grid_12">
+
+                    {% for person in staff %}
+
+                    <li>
+
+                        <div class="header">
+                            <h3><a href="{% url 'profiles.views.view_by_id' person.id %}">{{person.name}}</a></h3>
+                        </div>
+
+                        <div class="content">
+                            <img class=avatar src="{% static 'img/icons/packs/iconsweets2/25x25/user-2.png' %}"/>
+
+                            <table>
+                                <tr>
+                                    <th>{% trans "Reputation:" %}</th>
+                                    <td class="green">{% trans "In Good Standing" %}</td>
+                                </tr>
+                                <tr>
+                                    <th>{% trans "Email:" %}</th><td>{{ person.email }}</td>
+                                </tr>
+                                {% if person.email2 %}
+                                <tr>
+                                    <th>{% trans "Alternative email:" %}</th><td>{{ person.email2 }}</td>
+                                </tr>
+                                {% endif %}
+                                {% if person.address.to_string %}
+                                <tr>
+                                    <th>{% trans "Address:" %}</th><td>{{ person.address.to_string }}</td>
+                                </tr>
+                                {% endif %}
+                                {% if user.phone %}
+                                <tr>
+                                    <th>{% trans "Phone:" %}</th><td>{{ person.phone|phonenumber }}</td>
+                                </tr>
+                                {% endif %}
+                                {% if user.m_phone %}
+                                <tr>
+                                    <th>{% trans "Mobile phone:" %}</th><td>{{ person.m_phone|phonenumber }}</td>
+                                </tr>
+                                {% endif %}
+                            </table>
+
+                        </div><!-- End of .content -->
+
+                    </li>
+
+                    {% endfor %}
+
+                </ul><!-- End of .searchresults -->
+            </div>
+        </section><!-- End of #content -->
+
+{% endblock %}
+
+{% block addons %}
+    <!-- The settings dialog -->
+
+{% endblock %}

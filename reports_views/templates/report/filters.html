@@ -1,0 +1,120 @@
+{% load i18n %}
+<form class="grid_12 no-box" name="" method="post" action="" novalidate="novalidate" id="repFilters">
+    <fieldset {% if 'pattern' not in mode %}hidden style="display:none;"{% endif %}>
+        <legend>{% trans "Filtering" %}</legend>
+        <div class="row" {% if 'pattern' not in mode %}hidden style="display:none;"{% endif %}>
+            <label><strong>{% trans "Conditional Expression" %}</strong></label>
+            <div class="col-md-8">
+                <select class="form-control input-sm" name="filter_operation">
+                    <option value="and" {% if pattern.filter_operation == 'and' %}selected{% endif %}>{% trans "and" %}</option>
+                    <option value="or" {% if pattern.filter_operation == 'or' %}selected{% endif %}>{% trans "or" %}</option>
+                </select>
+            </div>
+        </div>
+        <div class="row" {% if 'pattern' not in mode %}hidden style="display:none;"{% endif %}>
+            <label><strong>{% trans "Filter" %}</strong></label>
+            <div>
+                <select class="form-control input-sm" id="filters-set">
+                    {% for val in report.filters %}
+                        <option value="{{ val.model_field_name }}">
+                            {{ val.readable_name }}
+                        </option>
+                    {% endfor %}
+                </select>
+
+            </div>
+        </div>
+
+    </fieldset>
+    <div class="actions" {% if 'pattern' not in mode %}hidden style="display:none;"{% endif %}>
+        <div class="right">
+            <a class="button medium pull-left" id="addFilter"><i class="icon icon-plus"></i> {% trans "Add" %}</a>
+        </div>
+    </div>
+    <fieldset>
+        <legend>{% trans "Filters List" %}</legend>
+        <table class="styled2 row" id="filters">
+            {% for fil in pattern.filters %}
+                {% for filter in report.filters %}
+                    {% if fil.alias == filter.model_field_name %}
+                        <tr>
+                            <td><i class="icon icon-sort"></i></td>
+                            <td>
+                                <div class="grid_12 rep-filter filter-by-{{ filter.model_field_name }}">
+                                    <input type="text" name="alias" value="{{ filter.model_field_name }}" hidden style="display:none;">
+                                    <label class="grid_2">{{ filter.readable_name }}</label>
+                                    <div class="grid_3">
+                                        <select class="form-control input-sm" name="op_alias"
+                                                {% if mode == 'show_report'%}disabled
+                                                    {% elif mode == 'new_report' and fil.is_final > 0 %}
+                                                    disabled
+                                                    {% endif %}
+                                                >
+                                            {% for op in filter.filters.operations %}
+                                                <option value="{{ op.alias }}"
+                                                        {% if fil.op_alias == op.alias %}selected{% endif %}>{{ op.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+
+                                    <div class="grid_3">
+                                        {% if filter.filters.values %}
+                                            <select class="form-control input-sm" name="data"
+                                                    {% if mode == 'show_report'%}disabled
+                                                    {% elif mode == 'new_report' and fil.is_final == 1 %}
+                                                    disabled
+                                                    {% endif %}
+                                                    >
+                                                {% for val in filter.filters.values %}
+                                                    <option value="{{ val.key }}"
+                                                            {% if val.key|stringformat:"s" == fil.data %}selected{% endif %}>{{ val.val }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        {% elif filter.field_type.alias == 'date' %}
+                                            <input readonly class="default-date-picker" name="data" type="text" value="{{ fil.data }}"
+                                                    {% if mode == 'show_report'%}disabled
+                                                    {% elif mode == 'new_report' and fil.is_final == 1 %}
+                                                    disabled
+                                                    {% endif %}
+                                                    >
+                                        {% elif filter.field_type.alias == 'datetime' %}
+                                            <input readonly class="default-date-picker2" name="data" type="text" value="{{ fil.data }}"
+                                                    {% if mode == 'show_report'%}disabled
+                                                    {% elif mode == 'new_report' and fil.is_final == 1 %}
+                                                    disabled
+                                                    {% endif %}
+                                                    >
+                                        {% else %}
+                                            <input class="form-control input-sm" name="data" type="text"
+                                                   value="{{ fil.data }}"
+                                                    {% if mode == 'show_report'%}disabled
+                                                    {% elif mode == 'new_report' and fil.is_final == 1 %}
+                                                    disabled
+                                                    {% endif %}
+                                                    >
+                                        {% endif %}
+                                    </div>
+                                    <div class="grid_3">
+                                        <div {% if 'pattern' not in mode %}hidden style="display:none;"{% endif %}>
+                                            <select class="form-control input-sm" name="is_final">
+                                                <option value="2" {% if fil.is_final == 2 %}selected{% endif %}>{% trans "Condition is final" %}</option>
+                                                <option value="1" {% if fil.is_final == 1 %}selected{% endif %}>{% trans "Condition and value are final" %}</option>
+                                                <option value="0" {% if fil.is_final == 0 %}selected{% endif %}>{% trans "Not final" %}</option>
+                                            </select>
+                                        </div>
+
+                                    </div>
+                                {% if 'pattern' in mode %}
+                                                <a class="button medium remove-filter pull-left"><i class="icon-minus"></i></a>
+                                         {% endif %}
+
+                                </div>
+                            </td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}
+        </table>
+    </fieldset>
+    {% include 'report/config/filters.html' %}
+</form>

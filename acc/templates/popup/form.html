@@ -1,0 +1,48 @@
+{% load i18n %}
+<div style="display: none;" id="dialog_form" title="Dialog with Form Elements">
+    <div class="formContent">
+<form id="" action="" class="full validate ready no-box">
+            <div class="row">
+                <label for="name">
+                    <strong>{% trans "Name" %}</strong>
+                </label>
+                <div>
+                    <input class="required" type="text" name="name" id="name" />
+                </div>
+            </div>
+            <div class="row">
+                <label for="firstNight">
+                    <strong>{% trans "First night" %}</strong>
+                </label>
+                <div>
+                    <input class="required" type="text" name="firstNight" id="firstNight" />
+                </div>
+            </div>
+            <div class="row">
+                <label for="nextNight">
+                    <strong>{% trans "Next night" %}</strong>
+                </label>
+                <div>
+                    <input class="required" type="text" name="nextNight" id="nextNight" />
+                </div>
+            </div>
+            <div class="row">
+                <label for="sale">
+                    <strong>{% trans "Sale" %}</strong>
+                </label>
+                <div>
+                    <input class="required" type="text" name="sale" id="sale" />
+                </div>
+            </div>
+
+        </form>
+        <div class="actions">
+                <div class="left">
+                    <button class="grey cancel">{% trans "Cancel" %}</button>
+                </div>
+                <div class="right">
+                    <button class="submit">{% trans "Submit" %}</button>
+                </div>
+            </div>
+    </div>
+</div>

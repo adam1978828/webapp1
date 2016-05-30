@@ -1,0 +1,123 @@
+{% extends 'acc_base.html' %}
+{% load staticfiles %}
+{% load acctags %}
+{% load filters %}
+{% load i18n %}
+{% block breadcrumb %}
+        <div class="left">
+            <ul class="breadcrumb">
+                <li><a href="/">{% trans "Home" %}</a></li>
+                <li><a href="{% url 'kiosks.views.view_list' %}">{% trans "Kiosks" %}</a></li>
+                <li><a href="">{% trans "Kiosk permissions" %}</a></li>
+            </ul>
+        </div>
+{% endblock %}
+{% block title %}{% trans "Kiosk permissions" %}{% endblock %}
+{% block acc_content %}
+<script>
+    $('#bt_kiosks_list').addClass('current');
+    $('.accordion li a').removeClass('open');
+</script>
+    <section id="content" class="container_12 clearfix ui-sortable" data-sort="true">
+        <h1 class="grid_12">{% trans "Add kiosk specific permission" %}</h1>
+        <form action="{% url 'kiosks.views.add_permission' kioskId %}" method="post" class="grid_12 full no-box validate" id="addPerm" name="addPerm">
+          {% csrf_token %}
+          <fieldset>
+            <div class="row">
+              <label for="userId">
+                <strong>{% trans "User" %}</strong>
+              </label>
+              <div>
+                <select name="userId" id="user_perm" data-placeholder="{% trans "Choose user" %}">
+                  <option value=""></option>
+                  {% for user in users %}
+                    <option value='{{user.id}}'>
+                        {% if user.full_name %}
+                            {{user.full_name}}
+                        {% else %}
+                            {% trans "No name" %}
+                        {% endif %}
+                        - {{user.email}}</option>
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+            <div class="actions">
+              <div class="right">
+                <input type="submit" value="{% trans "Add" %}">
+              </div>
+            </div>
+          </fieldset>
+        </form>
+        <h1 class="grid_12">{% trans "Kiosk specific permissions" %}</h1>
+        <div class="spacer"></div>
+        <div class="grid_12">
+            <div class="box">
+                <div class="header">
+                    <h2>{% trans "Specific permissions to users" %}</h2>
+                </div>
+                
+                <div class="content">
+                    <table class="styled">
+                        <colgroup>
+                           <col span="1">
+                           <col span="1">
+                           <col span="1">
+                           <col span="1">
+                           <col span="1">
+                           <col span="1">
+                           <col span="1">
+                        </colgroup>
+
+                        <thead>
+                            <tr>
+                                <th>{% trans "Who" %}</th>
+                                <th>{% trans "Can upload?" %}</th>
+                                <th>{% trans "Can ...?" %}</th>
+                                <th>{% trans "Can ...?" %}</th>
+                                <th>{% trans "Can ...?" %}</th>
+                                <th>{% trans "Level of assigmnent" %}</th>
+                                <th>{% trans "Actions" %}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-permission="{% trans "All" %}">
+                                <td class="center">{% trans "All" %}</td>
+                                <td data-check-group="1" class="center"><input type="checkbox"></td>
+                                <td data-check-group="2" class="center"><input type="checkbox"></td>
+                                <td data-check-group="3" class="center"><input type="checkbox"></td>
+                                <td data-check-group="4" class="center"><input type="checkbox"></td>
+                                <td class="center">-</td>
+                                <td class="center">-</td>
+                            </tr>
+                            {% for company_id, user_id, kiosk_id, user in granted %}
+                              <tr data-permission="{% trans "Specific" %}">
+                                  <td class="center">{{user.full_name}}</td>
+                                  <td data-check-group="1" class="center"><input type="checkbox"></td>
+                                  <td data-check-group="2" class="center"><input type="checkbox"></td>
+                                  <td data-check-group="3" class="center"><input type="checkbox"></td>
+                                  <td data-check-group="4" class="center"><input type="checkbox"></td>
+                                  <td>
+                                    {% if kiosk_id %}
+                                      {% trans "Only current kiosk" %}
+                                    {% else %}
+                                      {% trans "Whole company" %}
+                                    {% endif %}
+                                  </td>
+                                  <td class="center">
+                                    {% if kiosk_id %}
+                                      <a data-id="permToCompany" data-url="{% url 'kiosks.views.remove_permission' kiosk_id user_id %}" class="button small grey tooltip" title="{% trans "Reset to company permissions" %}"><i class="icon-remove"></i></a>
+                                    {% else %}
+                                      -
+                                    {% endif %}
+                                  </td>
+                              </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+

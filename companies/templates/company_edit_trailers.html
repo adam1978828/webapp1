@@ -1,0 +1,59 @@
+{% extends 'acc_base.html' %}
+{% load staticfiles %}
+{% load acctags %}
+{% load filters %}
+{% load i18n %}
+{% block breadcrumb %}
+        <div class="left">
+            <ul class="breadcrumb">
+                <li><a href="/">{% trans "Home" %}</a></li>
+                <li><a href="{% url 'companies.views.view_list' %}">{% trans "Company" %}</a></li>
+                <li><a href="{% url 'companies.views.trailers' %}">{% trans "Trailers" %}</a></li>
+            </ul>
+        </div>
+{% endblock %}
+{% block title %}{% trans "Company Trailers" %}{% endblock %}
+
+{% block acc_content %}
+<script>
+    $('#bt_company_trailers').addClass('current');
+    $('.accordion li a').removeClass('open');
+    $('#bt_company_trailers').parent().prev().addClass('open');
+</script>
+  <section id="content" class="container_12 clearfix ui-sortable" data-sort="true">
+
+    {% if 'company_add_trailer' in request.user.rights %}
+    <h1 class="grid_12">{% trans "Edit trailer" %}</h1>
+    <div class="spacer"></div>
+    <div class="grid_12">
+      <div id="addTrailerBox" class="box">
+        <div class="header">
+          <h2>{% trans "Trailer info" %}</h2>
+        </div>
+        <form action="{% url 'companies.views.ajax_edit_trailer' %}" method="post" class="full content validate" id="editTrailer">
+          {% csrf_token %}
+          <fieldset>
+
+            <input type="hidden" name="trailer_id" id="trailer_id" value="{{ video_file.id }}"/>
+
+            <div class="row">
+              <label for="title">
+                <strong>{% trans "Title" %}</strong>
+              </label>
+              <div>
+                <input type="text" name="title" id="title" value="{{ video_file.alias }}">
+              </div>
+            </div>
+          </fieldset>
+        </form>
+        <div class="actions">
+          <div class="right">
+            <input class="editTrailerBtn" type="submit" value="{% trans "Save" %}">
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
+  </section>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% load staticfiles %}
+{% load i18n %}
+<div class="pricing">
+    {% if if_featured %}
+        <div class="badge block">{% trans "Featured" %}</div>
+    {% endif %}
+
+    <div class="title"><strong>{{ movie.get_name }}</strong></div>
+
+    <div class="price">
+        {% if movie.img_path %}
+            <img src="{{ MEDIA_URL }}movie/poster{{ movie.img_path }}" width="120px">
+        {% endif %}
+        {% if movie.bd_path %}
+            <img src="{{ MEDIA_URL }}movie/backdrop{{ movie.bd_path }}" width="300px">
+        {% endif %}
+    </div>
+
+    <ul class="info">
+        <li class="feat" id="old_name">
+            <strong>{% trans 'Description' %}</strong> {{ movie.get_description }}
+        </li>
+        <li class="feat" id="old_content_type">
+            <strong>{% trans 'Release' %}</strong> {{ movie.dt_release|date:'m/d/y' }}
+        </li>
+        <li class="feat" id="old_content_type">
+            <strong>{% trans 'DVD Release' %}</strong> {{ movie.dt_dvd_release|date:'m/d/y' }}
+        </li>
+        <li class="feat" id="old_format">
+            <strong>{% trans 'Length' %}</strong> {{ movie.length }}
+        </li>
+    </ul>
+</div><!-- End of .pricing -->

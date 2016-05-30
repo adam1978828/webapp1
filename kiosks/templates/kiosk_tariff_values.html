@@ -1,0 +1,189 @@
+{% extends 'acc_base.html' %}
+{% load staticfiles %}
+{% load i18n %}
+{% block breadcrumb %}
+        <div class="left">
+            <ul class="breadcrumb">
+                <li><a href="/">{% trans "Home" %}</a></li>
+                <li><a href="{% url 'kiosks.views.view_list' %}">{% trans "Kiosks" %}</a></li>
+                <li><a href="{% url 'kiosks.views.kiosk_tariff_plans' kiosk.id %}">{% trans "Tariff plans" %}</a></li>
+                <li><a href="{% url 'kiosks.views.tariff_values' kiosk.id tariff_plan.id %}">{% trans "Values" %}</a></li>
+            </ul>
+        </div>
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}
+
+{% block title %}{% trans "Kiosks" %}{% endblock %}
+
+
+{% block acc_content %}
+    <script>
+        $('#bt_kiosks_list').addClass('current');
+        $('.accordion li a').removeClass('open');
+    </script>
+
+
+    <!-- Here goes the content. -->
+    <section id="content" class="container_12 clearfix" data-sort=true>
+      <h1 class="grid_12">{% trans "Kiosk tariff values of tariff plan" %} {{ tariff_plan.name }}</h1>
+      <div class="grid_12">
+        <form action="{% url 'kiosks.views.tariff_values' kiosk.id tariff_plan.id %}" method="post" class="grid_12" id="kioskTariffValues" name="kioskTariffValues" data-revert-url = "{% url 'kiosks.views.revert_tariff_values' kiosk.id tariff_plan.id %}">
+          {% csrf_token %}
+          <fieldset>
+            <div class="row">
+              <label for="upcLink">
+                <strong>{% trans "First Night" %}</strong>
+              </label>
+              <div>
+                <input id="firstNight" name='firstNight' value="{{actual_tariff.first_night}}">
+              </div>
+            </div>
+            <div class="row">
+              <label for="upcLink">
+                <strong>{% trans "Next Night" %}</strong>
+              </label>
+              <div>
+                <input id="nextNight" name='nextNight' value="{{actual_tariff.next_night}}">
+              </div>
+            </div>
+            <div class="row">
+              <label for="upcLink">
+                <strong>{% trans "Sale" %}</strong>
+              </label>
+              <div>
+                <input id="sale" name='sale' value="{{actual_tariff.sale}}">
+              </div>
+            </div>
+            <div class="row">
+              <label for="upcLink">
+                <strong>{% trans "Sunday" %}</strong>
+              </label>
+              <div>
+                <input id="sunNight" name='sunNight' value="{% if actual_tariff.sun_night %}{{actual_tariff.sun_night}}{% else %}{% endif %}">
+              </div>
+            </div>
+            <div class="row">
+              <label for="upcLink">
+                <strong>{% trans "Monday" %}</strong>
+              </label>
+              <div>
+                <input id="monNight" name='monNight' value="{% if actual_tariff.mon_night %}{{actual_tariff.mon_night}}{% else %}{% endif %}">
+              </div>
+            </div>
+            <div class="row">
+              <label for="upcLink">
+                <strong>{% trans "Tuesday" %}</strong>
+              </label>
+              <div>
+                <input id="tueNight" name='tueNight' value="{% if actual_tariff.tue_night %}{{actual_tariff.tue_night}}{% else %}{% endif %}">
+              </div>
+            </div>
+            <div class="row">
+              <label for="upcLink">
+                <strong>{% trans "Wednesday" %}</strong>
+              </label>
+              <div>
+                <input id="wedNight" name='wedNight' value="{% if actual_tariff.wed_night %}{{actual_tariff.wed_night}}{% else %}{% endif %}">
+              </div>
+            </div>
+            <div class="row">
+              <label for="upcLink">
+                <strong>{% trans "Thursday" %}</strong>
+              </label>
+              <div>
+                <input id="thuNight" name='thuNight' value="{% if actual_tariff.thu_night %}{{actual_tariff.thu_night}}{% else %}{% endif %}">
+              </div>
+            </div>
+            <div class="row">
+              <label for="upcLink">
+                <strong>{% trans "Friday" %}</strong>
+              </label>
+              <div>
+                <input id="friNight" name='friNight' value="{% if actual_tariff.fri_night %}{{actual_tariff.fri_night}}{% else %}{% endif %}">
+              </div>
+            </div>
+            <div class="row">
+              <label for="upcLink">
+                <strong>{% trans "Saturday" %}</strong>
+              </label>
+              <div>
+                <input id="satNight" name='satNight' value="{% if actual_tariff.sat_night %}{{actual_tariff.sat_night}}{% else %}{% endif %}">
+              </div>
+            </div>
+            <div class="actions">
+              <div class="left">
+                <input id="revertTariff" type="button" value="{% trans "Revert to company tariff value" %}" name=revert />
+              </div>
+              <div class="right">
+                <input id="btnKioskTariffValues" type="submit" value="{% trans "Change current tariff value" %}" />
+              </div>
+            </div>
+          </fieldset>
+        </form>
+      </div>
+      <h1 class="grid_12">{% trans "Tariff values history" %}</h1>
+      <div class="grid_12">
+        <div class="box">
+          <div class="content">
+            <table class="dynamic styled" data-show-Filter-Bar="true">
+              <colgroup>
+                <col span="1">
+                <col span="1">
+                <col span="1">
+                <col span="1">
+                <col span="1">
+                <col span="1">
+              </colgroup>
+
+              <thead>
+                <tr>
+                  <!--<td><input type="checkbox" onchange="$(this).parents('table').find(':checkbox').attr('checked', $(this).attr('checked') || false)"></td>-->
+                  <th>#</th>
+                  <th>{% trans "First Night" %}</th>
+                  <th>{% trans "Next Night" %}</th>
+                  <th>{% trans "Sale" %}</th>
+                  <th>{% trans "Charge per Day" %}</th>
+                  <th>{% trans "Last change by" %}</th>
+                  <th>{% trans "Started" %}</th>
+                  <th>{% trans "Finished" %}</th>
+                  <th>{% trans "Level of assignment" %}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for value in tariff_values %}
+                  <tr {% if forloop.first %}class='strong'{% endif %}>
+                    <!--<td><input type="checkbox"></td>-->
+                    <td>{{forloop.counter}}</td>
+                    <td>{{value.first_night}}</td>
+                    <td>{{value.next_night}}</td>
+                    <td>{{value.sale}}</td>
+                    <td>
+                    {% if value.sun_night %}Sun: ${{value.sun_night}}{% endif %}
+                    {% if value.mon_night %}Mon: ${{value.mon_night}}{% endif %}
+                    {% if value.tue_night %}Tue: ${{value.tue_night}}{% endif %}
+                    {% if value.wed_night %}Wed: ${{value.wed_night}}{% endif %}
+                    {% if value.thu_night %}Thu: ${{value.thu_night}}{% endif %}
+                    {% if value.fri_night %}Fri: ${{value.fri_night}}{% endif %}
+                    {% if value.sat_night %}Sat: ${{value.sat_night}}{% endif %}
+                    </td>
+                    <td>{{value.user.name}}</td>
+                    <td>{{value.dt_start|date:'d.m.Y H:i:s'}}</td>
+                    <td>{{value.dt_end|date:'d.m.Y H:i:s'|default:'In use'}}</td>
+                    <td>{{value.level_of_assignment}}</td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div><!-- End of .content -->
+        </div><!-- End of .box -->
+      </div><!-- End of .grid_12 -->
+    </section><!-- End of #content -->
+
+{% endblock %}
+
+{% block addons %}
+    <!-- The settings dialog -->
+
+{% endblock %}

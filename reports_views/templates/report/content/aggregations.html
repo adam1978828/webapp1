@@ -1,0 +1,10 @@
+<table class="styled pull-right">
+    <tbody>
+        {% for val in agg_data %}
+            <tr>
+                <td>{{ val.header }}</td>
+                <td>{{ val.data }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>

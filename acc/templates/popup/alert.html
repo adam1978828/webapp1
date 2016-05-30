@@ -1,0 +1,20 @@
+{% load i18n %}
+    <div style="display: none;" id="dialog_modal" title="Error">
+			<p class="error"></p>
+        <div class="actions">
+			<div class="center">
+				<button>{% trans "Okay" %}</button>
+			</div>
+		</div>
+	</div>
+    <div style="display: none;" id="dialog-confirm" title="Error">
+			<p class="error"></p>
+        <div class="actions">
+			<div class="left">
+				<button id="delok">{% trans "Okay" %}</button>
+			</div>
+            <div class="right">
+                <button>{% trans "Cancel" %}</button>
+            </div>
+		</div>
+	</div>

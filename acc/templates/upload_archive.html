@@ -1,0 +1,14 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+    <form action="{% url 'companies.views.ajax_upload_archive' %}" class="grid_12 validate" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="file" name="key_archive" id="key_archive"/>
+        <input type="submit" value="{% trans "Submit" %}" />
+    </form>
+</html>

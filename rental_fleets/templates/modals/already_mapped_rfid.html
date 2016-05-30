@@ -1,0 +1,57 @@
+{% load staticfiles %}
+{% load i18n %}
+<div class="grid_12 center-elements upc-cards">
+  <div id="oldUpc" class="pricing">
+    <div class="title">{{old_upc.upc}}</div>
+
+    <div class="price">
+      <img src="{{ MEDIA_URL }}movie/poster{{old_upc.movie.img_path}}" width="120px">
+    </div>
+
+    <ul class="info">
+      <li id="old_name">
+        <img src="{% static 'img/icons/packs/iconsweets2/16x16/book-large.png' %}" alt="{% trans "Name:" %}" height="16" width="16">
+        <span>{{old_upc.movie.get_name}}</span>
+      </li>
+      <li id="old_content_type">
+        <img src="{% static 'img/icons/packs/iconsweets2/16x16/document.png' %}" alt="{% trans "Content type:" %}" height="16" width="16">
+        <span>Movie</span>
+      </li>
+      <li id="old_format">
+        <img src="{% static 'img/icons/packs/iconsweets2/16x16/film-strip.png' %}" alt="{% trans "Format:" %}" height="16" width="16">
+        <span>{{old_upc.format.name}}</span>
+      </li>
+    </ul>
+  </div><!-- End of .pricing -->
+  <span class="upc-transfer"><i class="icon-arrow-right"></i></span>
+  <div id="newUpc" class="pricing">
+    <div class="title">{{new_upc.upc}}</div>
+    <div class="price">
+      <img src="{{ MEDIA_URL }}movie/poster{{new_upc.movie.img_path}}" width="120px">
+    </div>
+
+    <ul class="info">
+      <li id="new_name">
+        <img src="{% static 'img/icons/packs/iconsweets2/16x16/book-large.png' %}" alt="{% trans "Name:" %}" height="16" width="16">
+        <span>{{new_upc.movie.get_name}}</span>
+      </li>
+      <li id="new_content_type">
+        <img src="{% static 'img/icons/packs/iconsweets2/16x16/document.png' %}" alt="{% trans "Content type:" %}" height="16" width="16">
+        <span>{% trans "Movie" %}</span>
+      </li>
+      <li id="new_format">
+        <img src="{% static 'img/icons/packs/iconsweets2/16x16/film-strip.png' %}" alt="{% trans "Format:" %}" height="16" width="16">
+        <span>{{new_upc.format.name}}</span>
+      </li>
+    </ul>
+  </div><!-- End of .pricing -->
+</div>
+
+<div class="actions">
+  <div class="left">
+    <button class="grey cancel">{% trans "Cancel" %}</button>
+  </div>
+  <div class="right">
+    <button id="reassign" class="submit">{% trans "Reassign" %}{% if company_change %} ({% trans "Change company" %}){% endif %}</button>
+  </div>
+</div>

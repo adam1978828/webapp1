@@ -1,0 +1,143 @@
+{% extends 'acc_base.html' %}
+{% load staticfiles %}
+{% load acctags %}
+{% load filters %}
+{% load i18n %}
+{% block breadcrumb %}
+        <div class="left">
+            <ul class="breadcrumb">
+                <li><a href="/">{% trans "Home" %}</a></li>
+                <li><a href="{% url 'companies.views.view_list' %}">{% trans "Company" %}</a></li>
+                <li><a href="{% url 'companies.views.sites' %}">{% trans "Social Communities" %}</a></li>
+            </ul>
+        </div>
+{% endblock %}
+{% block title %}{% trans "Company social communities" %}{% endblock %}
+
+{% block acc_content %}
+  <script>
+    $('#bt_company_social_communities').addClass('current');
+    $('.accordion li a').removeClass('open');
+    $('#bt_company_social_communities').parent().prev().addClass('open');
+  </script>
+  <section id="content" class="container_12 clearfix ui-sortable" data-sort="true">
+
+  {% if 'company_add_social' in request.user.rights %}
+    <div class="grid_12">
+      <div  class="box">
+        <div class="header">
+          <h2>{% trans "Your social communitites" %}</h2>
+        </div>
+        <form id='companySocial' action="" method="post" class="full content validate">
+          {% csrf_token %}
+          <fieldset>
+
+            {% if request.user.is_focus %}
+            <div class="row">
+                <label for="f_company_id">
+                    <strong>{% trans "Company" %}</strong>
+                </label>
+                <div>
+                    <select name="f_company_id" id="f_company_id" class="search" data-placeholder="{% trans "Choose a Company" %}">
+                        {% for company in companies %}
+                            <option value="{{company.id}}">{{company.name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            {% endif %}
+
+            <div class="row">
+              <label for="brand">
+                <strong>{% trans "Brand" %}</strong>
+              </label>
+              <div>
+                <select name="brand" id="brand" class="search" data-placeholder="{% trans "Choose brand" %}">
+                  <option value=""></option>
+                  {% for brand in social_brands %}
+                    <option value="{{brand.id}}">{{brand.alias}}</option>
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+            <div class="row">
+              <label for="url">
+                <strong>{% trans "URL" %}</strong>
+              </label>
+              <div>
+                <input data-error-type="inline" type="text" class="required" name="url" id="url">
+              </div>
+            </div>
+            <div class="row">
+              <label for="alias">
+                <strong>{% trans "Title" %}</strong>
+              </label>
+              <div>
+                <input data-error-type="inline" type="text" class="required" name="alias" id="alias">
+              </div>
+            </div>
+            <div class="row">
+              <label for="logo">
+                <strong>{% trans "Logo" %}</strong>
+              </label>
+              <div>
+                <input type="file" name="logo" id="logo" accept="image/gif, image/jpeg, image/png">
+              </div>
+            </div>
+          </fieldset>
+        </form>
+        <div class="actions">
+          <div class="right">
+            <input id='addCompanySocial' type="submit" value="{% trans "Add" %}">
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
+    <section class="grid_12 box">
+      <table id='companySocialTable' class="dynamic styled" data-max-items-per-page="10" data-remove-url="{% url 'companies.views.social_remove' 0 %}">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>{% trans "Brand" %}</th>
+            <th>{% trans "URL" %}</th>
+            <th>{% trans "Title" %}</th>
+            <th>{% trans "Logo" %}</th>
+
+            {% if request.user.is_focus %}
+              <th>{% trans "Company" %}</th>
+            {% endif %}
+
+            <th>{% trans "Actions" %}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for community in communities %}
+            <tr>
+              <td class="center">{{forloop.counter}}</td>
+              <td class="center">{{community.brand.alias}}</td>
+              <td class="center">{{community.url}}</td>
+              <td class="center">{{community.alias}}</td>
+              <td class="center">
+                {% if community.logo_path %}
+                  <img src="/media/company/{{community.company.id}}/social/logos/{{community.logo_path}}" alt="{{community.brand}} logo" width="100">
+                {% else %}
+                  {% trans "Default logo used" %}
+                {% endif %}
+              </td>
+
+                {% if request.user.is_focus %}
+                  <td>{{ community.company.name }}</td>
+                {% endif %}
+
+              <td class="center">
+                <a href="{% url 'companies.views.social_remove' community.id %}"><i class="icon-remove"></i></a>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </section>
+  </section>
+{% endblock %}

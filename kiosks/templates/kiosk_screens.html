@@ -1,0 +1,83 @@
+{% extends 'acc_base.html' %}
+{% load staticfiles %}
+{% load acctags %}
+{% load filters %}
+{% load i18n %}
+{% block breadcrumb %}
+        <div class="left">
+            <ul class="breadcrumb">
+                <li><a href="/">{% trans "Home" %}</a></li>
+                <li><a href="{% url 'kiosks.views.view_list' %}">{% trans "Kiosks" %}</a></li>
+                <li><a href="">{% trans "Kiosk screens" %}</a></li>
+            </ul>
+        </div>
+{% endblock %}
+{% block title %}{% trans "Kiosk screens" %}{% endblock %}
+{% block acc_content %}
+  <script>
+    $('#bt_kiosks_list').addClass('current');
+    $('.accordion li a').removeClass('open');
+  </script>
+
+  <section id="content" class="container_12 clearfix">
+    <section class="grid_12">
+      <div class="box latest-screen">
+        <div class="header"><h2><i class="icon icon-picture"></i>{% trans "Latest screen" %}</h2></div>
+        <div class="content grid_12">
+          <div id="loading-overlay" class="hidden"></div>
+          <div id="loading" class="hidden">
+              <span>{% trans "Loading..." %}</span>
+          </div>
+          <div class="gallery">
+            {% if latest %}
+              <div id="latestTop" class="top image">
+                <div class="otstup">
+                    <a href="/media/screenshot/top/{{latest.id}}.jpg"><img src="/media/screenshot/top/{{latest.id}}.jpg"></a>
+                </div>
+              </div>
+              <div id="latestBottom" class="bottom image">
+                <div class="otstup">
+                    <a href="/media/screenshot/bottom/{{latest.id}}.jpg"><img src="/media/screenshot/bottom/{{latest.id}}.jpg"></a>
+                </div>
+              </div>
+            {% else %}
+              <p class="empty">{% trans "No screens for this kiosk yet" %}</p>
+            {% endif %}
+          </div>
+        </div>
+        <button id='makeScreen' data-url="{% url 'kiosks.views.make_screen' kiosk_id %}" class="block">{% trans "Make a screen" %}</button>
+      </div>
+    </section>
+
+    <section class="grid_12">
+      <div class="box screens">
+        <div class="header"><h2><i class="icon icon-picture"></i>{% trans "10 latest kiosk screens" %}</h2></div>
+        <div class="content">
+          <div id='screenGallery' class="gallery">
+            {% for screen in kiosk_screens %}
+              <div class="top image">
+                <div class="otstup">
+                {% if screen.close_to_now %}
+                  <span class="badge">{% trans "New" %}</span>
+                {% endif %}
+                <a href="/media/screenshot/top/{{screen.id}}.jpg"><img src="/media/screenshot/top/{{screen.id}}.jpg"></a>
+              </div>
+                </div>
+              <div class="bottom image">
+              <div class="otstup">
+                {% if screen.close_to_now %}
+                  <span class="badge">{% trans "New" %}</span>
+                {% endif %}
+                <a href="/media/screenshot/bottom/{{screen.id}}.jpg"><img src="/media/screenshot/bottom/{{screen.id}}.jpg"></a>
+              </div>
+              </div>
+            {% empty %}
+              <p class="empty">{% trans "No screens for this kiosk yet" %}</p>
+            {% endfor %}
+          </div><!-- End of Gallery -->
+        </div><!-- End of .content -->
+      </div><!-- End of .box -->
+    </section>
+  </section>
+{% endblock %}
+

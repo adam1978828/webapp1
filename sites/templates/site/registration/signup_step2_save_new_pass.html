@@ -1,0 +1,31 @@
+{% extends 'site/base.html' %}
+{% load staticfiles %}
+{% load filters %}
+{% load i18n %}
+{% block title %}{% trans "Sign up" %}{% endblock %}
+{% block content %}
+{% include 'site/search_panel.html' %}
+    <section class="container">
+            <h2 class="page-heading heading--outcontainer">{% trans "Sign up" %}</h2>
+            <form id="registration-form-new-pass" class="login select" action="" method="post" novalidate=''>
+                {% csrf_token %}
+                <div class="field-wrap">
+                    <input type='text' placeholder='{% trans "New password" %}' name='new_password' class="login__input">
+                    <input type='text' placeholder='{% trans "Password" %}' name='repeat_new_password' class="login__input">
+                </div>
+                <div class="login__control">
+                    <button type='submit' class="btn btn-md btn--warning btn--wider codepass">{% trans "Submite" %}</button>
+                </div>
+                <div class="clear"></div>
+            </form>
+        <div class="clearfix"></div>
+    </section>
+
+{%endblock%}
+{% block script %}
+ <script type="text/javascript">
+              $(document).ready(function() {
+                  init_Registration();
+              });
+		  </script>
+ {% endblock %}

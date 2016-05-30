@@ -1,0 +1,177 @@
+{% extends 'acc_base.html' %}
+{% load staticfiles %}
+{% load acctags %}
+{% load filters %}
+{% load i18n %}
+{% block breadcrumb %}
+    <div class="left">
+        <ul class="breadcrumb">
+            <li><a href="/">{% trans "Home" %}</a></li>
+            <li><a href="{% url 'coupons.views.all_coupons' %}">{% trans "Coupons" %}</a></li>
+        </ul>
+    </div>
+{% endblock %}
+{% block title %}{% trans "All coupons" %}{% endblock %}
+
+{% block acc_content %}
+    <script>
+        $('#bt_all_coupons').addClass('current');
+        $('.accordion li a').removeClass('open');
+        $('#bt_all_coupons').parent().prev().addClass('open');
+    </script>
+    <section id="content" class="container_12 clearfix ui-sortable" data-sort="true">
+
+        {% if 'coupons_edit' in request.user.rights %}
+            <h1 class="grid_12">{% trans "Add coupon" %}</h1>
+            <div class="spacer"></div>
+            <div class="grid_12">
+                <div id="addCouponBox" class="box">
+                    <div class="header">
+                        <h2>{% trans "Coupon details" %}</h2>
+                    </div>
+                    <form action="{% url 'coupons.views.add' %}" method="post" class="full content validate" id="addCoupon">
+                        {% csrf_token %}
+                        <fieldset>
+
+                            {% if request.user.is_focus %}
+                                <div class="row">
+                                    <label for="f_company_id">
+                                        <strong>{% trans "Company" %}</strong>
+                                    </label>
+
+                                    <div>
+                                        <select name="f_company_id" id="f_company_id" class="search" data-placeholder="{% trans "Choose a Company" %}">
+                                            {% for company in companies %}
+                                                <option value="{{ company.id }}">{{ company.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                            {% endif %}
+
+                            <div class="row">
+                                <label for="couponTypeId">
+                                    <strong>{% trans "Type" %}</strong>
+                                </label>
+
+                                <div>
+                                    <select name="couponTypeId" id="couponTypeId" class="search" data-placeholder="{% trans "Choose coupon pattern" %}">
+                                        <option value=""></option>
+                                        {% for pattern in patterns %}
+                                            <option value="{{ pattern.id }}">{{ pattern.alias }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="hidden row">
+                                <label for="params">
+                                    <strong>{% trans "Explanation" %}</strong>
+                                </label>
+
+                                <div>
+                                    <div id='params'></div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <label for="code">
+                                    <strong>{% trans "Code" %}</strong>
+                                </label>
+
+                                <div>
+                                    <input type="text" name="code" id="code">
+
+                                    <div>
+                                        <button id="genCouponCode" class="button">{% trans "Generate" %}</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <label for="usageAmount">
+                                    <strong>{% trans "# of times to be used" %}</strong>
+                                </label>
+
+                                <div>
+                                    <input type="text" name="usageAmount" id="usageAmount" pattern='[0-9]+'>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <label for="perCardUsage">
+                                    <strong>{% trans "# of times to be used per card" %}</strong>
+                                </label>
+
+                                <div>
+                                    <input type="text" name="perCardUsage" id="perCardUsage" pattern='[0-9]+'>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <label for="usageAmount">
+                                    <strong>{% trans "Due from" %}</strong>
+                                </label>
+
+                                <div>
+                                    <input type="date" name="dtStart" id="dtStart">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <label for="usageAmount">
+                                    <strong>{% trans "Due till" %}</strong>
+                                </label>
+
+                                <div>
+                                    <input type="date" name="dtEnd" id="dtEnd">
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+                    <div class="actions">
+                        <div class="right">
+                            <input type="submit" value="{% trans "Add" %}" id='submitCoupon'>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+
+        <div class="grid_12">
+            <div class="box">
+                <div class="content">
+                    <table id='couponsTable' class="dynamic styled" data-show-Filter-Bar="true" data-max-items-per-page="50"
+                           data-data-table='{"bServerSide":true, "bDeferRender":true,"bProcessing":true,"sAjaxSource":"{% url 'coupons.views.json_all' %}"}'>
+                        <thead>
+                        <tr>
+                            <th>{% trans 'ID' %}</th>
+                            <th>{% trans "Type" %}</th>
+                            <th>{% trans "Code" %}</th>
+                            <th>{% trans "Details" %}</th>
+                            <th>{% trans "Usage Amount" %}</th>
+                            <th>{% trans "Per Card Usage" %}</th>
+                            <th>{% trans "Due From" %}</th>
+                            <th>{% trans "Due Till" %}</th>
+                            <th>{% trans "Is Removed?" %}</th>
+
+                            {% if request.user.is_focus %}
+                                <th>{% trans "Company" %}</th>
+                            {% endif %}
+
+                            {% if 'coupons_edit' in request.user.rights %}
+                                <th>{% trans "Actions" %}</th>
+                            {% endif %}
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- End of .content -->
+    </section>
+{% endblock %}
+
+{% block post_scripts %}
+    <script src="{% static 'js/coupons.js' %}"></script>
+{% endblock %}

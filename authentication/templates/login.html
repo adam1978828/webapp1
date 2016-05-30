@@ -1,0 +1,80 @@
+{% extends 'auth_base.html' %}
+{% load staticfiles %}
+{% load i18n %}
+
+{% block title %}
+    {% trans "Login" context "page title" %}
+{% endblock %}
+
+{% block breadcrumb %}
+{% endblock %}
+{% block form %}
+    <!-- The container of the sidebar and content box -->
+	<section id="login" class="container_12 clearfix">
+
+		<form method="POST" class="box validate" name="login_form" id="login_form" action="/auth/login/">
+            {% csrf_token %}
+
+			<div class="header">
+				<h2><span class="icon icon-lock"></span>{% trans "Login" context "process, like 'to sign in', form label" %}</h2>
+			</div>
+
+			<div class="content">
+
+				<!-- Login messages -->
+				<div class="login-messages">
+					<div class="message welcome">{% trans "Welcome back!" %}</div>
+					<div class="message failure">{% trans "Invalid credentials." %}</div>
+				</div>
+
+                {% if error %}
+                <script type="text/javascript">
+				$login = $('#login');
+			    $msg = $login.find('.login-messages');
+			    $msg.find('.welcome').fadeOut();
+				$msg.find('.failure').fadeIn();
+                </script>
+
+                {% endif %}
+
+				<!-- The form -->
+				<div class="form-box">
+
+					<div class="row">
+						<label for="login_name">
+							<strong>{% trans "E-mail" %}</strong>
+							<!--<small>Or email address</small>-->
+						</label>
+                        <div>
+                            <input class="required" tabindex=1 email="true" type="text" name="login_name" id="login_name"/>
+                        </div>
+					</div>
+
+					<div class="row">
+						<label for="login_pw">
+							<strong>{% trans "Password" %}</strong>
+							<small>
+                                <a href="{% url 'authentication.views.restore' %}" id="">
+                                    {% trans "Forgot it?" %}
+                                </a>
+                            </small>
+						</label>
+						<div>
+							<input tabindex=2 type="password" class="required" name="login_pw" id="login_pw"/>
+						</div>
+					</div>
+
+				</div><!-- End of .form-box -->
+
+			</div><!-- End of .content -->
+
+			<div class="actions">
+				<div class="right">
+					<input tabindex=3 type="submit" value='{% trans "Sign In" context "Submit button label" %}' name="login_btn" />
+				</div>
+			</div><!-- End of .actions -->
+
+		</form><!-- End of form -->
+
+	</section>
+{% endblock %}

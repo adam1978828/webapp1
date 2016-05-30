@@ -1,0 +1,195 @@
+{% extends 'acc_base.html' %}
+{% load staticfiles %}
+{% load i18n %}
+{% block breadcrumb %}
+    <div class="left">
+        <ul class="breadcrumb">
+            <li><a href="/">{% trans "Home" %}</a></li>
+            <li><a href="{% url 'kiosks.views.view_list' %}">{% trans "Kiosk list" %}</a></li>
+        </ul>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}
+
+{% block title %}{% trans "Kiosks" %}{% endblock %}
+
+
+{% block acc_content %}
+    <script>
+        $('#bt_kiosks_list').addClass('current');
+        $('.accordion li a').removeClass('open');
+        $('#bt_kiosks_list').parent().prev().addClass('open');
+    </script>
+
+
+    <!-- Here goes the content. -->
+    <section id="content" class="container_12 clearfix" data-sort=true>
+        <h1 class="grid_12">{% trans "All Kiosks" %}</h1>
+
+        <div class="grid_12">
+
+            {% if 'kiosk_add' in request.user.rights %}
+                <a class="button" href="{% url 'kiosks.views.add' %}"><span class="icon icon-plus"></span>{% trans "Add new kiosk" %}</a>
+                <div class="spacer"></div>
+            {% endif %}
+
+            <div class="box">
+
+                <!--<div class="header">-->
+                <!--<h2>Simple Static Table</h2>-->
+                <!--</div>-->
+
+                <div class="content">
+
+                    <table class="dynamic styled" data-filter-bar="always">
+                        <colgroup>
+                            <!--<col span="1" style="width: 55px;">-->
+                            <col span="1" style="width: 55px;">
+                            <col span="1" style="width: 120px;">
+                            <col span="1" style="width: 120px;">
+                            {% if request.user.is_focus %}<col span="1">{% endif %}
+                            <col span="1">
+                            <col span="1">
+                            <col span="1" style="width: 200px">
+                        </colgroup>
+
+                        <thead>
+                        <tr>
+                            <!--<td><input type="checkbox" onchange="$(this).parents('table').find(':checkbox').attr('checked', $(this).attr('checked') || false)"></td>-->
+                            <th>{% trans "id" %}</th>
+                            <th>{% trans "Name" %}</th>
+                            <th>{% trans "Address" %}</th>
+
+                            {% if request.user.is_focus %}
+                            <th>{% trans "Company" %}</th>
+                            {% endif %}
+
+                            <th>{% trans "Status" %}</th>
+                            <th>{% trans "Activation code" %}</th>
+                            <th>{% trans "Actions" %}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for kiosk in kiosks %}
+                            <tr  class="{% if kiosk.is_running %}runkiosk{% else %}offkiosk{% endif %}">
+                                <!--<td><input type="checkbox"></td>-->
+                                <td>{{ kiosk.id }}</td>
+                                <td>{{ kiosk.settings.alias|default:'-' }}
+                                    {% if kiosk.is_few_slots %}
+                                        <a class="circul-red tooltip" title="{% trans "Few free slots" %}">!</a>
+                                    {% endif %}
+                                </td>
+                                <td>{{ kiosk.address.to_string }}</td>
+
+                                {% if request.user.is_focus %}
+                                <td>{{ kiosk.company.name }}</td>
+                                {% endif %}
+
+                                <td><span class="badge block {{ kiosk.status.badge }}">{{ kiosk.status.status }}</span></td>
+                                <td>{{ kiosk.activation_code }}</td>
+                                <td class='center'>
+
+                                    {% if 'kiosk_edit' in request.user.rights %}
+                                        <a href="{% url 'kiosks.views.edit_by_id' kiosk.id %}"
+                                       class="button small grey tooltip" data-gravity='s'
+                                       original title="{% trans "Edit" %}"><i class="icon-pencil"></i></a>
+                                    {% else %}
+                                        <a class="button small grey tooltip disabled" data-gravity='s'
+                                       original title="{% trans "Edit" %}"><i class="icon-pencil"></i></a>
+                                    {% endif %}
+
+                                    {% if 'kiosk_edit' in request.user.rights %}
+                                    <a href="{% url 'kiosks.views.settings' kiosk.id %}"
+                                       class="button small grey tooltip" data-gravity='s'
+                                       original title="{% trans "Settings" %}"><i class="icon-cog"></i></a>
+                                    {% else %}
+                                        <a class="button small grey tooltip disabled" data-gravity='s'
+                                           original title="{% trans "Settings" %}"><i class="icon-cog"></i></a>
+                                    {% endif %}
+
+                                    {% if 'price_plan_view' in request.user.rights %}
+                                        <a href="{% url 'kiosks.views.kiosk_tariff_plans' kiosk.id %}"
+                                       class="button small grey tooltip" data-gravity='s' original
+                                       title="{% trans "Tariff plans" %}"><i class="icon-tag"></i></a>
+                                    {% else %}
+                                        <a class="button small grey tooltip disabled" data-gravity='s' original
+                                       title="{% trans "Tariff plans" %}"><i class="icon-tag"></i></a>
+                                    {% endif %}
+
+                                    {% if 'company_view_permissions' in request.user.rights %}
+                                        <a href="{% url 'kiosks.views.permissions' kiosk.id %}"
+                                       class="button small grey tooltip" data-gravity='s' original
+                                       title="{% trans "Specific permissions" %}"><i class="icon-legal"></i></a>
+                                    {% else %}
+                                        <a class="button small grey tooltip disabled" data-gravity='s' original
+                                       title="{% trans "Specific permissions" %}"><i class="icon-legal"></i></a>
+                                    {% endif %}
+
+                                    {% if 'kiosk_view' in request.user.rights %}
+                                        <a href="{% url 'kiosks.views.kiosk_slots' kiosk.id %}"
+                                       class="button small grey tooltip" data-gravity='s' original
+                                       title="{% trans "Slots" %}"><i class="icon-reorder"></i></a>
+                                    {% else %}
+                                        <a class="button small grey tooltip disabled" data-gravity='s' original
+                                       title="{% trans "Slots" %}"><i class="icon-reorder"></i></a>
+                                    {% endif %}
+
+                                    {% if 'kiosk_view' in request.user.rights %}
+                                        <a href="{% url 'kiosks.views.screens' kiosk.id %}"
+                                       class="button small grey tooltip" data-gravity='s' original
+                                       title="{% trans "Screens" %}"><i class="icon-picture"></i></a>
+                                    {% else %}
+                                        <a class="button small grey tooltip disabled" data-gravity='s' original
+                                       title="{% trans "Screens" %}"><i class="icon-picture"></i></a>
+                                    {% endif %}
+
+                                    {% if 'kiosk_trailers_schedule_view' in request.user.rights %}
+                                        <a href="{% url 'kiosks.views.trailers_schedule' kiosk.id %}"
+                                       class="button small grey tooltip" data-gravity='s' original
+                                       title="{% trans "Trailers schedule" %}"><i class="icon-calendar"></i></a>
+                                    {% else %}
+                                        <a class="button small grey tooltip disabled" data-gravity='s' original
+                                       title="{% trans "Trailers schedule" %}"><i class="icon-calendar"></i></a>
+                                    {% endif %}
+
+                                    {% if kiosk.is_running %}
+                                        <a href="{% url 'kiosks.views.ajax_disable' kiosk.id 0 %}"
+                                            class="button small grey tooltip disableKiosk" data-gravity='s' original
+                                            title="{% trans "Disable kiosk" %}"><i class="icon-remove"></i></a>
+                                    {% else %}
+                                        <a href="{% url 'kiosks.views.ajax_disable' kiosk.id 1 %}"
+                                            class="button small grey tooltip disableKiosk" data-gravity='s' original
+                                            title="{% trans "Enable kiosk" %}"><i class="icon-ok"></i></a>
+                                    {% endif %}
+
+                                    <a href="{% url 'kiosks.views.kiosk_bash' kiosk.id %}"
+                                       class="button small grey tooltip" data-gravity='s' original
+                                       title="{% trans "Bash" %}"><i class="icon-terminal"></i></a>
+
+                                    <a href="{% url 'kiosks.views.kiosk_calibration' kiosk.id %}"
+                                       class="button small grey tooltip" data-gravity='s' original
+                                       title="{% trans "Calibration" %}"><i class="icon-stethoscope"></i></a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+
+                </div>
+                <!-- End of .content -->
+
+            </div>
+            <!-- End of .box -->
+        </div>
+        <!-- End of .grid_12 -->
+
+    </section><!-- End of #content -->
+
+{% endblock %}
+
+{% block addons %}
+    <!-- The settings dialog -->
+
+{% endblock %}

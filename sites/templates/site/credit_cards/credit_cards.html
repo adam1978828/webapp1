@@ -1,0 +1,69 @@
+{% extends 'site/base.html' %}
+{% load staticfiles %}
+{% load filters %}
+{% load i18n %}
+{% block title %}{% trans "Credit cards" %}{% endblock %}
+{% block content %}
+{% include 'site/search_panel.html' %}
+<section class="container">
+    <h2 class="page-heading heading--outcontainer">{% trans "Your cards" %}</h2>
+    <section class="container">
+        <div class="col-sm-6 col-sm-offset-3">
+            <form id="addCreditCardForm" class="login" action="{% url 'sites.views.ajax_add_credit_card' %}" method='post' novalidate=''>
+                {% csrf_token %}
+                <p class="login__title"><span class="login-edition">{% trans "Enter Credit Card Details" %}</span></p>
+
+                <div class="field-wrap">
+                    <input type='text' id="cardNumber" placeholder='{% trans "Card number" %}' name='cardNumber' class="login__input">
+                    <input type='text' id="cardHolder" placeholder='{% trans "Card holder" %}' name='cardHolder' class="login__input">
+                    {% trans "Card expiry:" %} <input type='text' id="cardExpiryMonth" placeholder='{% trans "Month" %}' name='cardExpiryMonth' class="login__input" style="width: 36%;"> / <input type='text' id="cardExpiryYear" placeholder='Year' name='cardExpiryYear' class="login__input" style="width: 36%;">
+                </div>
+                <div class="login__control">
+                    <button type='submit' id="submitAddCard" class="btn btn-md btn--warning btn--wider">{% trans "Add" %}</button>
+                </div>
+                <div class="clear"></div>
+            </form>
+        </div>
+    </section>
+</section>
+
+<section class="container">
+    <div class="col-sm-12">
+        <div class="row">
+            <div class="col-sm-12">
+                <h2 class="page-heading">{% trans "Your cards" %}</h2>
+
+                <div class="rates-wrapper rates--full">
+
+                    <table id="tableCreditCardList">
+                        <colgroup class="col-width-lg">
+                        <colgroup class="col-width">
+                        <colgroup class="col-width-sm">
+                          {% for card in cards %}
+                              <tr class="rates rates--top">
+                                <td class="rates__obj" name="card_name"><span class="rates__obj-name">{{ card.value_to_display }}</span></td>
+                                <td class="rates__vote" name="card_dt_add">{{ card.dt_add|date:'d.m.Y H:i:s'|default:'-' }}</td>
+                                <td class="rates__result" name="card_remove">
+                                  <a href="{% url 'sites.views.remove_credit_card' card.id %}" class="removeCreditCard rates__obj-name">Remove</a>
+                                </td>
+                              </tr>
+                          {% endfor %}
+                    </table>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+
+{%endblock%}
+{% block script %}
+<script type="text/javascript">
+  $(document).ready(function() {
+      init_Registration();
+  });
+</script>
+ {% endblock %}

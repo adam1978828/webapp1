@@ -1,0 +1,251 @@
+{% extends 'acc_base.html' %}
+{% load staticfiles %}
+{% load i18n %}
+{% block breadcrumb %}
+    <div class="left">
+        <ul class="breadcrumb">
+            <li><a href="/">{% trans "Home" %}</a></li>
+            <li><a href="{% url 'kiosks.views.view_list' %}">{% trans "Kiosks" %}</a></li>
+            <li><a>{% trans "Edit" %}</a></li>
+        </ul>
+    </div>
+{% endblock %}
+{% block scripts %}
+    <script type="text/javascript"
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAVZeU0hq_SAiOlFfbsO1Gz4ZQuHTLxz3Q">
+    </script>
+    <script src="{% static 'js/script_company.js' %}"></script>
+{% endblock %}
+{% block title %}{% trans "Kiosk Edit" %}{% endblock %}
+{% block acc_content %}
+    <script>
+        $('#bt_kiosks_list').addClass('current');
+        $('.accordion li a').removeClass('open');
+
+        function initializeMap() {
+            var ff = 0;
+            var mapOptions = {
+                    center: { 
+                        lat: {{kiosk.address.latitude|default:21}}, 
+                        lng: {{kiosk.address.longitude|default:-153}} 
+                    },
+                    zoom: 8
+                },
+                mapCanvas = document.getElementById('mapCanvas'),
+                map = new google.maps.Map(mapCanvas, mapOptions),
+                geocoder = new google.maps.Geocoder(),
+                marker,
+                infowindow = new google.maps.InfoWindow({content:''}),
+                formLinks = function() {
+                    var wrapper = document.createElement('div'),
+                        header = document.createElement('h2'),
+                        settingsLink = document.createElement("a"),
+                        tariffLink = document.createElement("a"),
+                        permissionsLink = document.createElement("a"),
+                        slotsLink = document.createElement("a"),
+                        screensLink = document.createElement("a"),
+                        trailerLink = document.createElement("a");
+                    wrapper.setAttribute('class', 'kioskInfo');
+                    header.innerHTML = "{{kiosk.settings.alias|default:'Kiosk'}}";
+                    wrapper.appendChild(header);
+                    {% if kiosk %}
+                        settingsLink.setAttribute("href", "{% url 'kiosks.views.settings' kiosk.id %}");
+                        settingsLink.innerHTML = "Settings";
+                        tariffLink.setAttribute("href", "{% url 'kiosks.views.kiosk_tariff_plans' kiosk.id %}");
+                        tariffLink.innerHTML = "Tariff plans";
+                        permissionsLink.setAttribute("href", "{% url 'kiosks.views.permissions' kiosk.id %}");
+                        permissionsLink.innerHTML = "Permissions";
+                        slotsLink.setAttribute("href", "{% url 'kiosks.views.kiosk_slots' kiosk.id %}");
+                        slotsLink.innerHTML = "Slots";
+                        screensLink.setAttribute("href", "{% url 'kiosks.views.screens' kiosk.id %}");
+                        screensLink.innerHTML = "Screens";
+                        trailerLink.setAttribute("href", "{% url 'kiosks.views.trailers_schedule' kiosk.id %}");
+                        trailerLink.innerHTML = "Trailers schedule";
+                        wrapper.appendChild(settingsLink);
+                        wrapper.appendChild(tariffLink);
+                        wrapper.appendChild(permissionsLink);
+                        wrapper.appendChild(slotsLink);
+                        wrapper.appendChild(screensLink);
+                        wrapper.appendChild(trailerLink);
+                    {% endif %}
+                    return wrapper;
+                },
+                addMarker = function(location, map) {
+                    if (marker) {
+                        marker.setPosition(location)
+                    } else {
+                        marker = new google.maps.Marker({
+                            position: location,
+                            map: map,
+                            draggable: true,
+                            animation: google.maps.Animation.DROP
+                        });
+
+                        google.maps.event.addListener(marker, 'click', function() {
+                            infowindow.content = formLinks();
+                            infowindow.open(map, marker)
+                        });
+                    }
+                    mapCanvas.setAttribute('data-marker', location.lat() + "|" + location.lng());
+                    geocodePosition(location, function(address) {
+                        $('[data-geolocation]').each(function(){
+                            var key = $(this).attr('data-geolocation');
+                            if (address.hasOwnProperty(key) && ff>0){
+                                $(this).val(address[key]);}
+                        });
+                        ff++;
+
+                    });
+                },
+                geocodePosition = function(position, callback) {
+                    geocoder.geocode({'latLng': position}, function(results, status) {
+                        var data = {};
+                        if (status == google.maps.GeocoderStatus.OK) {
+                            for (i in results) {
+                                var address = results[i].address_components;
+                                for (j in address) {
+                                    if (!data.hasOwnProperty(address[j].types[0]))
+                                        data[address[j].types[0]] = address[j].long_name
+                                }
+                            }
+                            data['formatted_address'] = results[0].formatted_address
+                            callback(data);
+                        }
+                    })
+                };
+                {% if kiosk.has_geolocation %}
+                    var location = new google.maps.LatLng(
+                        {{kiosk.address.latitude}}, 
+                        {{kiosk.address.longitude}}
+                    );
+                    addMarker(location, map);
+                {% endif %}
+            $('.find').on('click', function(e) {
+                e.preventDefault();
+                geocoder.geocode({'address': $(this).prev().val()}, function(results, status) {
+                    if (status == google.maps.GeocoderStatus.OK) {
+                        map.setCenter(results[0].geometry.location);
+                        addMarker(results[0].geometry.location, map);
+                        $('input#geolocation').val(results[0].geometry.location.lat() + "|" + results[0].geometry.location.lng());
+                    }
+                })
+            });
+            google.maps.event.addListener(map, 'mouseup', function(e) { addMarker(e.latLng, map); });
+        }
+
+        google.maps.event.addDomListener(window, 'load', initializeMap);
+    </script>
+    <!-- Here goes the content. -->
+    <section id="content" class="container_12 clearfix" data-sort=true>
+        <h1 class="grid_12">{% trans "Edit kiosk details" %}</h1>
+        <form action="{% url 'kiosks.views.ajax_add_kiosk' %}" method="post" class="grid_12" id="f_create_kiosk">
+            <fieldset>
+                <legend>{% trans "Info" %}</legend>
+                <input type="hidden" name="f_kiosk_id" id="f_kiosk_id" value="{{kiosk.id | default_if_none:'' }}">
+                
+                <div class="row">
+                    <label for="f_k_id">
+                        <strong>{% trans "Kiosk uuid" %}</strong>
+                    </label>
+                    <div>
+                        <input type="text" name="f_k_id" id="f_k_id" value="{{ kiosk.uuid }}" disabled>
+                    </div>
+                </div>
+                <div class="row">
+                    <label for="group_number">
+                        <strong>{% trans "Kiosk Group Number" %}</strong>
+                    </label>
+                    <div>
+                        <input type="text" name="group_number" id="group_number" value="{{ kiosk.group_number }}">
+                    </div>
+                </div>
+                <div class="row">
+                    <label for="f_company_id">
+                        <strong>{% trans "Company" %}</strong>
+                    </label>
+
+                    <div>
+                        <select name=f_company_id id=f_company_id class="search" data-placeholder="{% trans "Choose a Company" %}" {%if kiosk.id %}disabled{%endif%}>
+                            {% for company in companies %}
+                                <option value="{{company.id}}" {%if kiosk.company.id == company.id%}selected{%endif%}>{{company.name}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend>{% trans "Address" %}</legend>
+                <div class="map box">
+                    <div id="mapCanvas" class="map canvas"></div>
+                </div>
+                <div class="row">
+                    <label for="i_addr1">
+                        <strong>{% trans "Google map search" %}</strong>
+                    </label>
+                    <div>
+                        <input  class="find-input pull-left" data-reverse-geolocation="true" autocomplete="off" data-geolocation="formatted_address" type="text" name="line3" id="line3" value="" />
+                        <button class="find pull-left">{% trans "Find" %}</button>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                <div class="row">
+                    <label for="i_addr1">
+                        <strong>{% trans "Address 1" %}</strong>
+                    </label>
+                    <div>
+                        <input autocomplete="off" type="text" name="line1" id="line1" value="{{ kiosk.address.line_1|default:'' }}" />
+                    </div>
+                </div>
+                <div class="row">
+                    <label for="i_addr2">
+                        <strong>{% trans "Address 2" %}</strong>
+                    </label>
+                    <div>
+                        <input type="text" name="line2" autocomplete="off" id="line2" value="{{ kiosk.address.line_2|default:'' }}" />
+                    </div>
+                </div>
+                <div class="row">
+                    <label for="i_city">
+                        <strong>{% trans "City" %}</strong>
+                    </label>
+                    <div>
+                        <input data-geolocation="locality" autocomplete="off" type="text" name="city" id="city" value="{{ kiosk.address.city|default:'' }}" />
+                    </div>
+                </div>
+                <div class="row">
+                    <label for="i_state">
+                        <strong>{% trans "State" %}</strong>
+                    </label>
+                    <div>
+                        <input data-geolocation="administrative_area_level_1" autocomplete="off" type="text" name="state" id="state" value="{{ kiosk.address.state|default:'' }}" />
+                    </div>
+                </div>
+                <div class="row">
+                    <label for="i_post">
+                        <strong>{% trans "Postal code" %}</strong>
+                    </label>
+                    <div>
+                        <input data-geolocation="postal_code" type="text" autocomplete="off" name="postalcode" id="postalcode" value="{{ kiosk.address.postalcode|default:'' }}" />
+                    </div>
+                </div>
+                <div class="row">
+                    <label for="i_country">
+                        <strong>{% trans "Country" %}</strong>
+                    </label>
+                    <div>
+                        <input data-geolocation="country" type="text" autocomplete="off" name="country" id="country" value="{{ kiosk.address.country|default:'' }}" />
+                    </div>
+                </div>
+            </fieldset>
+            <div class="actions">
+                <div class="right">
+                    <input type="submit" value="{% trans "Save" %}">
+                </div>
+            </div><!-- End of .actions -->
+        </form>
+    </section><!-- End of #content -->
+{% endblock %}
+{% block addons %}
+    <!-- The settings dialog -->
+{% endblock %}

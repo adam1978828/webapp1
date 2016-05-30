@@ -1,0 +1,50 @@
+{% extends 'acc_base.html' %}
+{% load staticfiles %}
+{% load acctags %}
+{% load filters %}
+{% load i18n %}
+{% block breadcrumb %}
+    <div class="left">
+        <ul class="breadcrumb">
+            <li><a href="/">{% trans "Home" %}</a></li>
+            <li><a href="{% url 'movies.views.all' %}">{% trans "Movies" %}</a></li>
+        </ul>
+    </div>
+{% endblock %}
+{% block title %}{% trans "Movies" %}{% endblock %}
+{% block acc_content %}
+    <script>
+        $('#bt_movies_list_view').addClass('current');
+        $('.accordion li a').removeClass('open');
+        $('#bt_movies_list_view').parent().prev().addClass('open');
+    </script>
+    <section id="content" class="container_12 clearfix ui-sortable" data-sort="true">
+        <h1 class="grid_12">{% trans "Movies" %}</h1>
+
+        <div class="spacer"></div>
+        <div class="grid_12">
+            <div class="box">
+                <div class="content">
+                    <table id='moviesTable' class="dynamic styled" data-show-Filter-Bar="true" data-max-items-per-page="50" data-data-table='{"bServerSide":true, "bDeferRender":true,"bProcessing":true,"sAjaxSource":"{% url 'movies.views.json_all' %}"}'>
+                        <thead>
+                        <tr>
+                            <th>{% trans "ID" %}</th>
+                            <th>{% trans "UPC" %}</th>
+                            <th>{% trans "Title" %}</th>
+                            <th>{% trans "Length" %}</th>
+                            <th>{% trans "Release" %}</th>
+                            <th>{% trans "DVD Release" %}</th>
+                            <th>{% trans "Rating" %}</th>
+                            <th>{% trans "Last Modified" %}</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                    <!--do your stuff-->
+                </div>
+                <!-- End of .content -->
+            </div>
+        </div>
+    </section>
+{% endblock %}

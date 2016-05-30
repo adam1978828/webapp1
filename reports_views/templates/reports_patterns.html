@@ -1,0 +1,56 @@
+{% extends 'acc_base.html' %}
+{% load staticfiles %}
+{% load acctags %}
+{% load i18n %}
+{% block breadcrumb %}
+    <div class="left">
+        <ul class="breadcrumb">
+            <li><a href="/">{% trans "Home" %}</a></li>
+            <li><a href="{% url 'reports_views.views.reports' %}">{% trans "Reports" %}</a></li>
+            <li><a href="{% url 'reports_views.views.patterns' %}">{% trans "Report Templates" %}</a></li>
+        </ul>
+    </div>
+{% endblock %}
+{% block title %}{% trans "Report Templates" %}{% endblock %}
+{% block acc_content %}
+  <script>
+      $('#bt_patterns').addClass('current');
+      $('.accordion li a').removeClass('open');
+      $('#bt_patterns').parent().prev().addClass('open');
+  </script>
+<section id="content" class="container_12 clearfix ui-sortable" data-sort="true">
+    <h1 class="grid_12">{% trans "Report Templates" %}</h1>
+    <div class="spacer"></div>
+    <form id="" class="grid_12 no-box" name="" method="post" action="" novalidate="novalidate">
+        <fieldset>
+            <legend>{% trans "New Report Template" %}</legend>
+            <div class="row">
+                <label for="f_k_id">
+                    <strong>{% trans "Data Source" %}</strong>
+                </label>
+                <div>
+                    <select class="" id="reportPatterns">
+                        {% for val in patterns %}
+                            <option value="{% url 'reports_views.views.create_report_pattern' val.alias %}">{{ val.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </fieldset>
+        <div class="actions">
+            <div class="right">
+                <button class="" id="createReportPattern">
+                   <span class="icon icon-plus"></span> {% trans "Add" %}
+                </button>
+            </div>
+        </div>
+    </form>
+    <div class="grid_12">
+        <div class="box">
+            <div class="content">
+                {% include 'patterns_table.html' %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,29 @@
+{% load i18n %}
+<form class="grid_12 no-box" name="" method="post" action="" novalidate="novalidate" id="repFields">
+    <fieldset>
+        <legend>{% trans "Fields" %}</legend>
+        <div class="row">
+            <label> <strong>{% trans "Add Field" %}</strong></label>
+            <div class="grid_6">
+                {% include 'report/config/fields.html' %}
+            </div>
+            <a class="button medium addreport pull-left" id="addRootField"><i class="icon-plus"></i></a>
+        </div>
+    </fieldset>
+    <fieldset>
+        <legend>{% trans "Selected Fields" %}</legend>
+        <table class="styled2 row" id="fields">
+            <tbody class="rep-sortable">
+                {% autoescape off %}{{ pattern_fields }}{% endautoescape %}
+            </tbody>
+        </table>
+        <div id="fieldWrappers" hidden style="display:none;">
+            {% with without_id=False %}
+                {% include 'report/helpers/blank_field.html' %}
+                {% include 'report/helpers/not_blank_field.html' %}
+            {% endwith %}
+            <table class="styled3 col-lg-offset-1" id="subFieldsTable">
+            </table>
+        </div>
+    </fieldset>
+</form>

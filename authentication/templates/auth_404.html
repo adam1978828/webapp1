@@ -1,0 +1,54 @@
+{% extends 'auth_base.html' %}
+{% load staticfiles %}
+{% load i18n %}
+
+{% block title %}{% trans "Restore password" context "page title" %}{% endblock %}
+
+{% block breadcrumb %}
+{% endblock %}
+
+
+{% block form %}
+    <!-- The container of the sidebar and content box -->
+	<section id="login" class="container_12 clearfix">
+
+		<div class="box">
+			<div class="header">
+				<h2>
+                    <span class="icon icon-lock"></span>
+                    {% trans "Authentication" %}
+                </h2>
+			</div>
+
+			<div class="content">
+
+                <div class="big error">
+
+                    <div class="big">
+                        <h2>
+                            {% trans "Something went wrong here..." %}
+                        </h2>
+                        <h1><span>{% trans "404" %}</span></h1>
+                        <div class="spacer"></div>
+                    </div>
+
+                    <div class="small">
+                        <span>
+                            {% trans "Oops! Sorry, an error has occured." %}
+                        </span>
+                        <span>
+                            {% trans "Requested page not found!" %}
+                        </span>
+                    </div><!-- End of .small -->
+
+                    <div class="spacer"></div>
+
+                </div>
+
+
+			</div><!-- End of .content -->
+
+		</div><!-- End of .box -->
+
+	</section>
+{% endblock %}

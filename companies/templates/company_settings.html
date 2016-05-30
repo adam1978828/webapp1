@@ -1,0 +1,471 @@
+{% extends 'acc_base.html' %}
+{% load staticfiles %}
+{% load acctags %}
+{% load filters %}
+{% load i18n %}
+{% block breadcrumb %}
+    <div class="left">
+        <ul class="breadcrumb">
+            <li><a href="/">{% trans "Home" %}</a></li>
+            <li><a href="{% url 'companies.views.view_list' %}">{% trans "Company" %}</a></li>
+            <li><a href="{% url 'companies.views.settings' %}">{% trans "Company settings" %}</a></li>
+        </ul>
+    </div>
+{% endblock %}
+{% block scripts %}
+    <script type="text/javascript" 
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAVZeU0hq_SAiOlFfbsO1Gz4ZQuHTLxz3Q"></script>
+{% endblock %}
+{% block title %}{% trans "Company settings" %}{% endblock %}
+{% block acc_content %}
+<script>
+    $('#bt_list_settings').addClass('current');
+</script>
+    <section id="content" class="container_12 clearfix ui-sortable" data-sort="true">
+        {% if request.user.is_focus %}<h1 class="grid_12">{{ data.company.name }}</h1>{% endif %}
+        <h1 class="grid_12">{% trans "Company settings" %}</h1>
+            <div class="spacer"></div>
+            <form action="{% url 'companies.views.settings' %}" method="post" class="grid_12" id="companySettings" name="companySettings">
+                <fieldset>
+
+                    {% if request.user.is_focus %}
+                    <input type="hidden" name="company_id" value="{{ data.company.id }}" />
+                    {% endif %}
+
+                    <legend>{% trans "Settings" %}</legend>
+                    <div class="row">
+                        <label for="timezone">
+                            <strong>{% trans "Local time zone" %}</strong>
+                        </label>
+                        <div>
+                            <select name="timezone" id="timezone" class="search" data-placeholder="{% trans "Choose local time zone" %}">
+                                {% for local in data.timezones %}
+                                    <option value="{{local.id}}" {%if data.timezoneId == local.id%}selected{%endif%}>{{local.name}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label for="tDayStart">
+                            <strong>{% trans "Day start" %}</strong>
+                        </label>
+
+                        <div>
+                            <input class="required" type="time" name="tDayStart" id="tDayStart" pattern="^[0-9]{2}:[0-9]{2}$"
+                                   data-time="{{ data.tDayStart|time:'H:i' }}">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label for="tReturn">
+                            <strong>{% trans "Day return" %}</strong>
+                        </label>
+
+                        <div>
+                            <input class="required" type="time" name="tReturn" id="tReturn" pattern="^[0-9]{2}:[0-9]{2}$"
+                                   data-time="{{ data.tReturn|time:'H:i' }}">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <label for="currency">
+                            <strong>{% trans "Currency symbol" %}</strong>
+                        </label>
+                        <div>
+                            <select name="currency" id="currency" class="search" data-placeholder="{% trans "Choose currency" %}">
+                                {% for cur in data.currencies %}
+                                    <option value="{{cur.id}}" {%if data.currencyId == cur.id%}selected{%endif%}>{{ cur.symbol }} / {{ cur.alias }} / {{ cur.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label for="speakerVolume">
+                            <strong>{% trans "The speaker volume" %}</strong>
+                            <small>(0-100%)</small>
+                        </label>
+                        <div>
+                            <input type="text" name="speakerVolume" id="speakerVolume" value="{{ data.speakerVolume|default:'' }}" />
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <label for="rentTaxRate">
+                            <strong>{% trans "The rental tax rate" %}</strong>
+                            <small>(0-99.999%)</small>
+                        </label>
+                        <div>
+                            <input type="text" name="rentTaxRate" id="rentTaxRate" value="{{ data.rentTaxRate|default:''|stringformat:"0.3f" }}" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label for="saleTaxRate">
+                            <strong>{% trans "The sale tax rate" %}</strong>
+                        </label>
+                        <div>
+                            <input type="text" name="saleTaxRate" id="saleTaxRate" value="{{ data.saleTaxRate|default:''|stringformat:"0.3f" }}" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label for="taxJurisdiction">
+                            <strong>{% trans "The tax jurisdiction" %}</strong>
+                        </label>
+                        <div>
+                            <input type="text" name="taxJurisdiction" id="taxJurisdiction" value="{{ data.taxJurisdiction|default:'' }}" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label for="dvdTariffPlan">
+                            <strong>{% trans "The default DVD price plan" %}</strong>
+                        </label>
+                        <div>
+                            <select name="dvdTariffPlan" id="dvdTariffPlan" class="search" data-placeholder="{% trans "Choose price plan" %}">
+                                {% for price in data.tariff_plans %}
+                                    <option value="{{price.id}}" {%if data.dvdTariffPlanId == price.id%}selected{%endif%}>{{ price.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label for="bluRayTariffPlan">
+                            <strong>{% trans "The default Blu-ray price plan" %}</strong>
+                        </label>
+                        <div>
+                            <select name="bluRayTariffPlan" id="bluRayTariffPlan" class="search" data-placeholder="{% trans "Choose price plan" %}">
+                                {% for price in data.tariff_plans %}
+                                    <option value="{{price.id}}" {%if data.bluRayTariffPlanId == price.id%}selected{%endif%}>{{ price.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label for="gameTariffPlan">
+                            <strong>{% trans "The default game price plan" %}</strong>
+                        </label>
+                        <div>
+                            <select name="gameTariffPlan" id="gameTariffPlan" class="search" data-placeholder="{% trans "Choose price plan" %}">
+                                {% for price in data.tariff_plans %}
+                                    <option value="{{price.id}}" {%if data.gameTariffPlanId == price.id%}selected{%endif%}>{{ price.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label for="paymentSystem">
+                            <strong>{% trans "The default payment system" %}</strong>
+                        </label>
+                        <div>
+                            <select name="paymentSystem" id="paymentSystem" class="search" data-placeholder="{% trans "Choose payment system" %}">
+                                {% for pay in data.payment_systems %}
+                                    <option value="{{pay.id}}" {%if data.companyPaymentSystemId == pay.id%}selected{%endif%}>{{ pay.payment_system.name }} ({{ pay.system.store_number }})</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label for="reservationExpirationPeriod">
+                            <strong>{% trans "The reservation expiration" %} <br> {% trans "time period" %}</strong>
+                            <small>(0-9999 minutes)</small>
+                        </label>
+                        <div>
+                            <input type="text" name="reservationExpirationPeriod" id="reservationExpirationPeriod" value="{{ data.reservationExpirationPeriod|default:'' }}" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label for="maxDisksPerCard">
+                            <strong>{% trans "The maximum number" %} <br> {% trans "of disks out per credit card" %}</strong>
+                            <small>{% trans "(0-99 items)" %}</small>
+                        </label>
+                        <div>
+                            <input type="text" name="maxDisksPerCard" id="maxDisksPerCard" value="{{ data.maxDisksPerCard|default:'' }}" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label for="gracePeriod">
+                            <strong>{% trans "The grace period" %}</strong>
+                            <small>{% trans "(0-999 minutes)" %}</small>
+                        </label>
+                        <div>
+                            <input type="text" name="gracePeriod" id="gracePeriod" value="{{ data.gracePeriod|default:'' }}" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label for="saleConvertType">
+                            <strong>{% trans "The sale convert type" %} - <br> {% trans "number of days or" %} <br> {% trans "number of dollars" %}</strong>
+                        </label>
+                        <div>
+                            <div class="onoffswitch">
+                                <input type="checkbox" name="saleConvertType" id="saleConvertType" class="onoffswitch-checkbox" id="myonoffswitch" {% if data.saleConvertType == 1 %}checked{% endif %} value="{{ data.saleConvertType|default:'' }}">
+                                <label class="onoffswitch-label" for="saleConvertType">
+                                    <div class="onoffswitch-inner"></div>
+                                    <span class="onoffswitch-switch"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label for="saleConvertDays">
+                            <strong>{% trans "The sale convert days" %} <br> {% trans "(if type is days)" %}</strong>
+                        </label>
+                        <div>
+                            <input type="text" name="saleConvertDays" id="saleConvertDays" value="{{ data.saleConvertDays|default:'' }}" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label for="saleConvertPrice">
+                            <strong>{% trans "The sale convert price" %} <br> {% trans "(either type)" %}</strong>
+                            <small>{% trans "(0-99999.99 $)" %}</small>
+                        </label>
+                        <div>
+                            <input type="text" name="saleConvertPrice" id="saleConvertPrice" value="{{ data.saleConvertPrice|stringformat:"0.2f"|default:'' }}" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label for="dvdPreauthAmount">
+                            <strong>{% trans "Preauthorization" %} <br> {% trans "method for DVD" %}</strong>
+                        </label>
+                        <div>
+                            <select name="dvdPreauthMethod" id="dvdPreauthMethod" data-placeholder="{% trans "Choose preauthorization method for DVD" %}">
+                                {% for predvd in data.preauth_methods %}
+                                    <option value="{{predvd.id}}" {%if data.dvdPreauthMethodId == predvd.id%}selected{%endif%}>{{ predvd.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label for="dvdPreauthAmount">
+                            <strong>{% trans "Preauthorization" %} <br> {% trans "amount for DVD" %}</strong>
+                        </label>
+                        <div>
+                            <input type="text" name="dvdPreauthAmount" id="dvdPreauthAmount" value="{{ data.dvdPreauthAmount|default:'' }}" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label for="bluRayPreauthMethod">
+                            <strong>{% trans "Preauthorization" %} <br> {% trans "method for BluRay" %}</strong>
+                        </label>
+                        <div>
+                            <select name="bluRayPreauthMethod" id="bluRayPreauthMethod" data-placeholder="{% trans "Choose preauthorization method for BluRay" %}">
+                                {% for preblueray in data.preauth_methods %}
+                                    <option value="{{preblueray.id}}" {%if data.bluRayPreauthMethodId == preblueray.id%}selected{%endif%}>{{ preblueray.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label for="bluRayPreauthAmount">
+                            <strong>{% trans "Preauthorization" %} <br> {% trans "amount for BluRay" %}</strong>
+                        </label>
+                        <div>
+                            <input type="text" name="bluRayPreauthAmount" id="bluRayPreauthAmount" value="{{ data.bluRayPreauthAmount|default:'' }}" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label for="gamePreauthMethod">
+                            <strong>{% trans "Preauthorization" %} <br> {% trans "method for Game" %}</strong>
+                        </label>
+                        <div>
+                            <select name="gamePreauthMethod" id="gamePreauthMethod" data-placeholder="{% trans "Choose preauthorization method for Game" %}">
+                                {% for pregame in data.preauth_methods %}
+                                    <option value="{{pregame.id}}" {%if data.gamePreauthMethodId == pregame.id%}selected{%endif%}>{{ pregame.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label for="gamePreauthAmount">
+                            <strong>{% trans "Preauthorization" %} <br> {% trans "amount for Game" %}</strong>
+                        </label>
+                        <div>
+                            <input type="text" name="gamePreauthAmount" id="gamePreauthAmount" value="{{ data.gamePreauthAmount|default:'' }}" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label for="saleNoInternetOpId">
+                            <strong>{% trans "Allow known to rent" %} <br> {% trans "without authorization" %}</strong>
+                        </label>
+                        <div>
+                            <select name="saleNoInternetOpId" id="saleNoInternetOpId" data-placeholder="{% trans "Choose known to rent" %}">
+                                {% for known in data.no_internet_operations %}
+                                    <option value="{{known.id}}" {%if data.saleNoInternetOpId == known.id%}selected{%endif%}>{{ known.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label for="rentNoInternetOpId">
+                            <strong>{% trans "Allow unknown to rent" %} <br> {% trans "without authorization" %}</strong>
+                        </label>
+                        <div>
+                            <select name="rentNoInternetOpId" id="rentNoInternetOpId" data-placeholder="{% trans "Choose unknown to rent" %}">
+                                {% for unknown in data.no_internet_operations %}
+                                    <option value="{{unknown.id}}" {%if data.rentNoInternetOpId == unknown.id%}selected{%endif%}>{{ unknown.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label for="captureRetryInterval">
+                            <strong>{% trans "Capture Retry Interval" %}</strong>
+                            <small>{% trans "(0-99999 minutes)" %}</small>
+                        </label>
+                        <div>
+                            <input type="text" name="captureRetryInterval" id="captureRetryInterval" value="{{ data.captureRetryInterval|default:'' }}" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label for="captureRetryQuantity">
+                            <strong>{% trans "Capture Retry Quantity" %}</strong>
+                            <small>{% trans "(0-999 times)" %}</small>
+                        </label>
+                        <div>
+                            <input type="text" name="captureRetryQuantity" id="captureRetryQuantity" value="{{ data.captureRetryQuantity|default:'' }}" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label for="languageButtons">
+                            <strong>{% trans "Language buttons" %}</strong>
+                        </label>
+
+                        <div>
+                            <select multiple name="languageButtons" id="languageButtons" data-placeholder="{% trans "Choose language buttons" %}">
+                                {% for lang in data.allLanguages %}
+                                    <option value="{{ lang.id }}" {% if lang.id in data.companyLanguageId %}selected{% endif %}>{{ lang.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label for="contactTelephoneNumber">
+                            <strong>{% trans "Contact telephone number" %}</strong>
+                        </label>
+                        <div>
+                            <input type="text" name="contactTelephoneNumber" id="contactTelephoneNumber" value="{{ data.contactTelephoneNumber|default:'' }}" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label for="terms">
+                            <strong>{% trans "Terms and conditions" %}</strong>
+                        </label>
+                        <div>
+                            <textarea name="terms" id="terms">{{ data.terms|default:'' }}</textarea>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label for="i_country">
+                            <strong>{% trans "Skip Days" %}</strong>
+                        </label>
+                        <div>
+                            <div id="skipDays" class="skipDaysWeek">
+                                <div class="leftMonth">
+                                    <span>{% trans "Mo" %}</span>
+                                    <input type="checkbox" name="skipWeekdays" id="Mo" value="1" {% if 1 in data.skipWeekdays %} checked {% endif %}/>
+                                </div>
+                                <div class="leftMonth">
+                                    <span>{% trans "Tu" %}</span>
+                                    <input type="checkbox" name="skipWeekdays" id="Tu" value="2" {% if 2 in data.skipWeekdays %} checked {% endif %}/>
+                                </div>
+                                <div class="leftMonth">
+                                    <span>{% trans "We" %}</span>
+                                    <input type="checkbox" name="skipWeekdays" id="We" value="3" {% if 3 in data.skipWeekdays %} checked="checked" {% endif %}/>
+                                </div>
+                                <div class="leftMonth">
+                                    <span>{% trans "Th" %}</span>
+                                    <input type="checkbox" name="skipWeekdays" id="Th" value="4" {% if 4 in data.skipWeekdays %} checked="checked" {% endif %} />
+                                </div>
+                                <div class="leftMonth">
+                                    <span>{% trans "Fr" %}</span>
+                                    <input type="checkbox" name="skipWeekdays" id="Fr" value="5" {% if 5 in data.skipWeekdays %} checked="checked" {% endif %}/>
+                                </div>
+                                <div class="leftMonth">
+                                    <span>{% trans "Sa" %}</span>
+                                    <input type="checkbox" name="skipWeekdays" id="Sa" value="6" {% if 6 in data.skipWeekdays %} checked="checked" {% endif %}/>
+                                </div>
+                                <div class="leftMonth">
+                                    <span>{% trans "Su" %}</span>
+                                    <input type="checkbox" name="skipWeekdays" id="Su" value="7" {% if 7 in data.skipWeekdays %} checked="checked" {% endif %}/>
+                                </div>
+                            </div>
+                            <div id="skipPeriods">
+                                <a id="addSkipPeriod" class="button block" title="{% trans "Add" %}">
+                                    <span class="icon-plus"></span>
+                                    {% trans "Add Skip Date" %}
+                                </a>
+                            </div>
+                            <div class="grid_12">
+                                <div class="box">
+                                    <div class="header">
+                                        <h2>{% trans "Skipped days" %}</h2>
+                                    </div>
+                                    
+                                    <div class="content">
+                                        <table data-id='skipDates' class="dynamic styled" data-filter-Bar="none"> <!-- OPTIONAL: class=with-prev-next -->
+                                            <thead>
+                                                <tr>
+                                                    <th>{% trans "Day" %}</th>
+                                                    <th>{% trans "Month" %}</th>
+                                                    <th>{% trans "Year" %}</th>
+                                                    <th style='width:120px;'>{% trans "Mark to delete" %}</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for dt in data.skipDates %}
+                                                    <tr>
+                                                        <td class="center">{{ dt.day }}</td>
+                                                        <td class="center">{{ dt.month|month_name }}</td>
+                                                        <td class="center">
+                                                            {% if dt.year == 0 %}
+                                                                {% trans "Yearly" %}
+                                                            {% else %}
+                                                                {{ dt.year }}
+                                                            {% endif %}
+                                                        </td>
+                                                        <td class="center">
+                                                            <input data-day='{{dt.day}}' data-month='{{dt.month}}' data-year='{{dt.year}}' data-settings-id='{{dt.company_settings_id}}'  data-mark='delete' type="checkbox">
+                                                        </td>
+                                                    </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div><!-- End of .content -->
+                                </div><!-- End of .box -->
+                            </div><!-- End of .grid_12 -->
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label for="isBluRayWarning">
+                            <strong>{% trans "BluRay/3D Warning" %}</strong>
+                        </label>
+                        <div>
+                            <input type="checkbox" name="isBluRayWarning" {% if data.isBlurayWarning == True %}checked{% endif %} id="isBluRayWarning" value="0" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label for="isSmartCaptureRetry">
+                            <strong>{% trans "Smart Capture Retry" %}</strong>
+                        </label>
+                        <div>
+                            <input type="checkbox" name="isSmartCaptureRetry" {% if data.isSmartCaptureRetry == True %}checked{% endif %} id="isSmartCaptureRetry" value="0" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label for="emptySlotsWarning">
+                            <strong>{% trans "Empty slots alert threshold" %}</strong>
+                        </label>
+                        <div>
+                            <input type="text" name="emptySlotsWarning" id="emptySlotsWarning" value="{{ data.emptySlotsWarning|default:'' }}" />
+                        </div>
+                    </div>
+                </fieldset>
+
+                {% if 'company_edit_settings' in request.user.rights %}
+                <div class="actions">
+                    <div class="right">
+                        <input type="submit" value="{% trans "Save" %}" />
+                    </div>
+                </div>
+                {% endif %}
+
+           </form>
+    </section>
+{% endblock %}
+

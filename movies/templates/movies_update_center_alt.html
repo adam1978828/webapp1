@@ -1,0 +1,86 @@
+{% extends 'acc_base.html' %}
+
+{% load staticfiles %}
+{% load acctags %}
+{% load filters %}
+{% load i18n %}
+
+{% block breadcrumb %}
+    <div class="left">
+        <ul class="breadcrumb">
+            <li><a href="/">{% trans "Home" %}</a></li>
+            <li><a href="{% url 'movies.views.all' %}">{% trans "Movies" %}</a></li>
+            <li><a href="{% url 'movies.views.update_center_alt' 'log' %}">{% trans "Update Center" %}</a></li>
+        </ul>
+    </div>
+{% endblock %}
+
+{% block title %}{% trans "Movies" %}{% endblock %}
+
+{% block acc_content %}
+    <script>
+        $('#bt_movies_update_center').addClass('current');
+        $('.accordion li a').removeClass('open');
+        $('#bt_movies_update_center').parent().prev().addClass('open');
+    </script>
+
+    <section id="content" class="container_12 clearfix ui-sortable" data-sort="true">
+        <h1 class="grid_12">{% trans "Movies Update Center" %}</h1>
+
+        <input type="text" class="hidden" value="{% url 'movies.views.refresh_update_center' %}" id="urlRefreshUpdateCenter">
+        <input type="text" class="hidden" value="{% if last_update_stats.dt_end %}0{% else %}1{% endif %}" id="needRefreshUpdateCenter">
+
+        <div class="spacer"></div>
+        <div class="grid_12 update-center">
+            <div class="full-stats">
+                <div id="updateStats" class="stat hlist"
+                     data-list='[{"val":"{{ last_update_stats.dt_start|date:'m/d/y, h:i A'|default:'Never' }}","data_type":"string","title":"{% if last_update_stats.dt_end %}last update{% else %}started at{% endif %}", "color": "blue"},
+                                 {"val":"{{ last_update_stats.status.name|default:'-' }}","data_type":"string","title":"status", "color": "blue"},
+                                 {"val":{{ last_update_stats.detected|default:0 }},"format":"0","title":"items detected", "color": "blue"},
+                                 {"val":{{ last_update_stats.existed|default:0 }},"format":"0","title":"already exist", "color":"warm-yellow"},
+                                 {"val":{{ last_update_stats.not_recognized|default:0 }},"format":"0","title":"not recognized", "color":"red"},
+                                 {"val":{{ last_update_stats.stored|default:0 }},"format":"0","title":"successfully stored","color":"green"},
+                                 {"val":{{ last_update_stats.hash_handled|default:0 }},"format":"0","title":"poster handled","color":"green"}]'></div>
+            </div>
+        </div>
+
+        <div class="center hidden" id="autoRefreshInBlock">
+            <h3>{% trans 'Auto refresh in' %} <span class="badge block red" id="autoRefreshIn"></span> {% trans 'seconds' %}</h3>
+        </div>
+
+        <div class="center">
+            <button data-url="{% url 'movies.views.update_center_alt' 'full_load' %}" id="moviesUpdateAlt" class="block">
+                {% trans "Update Movies" %}
+            </button>
+
+            <button data-url="{% url 'movies.views.update_center_alt' 'hash_update' %}" id="moviesPosterHashUpdateAlt" class="block">
+                {% trans "Update Posters Hash" %}
+            </button>
+        </div>
+
+        <h1 class="grid_12">{% trans "Update Center Log" %}</h1>
+
+        <div class="spacer"></div>
+        <div class="grid_12">
+            <div class="box">
+                <div class="content">
+                    <table data-id="updateMoviesLog" class="dynamic styled" data-show-Filter-Bar="true" data-max-items-per-page=25 id="updateMoviesLogTable"
+                           data-data-table='{"bServerSide":true, "bDeferRender":true,"bProcessing":true,"sAjaxSource":"{% url 'movies.views.json_update_center_log' %}"}'>
+                        <thead>
+                        <tr>
+                            <th>{% trans "ID" %}</th>
+                            <th>{% trans "Type" %}</th>
+                            <th>{% trans "Started At" %}</th>
+                            <th>{% trans "Finished At" %}</th>
+                            <th>{% trans "Last Update At" %}</th>
+                            <th>{% trans "Runned By" %}</th>
+                            <th>{% trans "Status" %}</th>
+                        </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

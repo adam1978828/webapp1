@@ -1,0 +1,47 @@
+{% load filters %}
+{% load i18n %}
+<h2 class="page-heading">{% trans "Movies in" %} {{kiosk.settings.alias}} {% trans "kiosk" %}</h2>
+{% if movies.all  %}
+    <div class="select-area">
+        <form class="select select--film-category" method='get'>
+            <div class="genreskiosk">{% trans "Genres" %}</div>
+            <select name="select_item" class="select__sort" tabindex="0">
+                {% for genre in kiosk_genres %}
+                    <option href="{% url 'sites.views.specific_kiosk' kiosk.id %}?query={{genre}}&category=genre" value="{{genre}}" {% if genre == search_by %}selected{% endif %}>{{genre}}</option>
+                {% endfor %}
+            </select>
+        </form>
+
+        <form class="select select--film-category" method='get'>
+            <div class="genreskiosk">{% trans "Rating" %}</div>
+            <select name="select_item" class="select__sort" tabindex="0">
+                {% for rating in kiosk_ratings %}
+                    <option href="{% url 'sites.views.specific_kiosk' kiosk.id %}?query={{ rating }}&category=rating" value="{{rating}}" {% if rating == search_by %}selected{% endif %}>{{rating}}</option>
+                {% endfor %}
+            </select>
+        </form>
+
+        <form class="select select--film-category" method='get'>
+            <div class="genreskiosk">{% trans "Order By" %}</div>
+            <select name="select_item" class="select__sort" tabindex="0">
+                <option href="{% url 'sites.views.specific_kiosk' kiosk.id %}?query=normal&category=year" value="asc">{% trans "DVD Release (Oldest First)" %}</option>
+                <option href="{% url 'sites.views.specific_kiosk' kiosk.id %}?query=inverse&category=year" value="desc">{% trans "DVD Release (Newest First)" %}</option>
+
+                <option href="{% url 'sites.views.specific_kiosk' kiosk.id %}?query=normal&category=title" value="normal">{% trans "Title (A-Z)" %}</option>
+                <option href="{% url 'sites.views.specific_kiosk' kiosk.id %}?query=inverse&category=title" value="inverse">{% trans "Title (Z-A)" %}</option>
+
+            </select>
+        </form>
+
+
+
+    </div>
+    <div data-page="{{page|default:1}}" id="movies">
+        {% include 'site/partials/movie_info_list.html' with movies=movies %}
+    </div>
+{% else %}
+    <div class="alert alert-info">
+        <span class="icon-info"></span>
+        {% trans "No movies" %}
+    </div>
+{% endif %}

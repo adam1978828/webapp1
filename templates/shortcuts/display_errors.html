@@ -1,0 +1,23 @@
+{% load i18n %}
+{% if errors %}
+    <div class="grid_12">
+        <div class="box">
+
+            <div class="header">
+                <h2>{% trans "Errors" %}</h2>
+            </div>
+
+            <div class="content">
+
+                {% for error in errors %}
+                <div class="alert error sticky no-margin">
+                    <span class="icon"></span>
+                    <strong>{{error.field}}:</strong> {{error.message}}
+                </div>
+                {% endfor %}
+
+            </div><!-- End of .content -->
+
+        </div><!-- End of .box -->
+    </div><!-- End of .grid_6 -->
+{% endif %}

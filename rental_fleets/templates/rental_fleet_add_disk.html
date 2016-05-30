@@ -1,0 +1,91 @@
+{% extends 'acc_base.html' %}
+{% load staticfiles %}
+{% load acctags %}
+{% load filters %}
+{% load i18n %}
+{% block breadcrumb %}
+        <div class="left">
+            <ul class="breadcrumb">
+                <li><a href="/">{% trans "Home" %}</a></li>
+                <li><a href="{% url 'rental_fleets.views.index' %}">{% trans "Rental fleet" %}</a></li>
+                <li><a href="{% url 'rental_fleets.views.disks' %}">{% trans "Add Disks" %}</a></li>
+            </ul>
+        </div>
+{% endblock %}
+{% block title %}{% trans "Rental Fleet Add Disks" %}{% endblock %}
+
+{% block acc_content %}
+<script>
+    $('#bt_rental_fleets_add_disk').addClass('current');
+    $('.accordion li a').removeClass('open');
+    $('#bt_rental_fleets_disks').parent().prev().addClass('open');
+</script>
+  <section id="content" class="container_12 clearfix ui-sortable" data-sort="true">
+    <div class="grid_6">
+      <div id="addDiskBox" class="box">
+        <div class="header">
+          <h2>{% trans "Add disk" %}</h2>
+        </div>
+        <form action="{% url 'rental_fleets.views.add_disk' %}" method="post" class="full content" id="addDisc" name="addDisc" data-upc-url='{% url "rental_fleets.views.upc_detailed" %}' data-disk-url="{% url 'rental_fleets.views.show_disk' %}">
+          {% csrf_token %}
+          <fieldset>
+
+            {% if request.user.is_focus %}
+            <div class="row">
+                <label for="f_company_id">
+                    <strong>{% trans "Company" %}</strong>
+                </label>
+                <div>
+                    <select name=f_company_id id=f_company_id class="search" data-placeholder="{% trans "Choose a Company" %}">
+                        {% for company in companies %}
+                            <option value="{{company.id}}">{{company.name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            {% endif %}
+
+            <div class="row">
+              <label for="upcLink">
+                <strong>{% trans "UPC" %}</strong>
+              </label>
+              <div>
+                <!--<input data-error-type="inline" class="required maskCustom" data-mask="?999999999999" type="text" name="upcLink" id="upcLink">-->
+                <input type="text" name="upcLink" id="upcLink">
+              </div>
+            </div>
+            <div class="row">
+              <label for="rfId">
+                <strong>{% trans "RFID" %}</strong>
+              </label>
+              <div>
+                <input type="text" name="rfId" id="rfId">
+              </div>
+            </div>
+          </fieldset>
+        </form>
+        <div class="actions">
+          <div class="right">
+            <input type="submit" value="{% trans "Add" %}">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="grid_6">
+      <div id="addingHistoryBox" class="box">
+        <div class="header">
+          <h2>{% trans "Notification center" %}</h2>
+        </div>
+        <div id="activityHistoryBox" class="autoscroll content">
+          <div id="startNote" class="alert note">
+            <span class="icon"></span>
+            {% trans "Results of your attempts to add disk will be displayed here" %}
+          </div>
+        </div><!-- End of .content -->
+      </div><!-- End of .box -->
+    </div><!-- End of .grid_6 -->
+    <div id="diskInfo"></div>
+  </section>
+  <div id="addUpcTariff" data-check-tariff-url="{% url 'rental_fleets.views.check_upc_price_plan' 0 %}" class="invisible" title="{% trans "Add priceplan to the UPC" %}"></div>
+  <div id="upcTransfer" data-reassign-url="{% url 'rental_fleets.views.reassign_disk_upc' 'Dsk' 0 %}" title="{% trans "UPC reassigning" %}"></div>
+{% endblock %}
