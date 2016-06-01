@@ -15,7 +15,7 @@ DEBUG = True
 TEMPLATE_DEBUG = True
 
 # Database
-DB_HOST = '77.120.98.132'
+DB_HOST = 'localhost'
 # DB_HOST = '10.18.212.7'
 DB_NAME = 'kiosk_global_dev'
 # DB_NAME = 'kiosk_prod_db'
